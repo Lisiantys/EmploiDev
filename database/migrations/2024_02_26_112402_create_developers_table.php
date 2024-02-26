@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('developers', function (Blueprint $table) {
+            $table->id();
+            $table->string('profil_image');
+            $table->string('first_name');
+            $table->string('surname');
+            $table->string('cv');
+            $table->string('cover_letter');
+            $table->boolean('is_free');
+            $table->boolean('is_validated')->default(0);
+            $table->foreignId('contract_id')->constrained('types_contract');
+            $table->foreignId('year_id')->constrained('years_experience');
+            $table->foreignId('location_id')->constrained('locations');
+            $table->foreignId('type_id')->constrained('types_developers');
+            $table->foreignId('user_id')->constrained();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('developers');
+    }
+};
