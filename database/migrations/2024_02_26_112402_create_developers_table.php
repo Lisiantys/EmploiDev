@@ -20,11 +20,12 @@ return new class extends Migration
             $table->string('cover_letter');
             $table->boolean('is_free');
             $table->boolean('is_validated')->default(0);
-            $table->foreignId('contract_id')->constrained('types_contract');
-            $table->foreignId('year_id')->constrained('years_experience');
+            $table->foreignId('contract_id')->constrained('types_contracts');
+            $table->foreignId('year_id')->constrained('years_experiences');
             $table->foreignId('location_id')->constrained('locations');
             $table->foreignId('type_id')->constrained('types_developers');
             $table->foreignId('user_id')->constrained();
+            $table->timestamps();
         });
     }
 

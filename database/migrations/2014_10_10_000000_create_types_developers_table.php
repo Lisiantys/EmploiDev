@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('types_developers', function (Blueprint $table) {
             $table->id();
             $table->string('name')->default('50');
+            $table->timestamps();
         });
     }
 

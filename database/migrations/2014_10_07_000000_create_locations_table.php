@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('city')->default('50');
             $table->char('postal_code')->default('5');
+            $table->timestamps();
         });
     }
 

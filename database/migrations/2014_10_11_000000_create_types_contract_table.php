@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('types_contract', function (Blueprint $table) {
+        Schema::create('types_contracts', function (Blueprint $table) {
             $table->id();
             $table->string('name')->default('20');
+            $table->timestamps();
         });
     }
 

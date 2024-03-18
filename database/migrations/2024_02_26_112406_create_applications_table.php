@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('job_id')->constrained('job_offers');
             $table->foreignId('developer_id')->constrained('developers');
+            $table->timestamps();
         });
     }
 
