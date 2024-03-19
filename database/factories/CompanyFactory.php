@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,23 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'profil_image' => fake()->imageUrl(640, 480, 'company'),
+            'name' => fake()->company(),
         ];
+    }
+
+    /**
+     * Configure the model factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterMaking(function (Company $company) {
+            $user = User::factory()->create([
+                'role_id' => 2,
+            ]);
+            $company->user_id = $user->id;
+        });
     }
 }

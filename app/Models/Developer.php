@@ -44,7 +44,7 @@ class Developer extends Model
 
     public function programmingLanguages()
     {
-        return $this->belongsToMany(ProgrammingLanguage::class, 'developers_languages');
+        return $this->belongsToMany(ProgrammingLanguage::class, 'developers_languages', 'developer_id', 'language_id');
     }
 
     public function user()

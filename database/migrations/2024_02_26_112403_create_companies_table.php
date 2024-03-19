@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('profil_image');
             $table->string('name')->default('50');
-            $table->foreignId('job_id')->constrained('job_offers');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

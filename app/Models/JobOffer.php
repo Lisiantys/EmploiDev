@@ -18,6 +18,11 @@ class JobOffer extends Model
         'type_id',
     ];
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
     public function location()
     {
         return $this->belongsTo(Location::class);
@@ -40,7 +45,7 @@ class JobOffer extends Model
 
     public function programmingLanguages()
     {
-        return $this->belongsToMany(ProgrammingLanguage::class, 'job_languages');
+        return $this->belongsToMany(ProgrammingLanguage::class, 'job_languages', 'job_offer_id', 'programming_language_id');
     }
 
     public function applications()

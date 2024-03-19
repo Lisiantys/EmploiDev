@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-            $table->foreignId('role_id')->default(0)->constrained();
+            $table->foreignId('role_id')->constrained();
         });
     }
 

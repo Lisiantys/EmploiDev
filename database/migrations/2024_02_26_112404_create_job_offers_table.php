@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('year_id')->constrained('years_experiences');
             $table->foreignId('location_id')->constrained('locations');
             $table->foreignId('type_id')->constrained('types_developers');
+            $table->foreignId('company_id')->constrained('companies');
             $table->timestamps();
         });
     }

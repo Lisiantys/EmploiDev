@@ -14,9 +14,8 @@ class LocationsTableSeeder extends Seeder
     public function run(): void
     {
         $locations = [
-            ['city' => 'New York', 'postal_code' => '10001'],
-            ['city' => 'Los Angeles', 'postal_code' => '90001'],
-            // Ajoutez autant de locations que nécessaire
+            ['city' => 'Bordeaux', 'postal_code' => '33000'],
+            ['city' => 'Toulouse', 'postal_code' => '31000'],
         ];
 
         foreach ($locations as $location) {

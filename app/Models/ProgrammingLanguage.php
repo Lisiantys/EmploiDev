@@ -11,7 +11,7 @@ class ProgrammingLanguage extends Model
 
     public function developers()
     {
-        return $this->belongsToMany(Developer::class, 'developers_languages');
+        return $this->belongsToMany(Developer::class, 'developers_languages', 'language_id', 'developer_id');
     }
 
     public function jobOffers()

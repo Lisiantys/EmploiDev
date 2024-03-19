@@ -16,6 +16,6 @@ class Location extends Model
 
     public function jobOffers()
     {
-        return $this->hasMany(JobOffer::class);
+        return $this->hasMany(JobOffer::class, 'job_languages', 'programming_language_id', 'job_offer_id');
     }
 }

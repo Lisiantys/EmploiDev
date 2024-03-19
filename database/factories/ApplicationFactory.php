@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\JobOffer;
+use App\Models\Developer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,9 @@ class ApplicationFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'description' => fake()->paragraph(),
+            'job_id' => JobOffer::pluck('id')->random(),
+            'developer_id' => Developer::pluck('id')->random(),
         ];
     }
 }
