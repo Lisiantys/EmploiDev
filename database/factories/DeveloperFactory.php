@@ -29,8 +29,9 @@ class DeveloperFactory extends Factory
             'surname' => fake()->lastName(),
             'cv' => fake()->url(),
             'cover_letter' => fake()->url(),
+            'description' => fake()->sentence(),
             'is_free' => fake()->boolean(),
-            'is_validated' => fake()->boolean(),
+            'is_validated' => fake()->boolean(30),
             //Pluck récupére une collection contenant les valeurs d'une colonne spécifique.
             'contract_id' => TypesContract::pluck('id')->random(),
             'year_id' => YearsExperience::pluck('id')->random(),

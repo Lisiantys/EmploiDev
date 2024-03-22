@@ -14,17 +14,18 @@ return new class extends Migration
         Schema::create('developers', function (Blueprint $table) {
             $table->id();
             $table->string('profil_image');
-            $table->string('first_name');
-            $table->string('surname');
+            $table->string('first_name', 30);
+            $table->string('surname', 30);
             $table->string('cv');
             $table->string('cover_letter');
-            $table->boolean('is_free');
+            $table->string('description');
+            $table->boolean('is_free')->default(1);
             $table->boolean('is_validated')->default(0);
             $table->foreignId('contract_id')->constrained('types_contracts');
             $table->foreignId('year_id')->constrained('years_experiences');
             $table->foreignId('location_id')->constrained('locations');
             $table->foreignId('type_id')->constrained('types_developers');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

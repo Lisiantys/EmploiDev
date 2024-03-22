@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('programming_languages', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->default('20');
+            $table->string('name', 20);
             $table->timestamps();
         });
     }

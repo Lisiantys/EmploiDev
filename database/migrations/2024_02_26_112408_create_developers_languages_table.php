@@ -12,8 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('developers_languages', function (Blueprint $table) {
-            $table->foreignId('developer_id')->constrained('developers', 'id');
-            $table->foreignId('language_id')->constrained('programming_languages');
+            $table->id();
+            $table->foreignId('developer_id')->constrained('developers')->onDelete('cascade');
+            $table->foreignId('language_id')->constrained('programming_languages')->onDelete('cascade');
             $table->timestamps();
         });
     }
