@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Company;
+use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyStoreRequest;
@@ -52,5 +53,32 @@ class CompanyController extends Controller
     {
         $company->delete();
         return response()->json(null, 204);
+    }
+
+    /* ===== Customs methods  ===== */
+
+    /**
+     * L'entreprise consulte ses offres d'emploies
+     */
+    public function jobOffers(Company $company)
+    {
+        $jobOffers = $company->jobOffers()->get();
+        return response()->json($jobOffers);
+    }
+
+    /**
+     * Affiche les candidatures associées à l'offre d'emploi
+     */
+    public function jobOfferApplications(Company $company, JobOffer $jobOffer)
+    {
+        // Vérification que l'offre d'emploi appartient bien à l'entreprise
+        if ($jobOffer->company_id !== $company->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        // Récupération des candidatures associées à l'offre d'emploi spécifique
+        $applications = $jobOffer->applications;
+
+        return response()->json($applications);
     }
 }

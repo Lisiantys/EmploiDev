@@ -5,21 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use App\Models\Developer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\DeveloperStoreRequest;
 use App\Http\Requests\DeveloperUpdateRequest;
-use Illuminate\Support\Facades\Log;
 
 
 class DeveloperController extends Controller
 {
+    use FilterableTrait;
     /**
-     * Display a listing of the resource.
+     * Affiche les développeurs validés
      */
     public function index()
     {
-        $developers = Developer::all();
+        $developers = Developer::where('is_validated', 1)->get();
         return response()->json($developers);
     }
 
@@ -66,5 +68,28 @@ class DeveloperController extends Controller
     {
         $developer->delete();
         return response()->json(null, 204);
+    }
+
+
+    /* ===== Customs methods  ===== */
+
+    /**
+     * Filter developers based on the provided criteria.
+     */
+    public function filterForm(Request $request)
+    {
+        $developers = $this->filterResources(Developer::where('is_validated', 1), $request)->get();
+        return response()->json($developers);
+    }
+
+    /**
+     * Affiche les candidatures crées par le développeur
+     */
+    public function developerApplications(Developer $developer)
+    {
+        // Récupération des candidatures créées par le développeur spécifique
+        $applications = $developer->applications;
+
+        return response()->json($applications);
     }
 }

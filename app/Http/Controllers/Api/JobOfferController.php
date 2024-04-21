@@ -5,17 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\FilterableTrait;
 use App\Http\Requests\JobOfferStoreRequest;
 use App\Http\Requests\JobOfferUpdateRequest;
 
 class JobOfferController extends Controller
 {
+    use FilterableTrait;
     /**
-     * Display a listing of the resource.
+     * Affiche les offres d'emplois validés
      */
     public function index()
     {
-        $jobOffers = JobOffer::all();
+        $jobOffers = JobOffer::where('is_validated', 1)->get();
         return response()->json($jobOffers);
     }
 
@@ -51,5 +53,16 @@ class JobOfferController extends Controller
     {
         $jobOffer->delete();
         return response()->json(null, 204);
+    }
+
+    /* ===== Customs methods  ===== */
+
+    /**
+     * Filter Jobs offers based on the provided criteria.
+     */
+    public function filterForm(Request $request)
+    {
+        $jobOffers = $this->filterResources(JobOffer::where('is_validated', 1), $request)->get();
+        return response()->json($jobOffers);
     }
 }
