@@ -13,4 +13,8 @@ class TypesDeveloper extends Model
     {
         return $this->hasMany(Developer::class);
     }
+
+    public function jobOffers(){
+        return $this->hasMany(JobOffer::class);
+    }
 }

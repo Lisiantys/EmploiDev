@@ -9,6 +9,8 @@ class ProgrammingLanguage extends Model
 {
     use HasFactory;
 
+    //protected $fillable = ['name'];
+
     public function developers()
     {
         return $this->belongsToMany(Developer::class, 'developers_languages', 'language_id', 'developer_id');

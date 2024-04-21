@@ -15,11 +15,13 @@ class Developer extends Model
         'surname',
         'cv',
         'cover_letter',
+        'description',
         'is_free',
         'contract_id',
         'year_id',
         'location_id',
         'type_id',
+        'user_id'
     ];
 
     public function location()
