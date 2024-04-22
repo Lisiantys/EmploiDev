@@ -30,6 +30,9 @@ class JobOfferStoreRequest extends FormRequest
             'location_id' => 'required|exists:locations,id',
             'type_id' => 'required|exists:types_developers,id',
             'company_id' => 'required|exists:companies,id',
+            'programming_languages' => 'required|array', // le champ doit être un tableau
+            'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
+
         ];
     }
 }

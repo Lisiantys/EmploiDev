@@ -22,6 +22,8 @@ class DeveloperUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'email' => 'sometimes|email|unique:users,email,' . $this->developer->user_id, // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
+            'password' => 'sometimes|string|min:8', // La mise à jour du mot de passe est facultative
             'profil_image' => 'sometimes|string|max:255',
             'first_name' => 'sometimes|string|max:255',
             'surname' => 'sometimes|string|max:255',
@@ -34,6 +36,9 @@ class DeveloperUpdateRequest extends FormRequest
             'year_id' => 'sometimes|exists:years_experiences,id',
             'location_id' => 'sometimes|exists:locations,id',
             'type_id' => 'sometimes|exists:types_developers,id',
+            'programming_languages' => 'sometimes|array', // le champ doit être un tableau
+            'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
+            // Note: 'user_id' is not included since it's unlikely to change in an update
         ];
     }
 }

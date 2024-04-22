@@ -29,6 +29,8 @@ class JobOfferUpdateRequest extends FormRequest
             'year_id' => 'sometimes|exists:years_experiences,id',
             'location_id' => 'sometimes|exists:locations,id',
             'type_id' => 'sometimes|exists:types_developers,id',
+            'programming_languages' => 'sometimes|array', // le champ doit être un tableau
+            'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
             // 'company_id' is not included since it's unlikely to change in an update
         ];
     }

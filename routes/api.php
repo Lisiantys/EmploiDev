@@ -25,13 +25,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('developers', DeveloperController::class);
-Route::get('/developers/filter', [DeveloperController::class, 'filter']);
+Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']);
+Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); // OK
+Route::apiResource('developers', DeveloperController::class); // OK
 
-Route::apiResource('companies', CompanyController::class);
+Route::apiResource('companies', CompanyController::class); // OK sauf create
 
+Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']);
 Route::apiResource('job-offers', JobOfferController::class);
-Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+
 
 
 Route::apiResource('applications', ApplicationController::class);

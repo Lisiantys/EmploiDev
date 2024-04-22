@@ -22,14 +22,9 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'profil_image' => 'nullable|url',
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
             'is_validated' => 'sometimes|boolean',
-            'contract_id' => 'required|exists:types_contracts,id',
-            'year_id' => 'required|exists:years_experiences,id',
-            'location_id' => 'required|exists:locations,id',
-            'type_id' => 'required|exists:types_developers,id',
-            'company_id' => 'required|exists:companies,id',
         ];
     }
 }

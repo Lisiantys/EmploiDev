@@ -10,21 +10,18 @@ trait FilterableTrait
     protected function filterResources($query, $request)
     {
         // Filtrer par type de contrat
-        if ($request->has('contract_type')) {
-            $query->where('contract_id', $request->contract_type);
+        if ($request->has('contract_id')) {
+            $query->where('contract_id', $request->contract_id);
         }
 
         // Filtrer par années d'expérience
-        if ($request->has('experience_years')) {
-            $query->where('year_id', $request->experience_years);
+        if ($request->has('year_id')) {
+            $query->where('year_id', $request->year_id);
         }
 
         // Filtrer par code postal ou département
-        if ($request->has('location')) {
-            $query->whereHas('location', function ($query) use ($request) {
-                $query->where('city', 'like', '%' . $request->location . '%')
-                      ->orWhere('postal_code', $request->location);
-            });
+        if ($request->has('location_id')) {
+            $query->where('location_id', $request->location_id);
         }
 
         // Filtrer par langages de programmation
@@ -35,8 +32,8 @@ trait FilterableTrait
         }
 
         // Filtrer par type de développeur
-        if ($request->has('developer_type')) {
-            $query->where('type_id', $request->developer_type);
+        if ($request->has('type_id')) {
+            $query->where('type_id', $request->type_id);
         }
 
         // Filtrer par date de création

@@ -16,6 +16,7 @@ class JobOffer extends Model
         'year_id',
         'location_id',
         'type_id',
+        'company_id'
     ];
 
     public function company()

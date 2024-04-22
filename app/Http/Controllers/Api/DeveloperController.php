@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\DeveloperStoreRequest;
+use App\Http\Requests\DeveloperFilterRequest;
 use App\Http\Requests\DeveloperUpdateRequest;
 
 
@@ -30,16 +31,18 @@ class DeveloperController extends Controller
      */
     public function store(DeveloperStoreRequest $request)
     {
+        // Création de l'utilisateur
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => 1, // Assigne explicitement le role_id pour les développeurs
         ]);
 
-        $developerData = $request->validated();
-        $developerData['user_id'] = $user->id;
+        // Création du développeur
+        $developer = $user->developer()->create($request->validated());
 
-        $developer = Developer::create($developerData);
+        // Attachement des langages de programmation
+        $developer->programmingLanguages()->attach($request->programming_languages);
 
         return response()->json($developer, 201);
     }
@@ -49,7 +52,7 @@ class DeveloperController extends Controller
      */
     public function show(Developer $developer)
     {
-        return response()->json($developer);
+        return response()->json($developer, 201);
     }
 
     /**
@@ -58,6 +61,12 @@ class DeveloperController extends Controller
     public function update(DeveloperUpdateRequest  $request, Developer $developer)
     {
         $developer->update($request->validated());
+
+        // Mise à jour des langages du développeur
+        if ($request->has('programming_languages')) {
+            $developer->programmingLanguages()->sync($request->programming_languages);
+        }
+
         return response()->json($developer, 200);
     }
 
@@ -67,7 +76,7 @@ class DeveloperController extends Controller
     public function destroy(Developer $developer)
     {
         $developer->delete();
-        return response()->json(null, 204);
+        return response()->json($developer, 200);
     }
 
 
@@ -76,19 +85,24 @@ class DeveloperController extends Controller
     /**
      * Filter developers based on the provided criteria.
      */
-    public function filterForm(Request $request)
+    public function filterForm(DeveloperFilterRequest $request)
     {
-        $developers = $this->filterResources(Developer::where('is_validated', 1), $request)->get();
+        $developers = Developer::where('is_validated', 1); // Commencez par le modèle de développeur
+
+        // Appliquer les filtres
+        $developers = $this->filterResources($developers, $request)->get();
+
         return response()->json($developers);
     }
+
 
     /**
      * Affiche les candidatures crées par le développeur
      */
     public function developerApplications(Developer $developer)
     {
-        // Récupération des candidatures créées par le développeur spécifique
-        $applications = $developer->applications;
+        // Récupération des candidatures associées au développeur spécifique
+        $applications = $developer->applications()->get();
 
         return response()->json($applications);
     }
