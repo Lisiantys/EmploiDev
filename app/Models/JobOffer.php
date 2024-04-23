@@ -12,6 +12,7 @@ class JobOffer extends Model
     protected $fillable = [
         'name',
         'description',
+        'is_validated',
         'contract_id',
         'year_id',
         'location_id',

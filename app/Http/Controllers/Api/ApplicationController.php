@@ -25,7 +25,6 @@ class ApplicationController extends Controller
      */
     public function store(ApplicationStoreRequest $request)
     {
-
         $application = Application::create($request->validate());
         return response()->json($application, 201);
     }
@@ -36,15 +35,6 @@ class ApplicationController extends Controller
     public function show(Application $application)
     {
         return response()->json($application);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(ApplicationUpdateRequest $request, Application $application)
-    {
-        $application->update($request->validate());
-        return response()->json($application, 200);
     }
 
     /**

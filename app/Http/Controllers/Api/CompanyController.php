@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Company;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 
@@ -25,7 +27,16 @@ class CompanyController extends Controller
      */
     public function store(CompanyStoreRequest $request)
     {
-        $company = Company::create($request->validated());
+        // Création de l'utilisateur
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 2, // Assigne explicitement le role_id pour les entreprises
+        ]);
+
+        // Création de l'entreprise
+        $company = $user->company()->create($request->validated());
+
         return response()->json($company, 201);
     }
 
@@ -42,7 +53,12 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
+        // Mettre à jour les détails de l'entreprise
         $company->update($request->validated());
+
+        // Mettre à jour l'utilisateur associé
+        $company->user->update($request->only('email', 'password'));
+
         return response()->json($company, 200);
     }
 
@@ -60,16 +76,16 @@ class CompanyController extends Controller
     /**
      * L'entreprise consulte ses offres d'emploies
      */
-    public function jobOffers(Company $company)
+    public function jobOffers(Company $company) //OK
     {
         $jobOffers = $company->jobOffers()->get();
         return response()->json($jobOffers);
     }
 
     /**
-     * Affiche les candidatures associées à l'offre d'emploi
+     * Affiche les candidatures associées à l'offre d'emploi + leurs candidature
      */
-    public function jobOfferApplications(Company $company, JobOffer $jobOffer)
+    public function jobOfferApplications(Company $company, JobOffer $jobOffer) //OK
     {
         // Vérification que l'offre d'emploi appartient bien à l'entreprise
         if ($jobOffer->company_id !== $company->id) {

@@ -22,9 +22,11 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profil_image' => 'nullable|url',
-            'name' => 'required|string|max:255',
-            'is_validated' => 'sometimes|boolean',
+            'email' => 'sometimes|email|unique:users,email', //user
+            'password' => 'sometimes|string|min:8',//user ajouter criteres
+            'profil_image' => 'sometimes|url',
+            'name' => 'sometimes|string|max:255',
+            // 'user_id' est automatiquement assigné dans le controller
         ];
     }
 }

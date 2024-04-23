@@ -62,6 +62,9 @@ class DeveloperController extends Controller
     {
         $developer->update($request->validated());
 
+        // Mettre à jour l'utilisateur associé
+        $developer->user->update($request->only('email', 'password'));
+
         // Mise à jour des langages du développeur
         if ($request->has('programming_languages')) {
             $developer->programmingLanguages()->sync($request->programming_languages);
@@ -79,14 +82,14 @@ class DeveloperController extends Controller
         return response()->json($developer, 200);
     }
 
-
     /* ===== Customs methods  ===== */
 
     /**
-     * Filter developers based on the provided criteria.
+     * Filtre les développeurs
      */
-    public function filterForm(DeveloperFilterRequest $request)
+    public function filterForm(DeveloperFilterRequest $request) //OK
     {
+        $developers = $this->filterResources(Developer::where('is_validated', 1), $request)->get();
         $developers = Developer::where('is_validated', 1); // Commencez par le modèle de développeur
 
         // Appliquer les filtres
@@ -95,15 +98,15 @@ class DeveloperController extends Controller
         return response()->json($developers);
     }
 
-
     /**
      * Affiche les candidatures crées par le développeur
      */
-    public function developerApplications(Developer $developer)
+    public function developerApplications(Developer $developer) //OK
     {
         // Récupération des candidatures associées au développeur spécifique
         $applications = $developer->applications()->get();
 
         return response()->json($applications);
     }
+
 }

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\JobOffer;
+use App\Models\Developer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
 use App\Http\Requests\JobOfferStoreRequest;
 use App\Http\Requests\JobOfferFilterRequest;
 use App\Http\Requests\JobOfferUpdateRequest;
+use App\Http\Requests\DeveloperFilterRequest;
 
 class JobOfferController extends Controller
 {
@@ -28,6 +30,9 @@ class JobOfferController extends Controller
     public function store(JobOfferStoreRequest $request)
     {
         $jobOffer = JobOffer::create($request->validated());
+
+        // Attachement des langages de programmation
+        $jobOffer->programmingLanguages()->attach($request->programming_languages);
         return response()->json($jobOffer, 201);
     }
 
@@ -39,8 +44,8 @@ class JobOfferController extends Controller
         return response()->json($jobOffer);
     }
     /**
-     * Update the specified resource in storage.
-     */
+     * Update the specified resource in storage. VOIR SI ON FAIT LUPDATE OU NON + POLICIES 
+     */ 
     public function update(JobOfferUpdateRequest $request, JobOffer $jobOffer)
     {
         $validatedData = $request->validated();
@@ -54,6 +59,11 @@ class JobOfferController extends Controller
         // Mettre à jour les autres champs de l'offre d'emploi
         $jobOffer->update($validatedData);
 
+        // Mise à jour des langages du développeur
+        if ($request->has('programming_languages')) {
+            $jobOffer->programmingLanguages()->sync($request->programming_languages);
+        }
+
         return response()->json($jobOffer->fresh(), 200);
     }
 
@@ -62,16 +72,20 @@ class JobOfferController extends Controller
      */
     public function destroy(JobOffer $jobOffer)
     {
+        $this->authorize('delete', $jobOffer);
+
         $jobOffer->delete();
+
         return response()->json($jobOffer, 200);
     }
+
 
     /* ===== Customs methods  ===== */
 
     /**
      * Filter Jobs offers based on the provided criteria.
      */
-    public function filterForm(JobOfferFilterRequest $request)
+    public function filterForm(JobOfferFilterRequest $request) //OK
     {
         $jobOffers = $this->filterResources(JobOffer::where('is_validated', 1), $request)->get();
       // dd($jobOffers);

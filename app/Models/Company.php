@@ -16,7 +16,7 @@ class Company extends Model
 
     public function jobOffers()
     {
-        return $this->hasMany(JobOffer::class, 'job_id');
+        return $this->hasMany(JobOffer::class);
     }
 
     public function user()

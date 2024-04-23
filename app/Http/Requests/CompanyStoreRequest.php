@@ -22,6 +22,8 @@ class CompanyStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'email' => 'required|email|unique:users,email', //user
+            'password' => 'required|string|min:8',//user ajouter criteres
             'profil_image' => 'required|url',
             'name' => 'required|string|max:255',
             // 'user_id' est automatiquement assigné dans le controller

@@ -25,24 +25,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']);
+Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); // OK
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); // OK
 Route::apiResource('developers', DeveloperController::class); // OK
 
-Route::apiResource('companies', CompanyController::class); // OK sauf create
+Route::get('companies/{company}/job_offers', [CompanyController::class, 'jobOffers']); //OK
+Route::get('companies/{company}/job_offers/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']); //OK
+Route::apiResource('companies', CompanyController::class); // OK
 
-Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']);
-Route::apiResource('job-offers', JobOfferController::class);
+Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); // OK
+Route::apiResource('job-offers', JobOfferController::class); //OK
 
 
-
-Route::apiResource('applications', ApplicationController::class);
-
+Route::apiResource('applications', ApplicationController::class); //OK
 
 Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']);
 Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']);
 Route::put('/admin/job-offers/{id}/{action}', [AdminController::class, 'handleJobOffer']);
 Route::put('/admin/developers/{id}/{action}', [AdminController::class, 'handleDeveloper']);
-Route::get('companies/{company}/job-offers', [CompanyController::class, 'jobOffers']);
-Route::get('companies/{company}/job-offers/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);
-
