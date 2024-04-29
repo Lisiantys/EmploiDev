@@ -3,6 +3,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\JobOfferController;
@@ -21,17 +22,31 @@ use App\Http\Controllers\Api\ApplicationController;
 |
 */
 
+
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); // OK
-Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); // OK
-Route::apiResource('developers', DeveloperController::class); // OK
+// Grouper les routes sous le middleware Sanctum
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']);
+    Route::post('/developers/filter', [DeveloperController::class, 'filterForm']);
+    Route::apiResource('developers', DeveloperController::class);
+
+
+    Route::apiResource('companies', CompanyController::class); // OK
+
+});
+
+
 
 Route::get('companies/{company}/job_offers', [CompanyController::class, 'jobOffers']); //OK
 Route::get('companies/{company}/job_offers/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']); //OK
-Route::apiResource('companies', CompanyController::class); // OK
+
 
 Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); // OK
 Route::apiResource('job-offers', JobOfferController::class); //OK

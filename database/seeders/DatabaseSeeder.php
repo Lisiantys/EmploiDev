@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             ProgrammingLanguagesTableSeeder::class,
             TypesDevelopersTableSeeder::class,
             TypesContractsTableSeeder::class,
+            UsersTableSeeder::class
         ]);
 
         // Créez des Developers et Companies, chaque création entraînera aussi la création d'un User associé avec le bon role_id.
