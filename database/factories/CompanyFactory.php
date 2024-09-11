@@ -19,8 +19,9 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'profil_image' => fake()->imageUrl(640, 480, 'company'),
+            'profil_image' => 'images/company.jpg',    
             'name' => fake()->company(),
+            'description' => fake()->sentence(),
         ];
     }
 

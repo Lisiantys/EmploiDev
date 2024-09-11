@@ -11,6 +11,8 @@ use App\Http\Requests\ApplicationUpdateRequest;
 
 class ApplicationController extends Controller
 {
+
+    //APPLICATION C'EST LA CANDIDATURE 
     /**
      * Display a listing of the resource.
      */

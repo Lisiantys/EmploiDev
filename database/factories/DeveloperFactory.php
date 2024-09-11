@@ -24,7 +24,7 @@ class DeveloperFactory extends Factory
     public function definition(): array
     {
         return [
-            'profil_image' => fake()->imageUrl(640, 480, 'persone'),
+            'profil_image' => 'images/user.jpg',
             'first_name' => fake()->firstName(),
             'surname' => fake()->lastName(),
             'cv' => fake()->url(),

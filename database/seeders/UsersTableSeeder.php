@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
         DB::table('users')->insert([
             'email' => 'user@example.com',
             'email_verified_at' => now(),
-            'password' => Hash::make('123456789'), // Remplacez 'your_predefined_password' par le mot de passe que vous souhaitez utiliser
+            'password' => Hash::make('123456789'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),

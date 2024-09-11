@@ -12,6 +12,7 @@ class Company extends Model
     protected $fillable = [
         'profil_image',
         'name',
+        'description'
     ];
 
     public function jobOffers()

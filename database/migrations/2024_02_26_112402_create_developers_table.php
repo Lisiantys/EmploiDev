@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('developers', function (Blueprint $table) {
             $table->id();
-            $table->string('profil_image');
+            $table->string('profil_image')->nullable();
             $table->string('first_name', 30);
             $table->string('surname', 30);
             $table->string('cv');
             $table->string('cover_letter');
-            $table->string('description');
+            $table->text('description')->nullable();
             $table->boolean('is_free')->default(1);
             $table->boolean('is_validated')->default(0);
             $table->foreignId('contract_id')->constrained('types_contracts');

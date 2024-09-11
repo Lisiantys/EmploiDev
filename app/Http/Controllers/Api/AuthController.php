@@ -17,12 +17,18 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return response()->json(Auth::user());
-        }
+        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
 
-        return response()->json(['message' => 'The provided credentials do not match our records.'], 401);
+            // si la connexion fonctionne, on récupère l'utilisateur et on charge son rôle
+            $authUser = User::find(Auth::user()->id);
+            $authUser->load('role');
+
+            // on renvoie la réponse 
+            return response()->json([$authUser, 'Vous êtes connecté']);
+        } else {
+            // si échec de la connexion, on renvoie un message d'erreur
+            return response()->json(['Echec de la connexion.', 'errors' => 'L\'utilisateur n\'existe pas ou le mot de passe est incorrect']);
+        }
     }
 
     /**

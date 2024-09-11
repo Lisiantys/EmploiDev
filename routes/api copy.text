@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\ApplicationController;
 
 Route::post('login', [AuthController::class, 'login']); //OK excel
 
+Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']);
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); 
 
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'store', 'show']); // Affichage, création, et affichage individuel de développeurs
@@ -35,6 +36,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Affichage des candidatures du développeur
     Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); //OK
     Route::apiResource('developers', DeveloperController::class, ['except' => ['index', 'store', 'show']]);//
+
+    //Affichage d'emplois de l'entreprise
+    Route::get('companies/{company}/job_offers', [CompanyController::class, 'jobOffers']); //
+    //Affichage des candidatures reçus sur une offre d'emploi
+    Route::get('companies/{company}/job_offers/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']); //
+    Route::apiResource('companies', CompanyController::class); //
+
+    Route::apiResource('job-offers', JobOfferController::class); //
+    Route::apiResource('applications', ApplicationController::class); // 
+
+    // Routes spécifiques pour l'administrateur
+    Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); //
+    Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']); //
+    Route::put('/admin/job-offers/{id}/{action}', [AdminController::class, 'handleJobOffer']); //
+    Route::put('/admin/developers/{id}/{action}', [AdminController::class, 'handleDeveloper']); //
 });
 
 

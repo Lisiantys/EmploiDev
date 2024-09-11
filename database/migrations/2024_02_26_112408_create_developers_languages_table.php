@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('developer_id')->constrained('developers')->onDelete('cascade');
             $table->foreignId('language_id')->constrained('programming_languages')->onDelete('cascade');
-            $table->timestamps();
         });
     }
 

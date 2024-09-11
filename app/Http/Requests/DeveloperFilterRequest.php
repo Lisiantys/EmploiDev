@@ -22,13 +22,13 @@ class DeveloperFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_id' => 'nullable|integer',
-            'year_id' => 'nullable|integer',
-            'location_id' => 'nullable|integer',
-            'type_id' => 'nullable|integer',
-            'created_at' => 'nullable|date',
-            'programming_languages' => 'nullable|array', // Les langages de programmation doivent être un tableau
-            'programming_languages.*' => 'exists:programming_languages,id', // Assure que chaque ID de langage de programmation existe
+            'contract_id' => 'nullable|integer|exists:types_contracts,id',
+            'year_id' => 'nullable|integer|exists:years_experiences,id',
+            'location_id' => 'nullable|integer|exists:locations,id',
+            'type_id' => 'nullable|integer|exists:types_developers,id', 
+            'created_at' => 'nullable|date', 
+            'programming_languages' => 'nullable|array', 
+            'programming_languages.*' => 'exists:programming_languages,id',
         ];
     }
 }
