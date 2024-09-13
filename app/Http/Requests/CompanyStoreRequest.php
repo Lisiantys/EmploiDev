@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CompanyStoreRequest extends FormRequest
@@ -23,9 +24,17 @@ class CompanyStoreRequest extends FormRequest
     {
         return [
             'email' => 'required|email|unique:users,email', //user
-            'password' => 'required|string|min:8',//user ajouter criteres
-            'profil_image' => 'required|url',
-            'name' => 'required|string|max:255',
+            'password' => [
+                'required',
+                Password::min(8)
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()
+            ],
+            'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
+            'name' => 'required|string|max:50',
+            'description' => 'required|string|max:255',
             // 'user_id' est automatiquement assigné dans le controller
         ];
     }

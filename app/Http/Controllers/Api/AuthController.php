@@ -21,8 +21,6 @@ class AuthController extends Controller
             return response()->json(['message' => 'Connexion réussie', 'user' => Auth::user()]);
         }
 
-        Log::error('Login failed for user: ', $credentials);
-
         return response()->json(['message' => 'Identifiants invalides'], 401);
     }
 

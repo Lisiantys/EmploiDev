@@ -23,9 +23,9 @@ use App\Http\Controllers\Api\ApplicationController;
 // Routes publiques (ne nécessitent pas d'authentification)
 
 Route::middleware('web')->group(function () {
-    Route::post('login', [AuthController::class, 'login']); //OK
-    Route::post('developers', [DeveloperController::class, 'store']);
-    Route::post('companies', [CompanyController::class, 'store']);
+    Route::post('login', [AuthController::class, 'login']); //OK mais à voir avec le front
+    Route::post('developers', [DeveloperController::class, 'store']);//OK
+    Route::post('companies', [CompanyController::class, 'store']); //OK
 });
     
 
@@ -33,13 +33,13 @@ Route::post('/developers/filter', [DeveloperController::class, 'filterForm']);
 
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); // Affichage, création, et affichage individuel de développeurs
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout'); //OK excel
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout');//A revoir / voir avec le front
 
     //Affichage des candidatures du développeur
-    //Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); //OK
-    Route::apiResource('developers', DeveloperController::class, ['except' => ['index', 'store', 'show']]);//
+    //Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']);
+    Route::apiResource('developers', DeveloperController::class, ['except' => ['index', 'store', 'show']]);
 });
 
 

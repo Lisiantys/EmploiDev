@@ -35,11 +35,10 @@ class DeveloperUpdateRequest extends FormRequest
             'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
             'first_name' => 'sometimes|string|max:255',
             'surname' => 'sometimes|string|max:255',
-            'cv' => 'sometimes|string|max:255',
-            'cover_letter' => 'sometimes|string|max:255',
+            'cv' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
+            'cover_letter' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'sometimes|string|max:255',
             'is_free' => 'sometimes|boolean',
-            'is_validated' => 'sometimes|boolean',
             'contract_id' => 'sometimes|exists:types_contracts,id',
             'year_id' => 'sometimes|exists:years_experiences,id',
             'location_id' => 'sometimes|exists:locations,id',

@@ -34,11 +34,27 @@ class CompanyController extends Controller
             'role_id' => 2, // Assigne explicitement le role_id pour les entreprises
         ]);
 
-        // Création de l'entreprise
-        $company = $user->company()->create($request->validated());
+        // Gestion de l'image de profil
+        $imagePath = $request->hasFile('profil_image')
+            ? $request->file('profil_image')->store('public/images')
+            : 'public/images/company.jpg'; // Image par défaut si non fournie
 
-        return response()->json($company, 201);
+        // Création de l'entreprise
+        $company = $user->company()->create(array_merge(
+            $request->validated(),
+            [
+                'profil_image' => $imagePath,
+            ]
+        ));
+
+        // Retourner la réponse
+        return response()->json([
+            'message' => 'Entreprise créée avec succès.',
+            'company' => $company,
+            'user' => $user
+        ], 201);
     }
+
 
     /**
      * Display the specified resource.

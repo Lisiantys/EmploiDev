@@ -106,7 +106,7 @@ class DeveloperController extends Controller
         // Gestion de l'image de profil
         if ($request->hasFile('profil_image')) {
             // Supprimer l'ancienne image du développeur sauf si c'est l'image par défaut
-            if ($developer->profil_image !== 'public/images/default.png') {
+            if ($developer->profil_image !== 'public/images/user.jpg') {
                 Storage::delete($developer->profil_image);
             }
 
@@ -117,11 +117,39 @@ class DeveloperController extends Controller
             $imagePath = $developer->profil_image;
         }
 
+        // Gestion du CV
+        if ($request->hasFile('cv')) {
+            // Supprimer l'ancien CV
+            Storage::delete($developer->cv);
+
+            // Enregistrer le nouveau CV
+            $cvPath = $request->file('cv')->store('public/cv');
+        } else {
+            // Conserver le CV actuel si non modifié
+            $cvPath = $developer->cv;
+        }
+
+        // Gestion de la lettre de motivation
+        if ($request->hasFile('cover_letter')) {
+            // Supprimer l'ancienne lettre de motivation
+            Storage::delete($developer->cover_letter);
+
+            // Enregistrer la nouvelle lettre de motivation
+            $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
+        } else {
+            // Conserver la lettre actuelle si non modifiée
+            $coverLetterPath = $developer->cover_letter;
+        }
+
         // Invalider le développeur jusqu'à revalidation
         $developer->is_validated = 0;
 
-        // Fusionner les données validées avec le chemin de l'image
-        $developerData = array_merge($request->validated(), ['profil_image' => $imagePath]);
+        // Fusionner les données validées avec les nouveaux chemins des fichiers
+        $developerData = array_merge($request->validated(), [
+            'profil_image' => $imagePath,
+            'cv' => $cvPath,
+            'cover_letter' => $coverLetterPath,
+        ]);
 
         // Mettre à jour le développeur
         $developer->update($developerData);
@@ -139,6 +167,7 @@ class DeveloperController extends Controller
             'developer' => $developer
         ], 200);
     }
+
 
 
     /**
