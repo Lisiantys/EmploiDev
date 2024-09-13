@@ -22,7 +22,11 @@ use App\Http\Controllers\Api\ApplicationController;
 
 // Routes publiques (ne nécessitent pas d'authentification)
 
-Route::post('login', [AuthController::class, 'login']); //OK excel
+Route::middleware('web')->group(function () {
+    Route::post('login', [AuthController::class, 'login']); //OK
+    Route::post('register', [AuthController::class, 'register']); //OK
+});
+    
 
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); 
 
