@@ -35,11 +35,10 @@ class DeveloperStoreRequest extends FormRequest
             'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
             'first_name' => 'required|string|max:255',
             'surname' => 'required|string|max:255',
-            'cv' => 'required|string|max:255',
-            'cover_letter' => 'required|string|max:255',
+            'cv' => 'required|file|mimes:pdf,doc,docx|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
+            'cover_letter' => 'required|file|mimes:pdf,doc,docx|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'required|string|max:255',
             'is_free' => 'required|boolean',
-            'is_validated' => 'required|boolean',
             'contract_id' => 'required|exists:types_contracts,id',
             'year_id' => 'required|exists:years_experiences,id',
             'location_id' => 'required|exists:locations,id',
@@ -77,20 +76,17 @@ class DeveloperStoreRequest extends FormRequest
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
             'cv.required' => 'Le CV est obligatoire.',
-            'cv.string' => 'Le CV doit être un fichier valide.',
-
+            'cv.mimes' => 'Le CV doit être au format PDF, DOC ou DOCX.',
+            
             'cover_letter.required' => 'La lettre de motivation est obligatoire.',
-            'cover_letter.string' => 'La lettre de motivation doit être un fichier valide.',
-
+            'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF, DOC ou DOCX.',
+   
             'description.required' => 'La description est obligatoire.',
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
 
             'is_free.required' => 'Le statut de disponibilité est obligatoire.',
             'is_free.boolean' => 'Le statut de disponibilité doit être vrai ou faux.',
-
-            'is_validated.required' => 'Le statut de validation est obligatoire.',
-            'is_validated.boolean' => 'Le statut de validation doit être vrai ou faux.',
 
             'contract_id.required' => 'Le type de contrat est obligatoire.',
             'contract_id.exists' => 'Le type de contrat sélectionné est invalide.',

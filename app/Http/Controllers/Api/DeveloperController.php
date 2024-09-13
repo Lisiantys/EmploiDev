@@ -45,28 +45,41 @@ class DeveloperController extends Controller
         $user = User::create([
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 1, // Assigne explicitement le role_id pour les développeurs
+            'role_id' => 1,
         ]);
 
-        // Gestion de l'image de profil
-        $imagePath = $request->hasFile('profil_image')
-        ? $request->file('profil_image')->store('public/images')
-        : 'public/images/user.jpg'; // Image par défaut si non fournie
+        // Gestion des fichiers
+        $imagePath = $request->hasFile('profil_image') 
+            ? $request->file('profil_image')->store('public/images') 
+            : 'public/images/user.jpg';
 
-        // Création du développeur associé
+        $cvPath = $request->file('cv')->store('public/cv');
+        $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
+
+        // Création du développeur
         $developer = $user->developer()->create(array_merge(
             $request->validated(),
-            ['profil_image' => $imagePath]
+            [
+                'profil_image' => $imagePath,
+                'cv' => $cvPath,
+                'cover_letter' => $coverLetterPath,
+                'is_validated' => 0,
+            ]
         ));
 
-        // Attachement des langages de programmation
-        $developer->programmingLanguages()->attach($request->programming_languages);
+        // Attacher les langages de programmation au développeur
+        $programmingLanguages = $request->input('programming_languages');
+        $developer->programmingLanguages()->attach($programmingLanguages);
 
+        // Retourner la réponse avec les relations automatiquement chargées
         return response()->json([
-            'message' => 'Développeur créé avec succès.',
-            'developer' => $developer
+            'message' => 'Développeur créé avec succès et vous êtes connecté.',
+            'developer' => $developer,
+            'programming_languages' => $developer->programmingLanguages,
+            'user' => $user,
         ], 201);
     }
+
 
     /**
      * Affiche les détails d'un développeur validé.

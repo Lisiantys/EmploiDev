@@ -24,20 +24,21 @@ use App\Http\Controllers\Api\ApplicationController;
 
 Route::middleware('web')->group(function () {
     Route::post('login', [AuthController::class, 'login']); //OK
-    Route::post('register', [AuthController::class, 'register']); //OK
+    Route::post('developers', [DeveloperController::class, 'store']);
+    Route::post('companies', [CompanyController::class, 'store']);
 });
     
 
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); 
 
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'store', 'show']); // Affichage, création, et affichage individuel de développeurs
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); // Affichage, création, et affichage individuel de développeurs
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::post('logout', [AuthController::class, 'logout'])->name('logout'); //OK excel
 
     //Affichage des candidatures du développeur
-    Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); //OK
+    //Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']); //OK
     Route::apiResource('developers', DeveloperController::class, ['except' => ['index', 'store', 'show']]);//
 });
 

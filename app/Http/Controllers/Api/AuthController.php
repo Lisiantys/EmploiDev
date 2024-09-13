@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,23 +13,17 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
 
-        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']])) {
+        $credentials = $request->only('email', 'password');
 
-            // si la connexion fonctionne, on récupère l'utilisateur et on charge son rôle
-            $authUser = User::find(Auth::user()->id);
-            $authUser->load('role');
-
-            // on renvoie la réponse 
-            return response()->json([$authUser, 'Vous êtes connecté']);
-        } else {
-            // si échec de la connexion, on renvoie un message d'erreur
-            return response()->json(['Echec de la connexion.', 'errors' => 'L\'utilisateur n\'existe pas ou le mot de passe est incorrect']);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return response()->json(['message' => 'Connexion réussie', 'user' => Auth::user()]);
         }
+
+        Log::error('Login failed for user: ', $credentials);
+
+        return response()->json(['message' => 'Identifiants invalides'], 401);
     }
 
     /**
@@ -36,18 +31,7 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Optionally, revoke all tokens for security...
-        $request->user()->tokens()->delete();
-
-        return response()->json([
-            'message' => 'Successfully logged out'
-        ]);
-    }
-    /**
-     * Get the authenticated user.
-     */
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
+        $request->session()->invalidate();
+        return response()->json(['message' => 'Déconnexion réussie']);
     }
 }

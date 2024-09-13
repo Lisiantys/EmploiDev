@@ -24,6 +24,8 @@ class Developer extends Model
         'user_id'
     ];
 
+    protected $with = ['programmingLanguages'];
+
     public function location()
     {
         return $this->belongsTo(Location::class);
