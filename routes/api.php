@@ -23,21 +23,22 @@ use App\Http\Controllers\Api\ApplicationController;
 // Routes publiques (ne nécessitent pas d'authentification)
 
 
-Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); 
+Route::post('/developers/filter', [DeveloperController::class, 'filterForm']);//OK
 
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);//OK
 
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK
 
+    //DEV
     Route::post('/developers', [DeveloperController::class, 'store']);//OK
-
-    Route::put('/developers/{developer}', [DeveloperController::class, 'update'])->middleware('auth:sanctum'); //OK
-    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy'])->middleware('auth:sanctum'); //OK
-
-    
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK
+        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK
+        Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK
+    });
 
 });
 
