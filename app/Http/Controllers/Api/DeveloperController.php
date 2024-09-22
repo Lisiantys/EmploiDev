@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Developer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
@@ -14,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\DeveloperStoreRequest;
 use App\Http\Requests\DeveloperFilterRequest;
 use App\Http\Requests\DeveloperUpdateRequest;
+use Illuminate\Http\Request;
+
 
 
 class DeveloperController extends Controller
@@ -21,7 +22,7 @@ class DeveloperController extends Controller
     use FilterableTrait;
 
     /**
-     * Affiche les développeurs validés, libres en premier dans un ordre aléatoire, puis non libres.
+     * Affiche les développeurs validés libres en premier (is_validated = 1) dans un ordre aléatoire, puis les non libres.
      */
     public function index()
     {
@@ -29,7 +30,7 @@ class DeveloperController extends Controller
             ->orderBy('is_free', 'desc')
             ->inRandomOrder()
             ->paginate(8);
-        
+
         return response()->json([
             'message' => 'Liste des développeurs validés récupérée avec succès.',
             'developers' => $developers
@@ -49,8 +50,8 @@ class DeveloperController extends Controller
         ]);
 
         // Gestion des fichiers
-        $imagePath = $request->hasFile('profil_image') 
-            ? $request->file('profil_image')->store('public/images') 
+        $imagePath = $request->hasFile('profil_image')
+            ? $request->file('profil_image')->store('public/images')
             : 'public/images/user.jpg';
 
         $cvPath = $request->file('cv')->store('public/cv');
@@ -70,6 +71,12 @@ class DeveloperController extends Controller
         // Attacher les langages de programmation au développeur
         $programmingLanguages = $request->input('programming_languages');
         $developer->programmingLanguages()->attach($programmingLanguages);
+
+        //On connecte l'utilisateur
+        Auth::login($user);
+
+        // Régénérer la session après la connexion
+        $request->session()->regenerate();
 
         // Retourner la réponse avec les relations automatiquement chargées
         return response()->json([
@@ -101,43 +108,35 @@ class DeveloperController extends Controller
      */
     public function update(DeveloperUpdateRequest $request, Developer $developer)
     {
+
+        // Autoriser l'utilisateur à mettre à jour le développeur
         $this->authorize('update', $developer);
 
         // Gestion de l'image de profil
         if ($request->hasFile('profil_image')) {
-            // Supprimer l'ancienne image du développeur sauf si c'est l'image par défaut
             if ($developer->profil_image !== 'public/images/user.jpg') {
                 Storage::delete($developer->profil_image);
             }
-
-            // Enregistrer la nouvelle image
             $imagePath = $request->file('profil_image')->store('public/images');
         } else {
-            // Conserver l'image actuelle si non modifiée
             $imagePath = $developer->profil_image;
         }
 
         // Gestion du CV
         if ($request->hasFile('cv')) {
-            // Supprimer l'ancien CV
+
             Storage::delete($developer->cv);
 
-            // Enregistrer le nouveau CV
             $cvPath = $request->file('cv')->store('public/cv');
         } else {
-            // Conserver le CV actuel si non modifié
             $cvPath = $developer->cv;
         }
 
         // Gestion de la lettre de motivation
         if ($request->hasFile('cover_letter')) {
-            // Supprimer l'ancienne lettre de motivation
             Storage::delete($developer->cover_letter);
-
-            // Enregistrer la nouvelle lettre de motivation
             $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
         } else {
-            // Conserver la lettre actuelle si non modifiée
             $coverLetterPath = $developer->cover_letter;
         }
 
@@ -154,8 +153,14 @@ class DeveloperController extends Controller
         // Mettre à jour le développeur
         $developer->update($developerData);
 
-        // Mettre à jour l'utilisateur associé
-        $developer->user->update($request->only('email', 'password'));
+        // Mettre à jour l'utilisateur associé (si nécessaire)
+        if ($request->has('email') || $request->has('password')) {
+            $userData = $request->only('email', 'password');
+            if (isset($userData['password'])) {
+                $userData['password'] = Hash::make($userData['password']);
+            }
+            $developer->user->update($userData);
+        }
 
         // Mise à jour des langages du développeur
         if ($request->has('programming_languages')) {
@@ -168,19 +173,19 @@ class DeveloperController extends Controller
         ], 200);
     }
 
-
-
     /**
      * Supprime un développeur et l'utilisateur associé.
      */
-    public function destroy(Developer $developer)
+    public function destroy(Developer $developer, Request $request)
     {
         $this->authorize('delete', $developer);
 
-        // Suppression de l'utilisateur, ce qui supprime en cascade le développeur
-        $developer->user->delete();
+        $user = $request->user();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->delete();
 
-        return response()->json(['message' => 'Développeur et utilisateur supprimés avec succès.'], 200);
+        return response()->json(['message' => 'Utilisateur supprimé avec succès']);
     }
 
     /* ===== Customs methods  ===== */
@@ -191,7 +196,7 @@ class DeveloperController extends Controller
     public function filterForm(DeveloperFilterRequest $request) //OK
     {
         $developersQuery = Developer::where('is_validated', 1)
-        ->orderBy('is_free', 'desc');
+            ->orderBy('is_free', 'desc');
 
         // Appliquer les filtres via le trait FilterableTrait
         $developers = $this->filterResources($developersQuery, $request)->paginate(8);
@@ -211,11 +216,10 @@ class DeveloperController extends Controller
 
         // Récupération des candidatures associées au développeur
         $applications = $developer->applications()->get();
-    
+
         return response()->json([
             'message' => 'Candidatures récupérées avec succès.',
             'applications' => $applications
         ], 200);
     }
-
 }

@@ -29,7 +29,10 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        $request->session()->invalidate();
-        return response()->json(['message' => 'Déconnexion réussie']);
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return response()->json(['message' => 'Déconnexion réussie']);
     }
+
 }

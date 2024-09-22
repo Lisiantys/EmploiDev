@@ -22,25 +22,25 @@ use App\Http\Controllers\Api\ApplicationController;
 
 // Routes publiques (ne nécessitent pas d'authentification)
 
-Route::middleware('web')->group(function () {
-    Route::post('login', [AuthController::class, 'login']); //OK mais à voir avec le front
-    Route::post('developers', [DeveloperController::class, 'store']);//OK
-    Route::post('companies', [CompanyController::class, 'store']); //OK
-});
-    
 
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); 
 
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); // Affichage, création, et affichage individuel de développeurs
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);
 
-Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');//A revoir / voir avec le front
+Route::middleware('web')->group(function () {
+    Route::post('/login', [AuthController::class, 'login']); //OK 
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK
 
-    //Affichage des candidatures du développeur
-    //Route::get('/developers/{developer}/applications', [DeveloperController::class, 'developerApplications']);
-    Route::apiResource('developers', DeveloperController::class, ['except' => ['index', 'store', 'show']]);
+    Route::post('/developers', [DeveloperController::class, 'store']);//OK
+
+    Route::put('/developers/{developer}', [DeveloperController::class, 'update'])->middleware('auth:sanctum'); //OK
+    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy'])->middleware('auth:sanctum'); //OK
+
+    
+
 });
+
 
 
 
