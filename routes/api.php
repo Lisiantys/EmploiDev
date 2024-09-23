@@ -27,7 +27,7 @@ Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); /
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK
 
 //entreprise
-Route::get('/companies/{company}', [CompanyController::class, 'show']);
+Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK 

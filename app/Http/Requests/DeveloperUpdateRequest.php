@@ -33,11 +33,11 @@ class DeveloperUpdateRequest extends FormRequest
                 ->symbols()
             ],
             'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
-            'first_name' => 'sometimes|string|max:255',
-            'surname' => 'sometimes|string|max:255',
+            'first_name' => 'required|string|min:2|max:255',
+            'surname' => 'required|string|min:2|max:255',
             'cv' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
             'cover_letter' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
-            'description' => 'sometimes|string|max:255',
+            'description' => 'nullable|string|min:10|max:255',
             'is_free' => 'sometimes|boolean',
             'contract_id' => 'sometimes|exists:types_contracts,id',
             'year_id' => 'sometimes|exists:years_experiences,id',
@@ -66,9 +66,11 @@ class DeveloperUpdateRequest extends FormRequest
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
             'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+            'first_name.min' => 'Le prénom doit contenir au moins :min caractères.',
             'first_name.max' => 'Le prénom ne doit pas dépasser :max caractères.',
 
             'surname.string' => 'Le nom de famille doit être une chaîne de caractères.',
+            'surname.min' => 'Le nom de famille doit contenir au moins :min caractères.',
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
             'cv.string' => 'Le CV doit être un fichier valide.',
@@ -76,6 +78,7 @@ class DeveloperUpdateRequest extends FormRequest
             'cover_letter.string' => 'La lettre de motivation doit être un fichier valide.',
 
             'description.string' => 'La description doit être une chaîne de caractères.',
+            'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
 
             'is_free.boolean' => 'Le statut de disponibilité doit être vrai ou faux.',

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 
@@ -54,7 +55,6 @@ class CompanyController extends Controller
         ], 201);
     }
 
-
     /**
      * Affiche les détails d'une entreprise + offres d'emplois validés.
      */
@@ -70,17 +70,37 @@ class CompanyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour les informations d'une entreprise.
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
-        // Mettre à jour les détails de l'entreprise
-        $company->update($request->validated());
+        // Autoriser l'utilisateur à mettre à jour l'entreprise
+        $this->authorize('update', $company);
 
-        // Mettre à jour l'utilisateur associé
-        $company->user->update($request->only('email', 'password'));
+        // Gestion de l'image de profil
+        if ($request->hasFile('profil_image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($company->profil_image && $company->profil_image !== 'public/images/company.jpg') {
+                Storage::delete($company->profil_image);
+            }
+            // Stocker la nouvelle image
+            $imagePath = $request->file('profil_image')->store('public/images');
+        } else {
+            $imagePath = $company->profil_image; // Garder l'ancienne image si aucune nouvelle n'est fournie
+        }
 
-        return response()->json($company, 200);
+        // Fusionner les données validées avec le nouveau chemin de l'image
+        $companyData = array_merge($request->validated(), [
+            'profil_image' => $imagePath,
+        ]);
+
+        // Mettre à jour l'entreprise
+        $company->update($companyData);
+
+        return response()->json([
+            'message' => 'Entreprise mise à jour avec succès.',
+            'company' => $company
+        ], 200);
     }
 
     /**
