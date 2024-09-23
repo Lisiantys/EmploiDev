@@ -35,8 +35,8 @@ class DeveloperUpdateRequest extends FormRequest
             'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
             'first_name' => 'required|string|min:2|max:255',
             'surname' => 'required|string|min:2|max:255',
-            'cv' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
-            'cover_letter' => 'sometimes|file|mimes:pdf,doc,docx|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
+            'cv' => 'sometimes|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
+            'cover_letter' => 'sometimes|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'nullable|string|min:10|max:255',
             'is_free' => 'sometimes|boolean',
             'contract_id' => 'sometimes|exists:types_contracts,id',
@@ -74,8 +74,10 @@ class DeveloperUpdateRequest extends FormRequest
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
             'cv.string' => 'Le CV doit être un fichier valide.',
-
+            'cv.mimes' => 'Le CV doit être au format PDF.',
+            
             'cover_letter.string' => 'La lettre de motivation doit être un fichier valide.',
+            'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF.',
 
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.min' => 'La description doit contenir au moins :min caractères.',

@@ -63,7 +63,7 @@ Route::middleware('web')->group(function () {
     //Candidatures
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/applications', [ApplicationController::class, 'index']); //OK
-        Route::post('/applications', [ApplicationController::class, 'store']);
+        Route::post('/applications', [ApplicationController::class, 'store']); //OK
         Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
         Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);
         Route::get('/applications/{application}', [ApplicationController::class, 'show']);

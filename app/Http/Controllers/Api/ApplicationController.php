@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\JobOffer;
 use App\Models\Developer;
 use App\Models\Application;
 use Illuminate\Http\Request;
@@ -31,17 +32,37 @@ class ApplicationController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Unauthorized. Only developers can view their applications.'
+                'message' => 'Unauthorized. Seul un développeur peut voir ses candidatures'
             ], 403);
         }
     }
-    
-
 
     // Déposer une candidature
     public function store(ApplicationStoreRequest $request, Application $application)
     {
         $this->authorize('create', $application);
+
+        // Vérifier que l'offre d'emploi est validée
+        $jobOffer = JobOffer::find($request->job_id);
+
+        if (!$jobOffer || $jobOffer->is_validated === 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas candidater à une offre non validée.'
+            ], 403);
+        }
+
+        // Vérifier si le développeur a déjà une candidature pour cette offre
+        $existingApplication = Application::where('job_id', $request->job_id)
+            ->where('developer_id', Auth::id())
+            ->first();
+
+        if ($existingApplication) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous avez déjà envoyé une candidature pour cette offre d\'emploi.'
+            ], 409);
+        }
 
         $application = Application::create([
             'description' => $request->description,
@@ -53,7 +74,7 @@ class ApplicationController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Candidature déposée avec succès.',
+            'message' => 'Candidature posté avec succès.',
             'application' => $application,
         ], 201);
     }
