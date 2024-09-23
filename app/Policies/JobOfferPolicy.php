@@ -2,30 +2,13 @@
 
 namespace App\Policies;
 
-use App\Models\JobOffer;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\JobOffer;
 
 class JobOfferPolicy
 {
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, JobOffer $jobOffer): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can create models.
+     * Détermine si l'utilisateur peut créer une offre d'emploi.
      */
     public function create(User $user): bool
     {
@@ -33,44 +16,10 @@ class JobOfferPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Détermine si l'utilisateur peut supprimer une offre d'emploi.
      */
-    public function update(User $user, JobOffer $jobOffer): bool
+    public function delete(User $user, JobOffer $jobOffer): bool
     {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, JobOffer $jobOffer)
-    {
-        // Vérifier si l'utilisateur est l'entreprise qui a créé l'offre
-        if ($user->role_id === 2) {
-            return $user->id === $jobOffer->company->user_id;
-        }
-        
-        // Vérifier si l'utilisateur est un administrateur
-        if ($user->role_id === 3) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, JobOffer $jobOffer): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, JobOffer $jobOffer): bool
-    {
-        //
+        return $user->id === $jobOffer->company_id || $user->role_id === 3;
     }
 }

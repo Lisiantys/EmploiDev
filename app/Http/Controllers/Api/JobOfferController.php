@@ -15,68 +15,67 @@ use App\Http\Requests\DeveloperFilterRequest;
 class JobOfferController extends Controller
 {
     use FilterableTrait;
+
     /**
-     * Affiche les offres d'emplois validés
+     * Affiche toutes les offres d'emploi validées, en ordre randomisé.
      */
     public function index()
     {
-        $jobOffers = JobOffer::where('is_validated', 1)->get();
-        return response()->json($jobOffers);
+        $jobOffers = JobOffer::where('is_validated', 1)->inRandomOrder()->get();
+
+        return response()->json([
+            'message' => 'Offres d\'emploi validées récupérées avec succès.',
+            'job_offers' => $jobOffers,
+        ], 200);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Crée une nouvelle offre d'emploi.
      */
     public function store(JobOfferStoreRequest $request)
     {
+        $this->authorize('create', JobOffer::class);
+
         $jobOffer = JobOffer::create($request->validated());
 
         // Attachement des langages de programmation
         $jobOffer->programmingLanguages()->attach($request->programming_languages);
-        return response()->json($jobOffer, 201);
-    }
+        return response()->json([
+            'message' => 'Offre d\'emploi créée avec succès.',
+            'job_offer' => $jobOffer,
+        ], 201);    }
 
     /**
-     * Display the specified resource.
+     * Affiche une offre d'emploi spécifique.
      */
     public function show(JobOffer $jobOffer)
     {
-        return response()->json($jobOffer);
+        if ($jobOffer->is_validated == 1) {
+            return response()->json([
+                'message' => 'Offre d\'emploi récupérée avec succès.',
+                'job_offer' => $jobOffer
+            ], 200);
+        } else {
+            return response()->json(['message' => 'Offre d\'emploi non validée.'], 403);
+        }
     }
+    
     /**
      * Update the specified resource in storage. VOIR SI ON FAIT LUPDATE OU NON + POLICIES 
      */ 
-    public function update(JobOfferUpdateRequest $request, JobOffer $jobOffer)
-    {
-        $validatedData = $request->validated();
-
-        // Supprimer les anciens langages de programmation et associer les nouveaux
-        if (isset($validatedData['programming_languages'])) {
-            $jobOffer->programmingLanguages()->sync($validatedData['programming_languages']);
-            unset($validatedData['programming_languages']); // Retirer les langages de programmation du tableau pour ne pas les passer à la méthode update
-        }
-
-        // Mettre à jour les autres champs de l'offre d'emploi
-        $jobOffer->update($validatedData);
-
-        // Mise à jour des langages du développeur
-        if ($request->has('programming_languages')) {
-            $jobOffer->programmingLanguages()->sync($request->programming_languages);
-        }
-
-        return response()->json($jobOffer->fresh(), 200);
-    }
-
+    
     /**
-     * Remove the specified resource from storage.
+     * Supprime une offre d'emploi.
      */
     public function destroy(JobOffer $jobOffer)
     {
-        $this->authorize('delete', $jobOffer);
+        $this->authorize('delete', $jobOffer); // Vérifie que l'utilisateur a le droit de supprimer cette offre
 
         $jobOffer->delete();
 
-        return response()->json($jobOffer, 200);
+        return response()->json([
+            'message' => 'Offre d\'emploi supprimée avec succès.',
+        ], 200);
     }
 
 
