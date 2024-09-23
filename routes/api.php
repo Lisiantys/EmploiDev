@@ -59,4 +59,14 @@ Route::middleware('web')->group(function () {
         Route::post('/job-offers', [JobOfferController::class, 'store']); //OK
         Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK
     });
+
+    //Candidatures
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/applications', [ApplicationController::class, 'index']); //OK
+        Route::post('/applications', [ApplicationController::class, 'store']);
+        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
+        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);
+        Route::get('/applications/{application}', [ApplicationController::class, 'show']);
+        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
+    });
 });

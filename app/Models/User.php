@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function developer()
     {
-        return $this->hasOne(Developer::class)->where('role_id', '=', 1);
+        return $this->hasOne(Developer::class);
     }
 
     public function company()
