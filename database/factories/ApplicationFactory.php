@@ -22,6 +22,9 @@ class ApplicationFactory extends Factory
             'description' => fake()->paragraph(),
             'job_id' => JobOffer::pluck('id')->random(),
             'developer_id' => Developer::pluck('id')->random(),
+            'cv' => 'storage/cv.pdf',
+            'cover_letter' => 'storage/cover_letter.pdf',
+            'status' => fake()->randomElement(['accepted', 'rejected', 'pending']),
         ];
     }
 }

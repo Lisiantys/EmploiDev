@@ -11,6 +11,9 @@ class Application extends Model
 
     protected $fillable = [
         'description',
+        'cv',
+        'cover_letter',
+        'status',
     ];
 
     public function jobOffer()

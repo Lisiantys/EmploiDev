@@ -42,8 +42,10 @@ Route::middleware('web')->group(function () {
     });
 
     //Entreprises
-    Route::post('/companies', [CompanyController::class, 'store']); //OK mais a voir si sa connecte bien
+    Route::post('/companies', [CompanyController::class, 'store']); //OK 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);
+        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK
+        Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);
+        Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);
     });
 });

@@ -104,38 +104,47 @@ class CompanyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Supprime une entreprise et l'utilisateur associé.
      */
-    // public function destroy(Company $company)
-    // {
-    //     $company->delete();
-    //     return response()->json($company, 200);
-    // }
+    public function destroy(Company $company, Request $request)
+    {
+        $this->authorize('delete', $company);
+
+        $user = $request->user();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->delete();
+
+        return response()->json(['message' => 'Entreprise supprimée avec succès']);
+    }
 
     /* ===== Customs methods  ===== */
 
-    /**
-     * L'entreprise consulte ses offres d'emploies
-     */
-    public function jobOffers(Company $company) //OK
+    //Affiche les offres d'emplois de l'entreprise
+    public function jobOffersCompany(Company $company)
     {
-        $jobOffers = $company->jobOffers()->get();
-        return response()->json($jobOffers);
+        $this->authorize('view', $company);
+
+        // Récupération de toutes les offres d'emploi de l'entreprise
+        $jobOffers = $company->jobOffers;
+
+        return response()->json([
+            'message' => 'Offres d\'emploi récupérées avec succès.',
+            'job_offers' => $jobOffers,
+        ], 200);
     }
 
-    /**
-     * Affiche les candidatures associées à l'offre d'emploi + leurs candidature
-     */
-    public function jobOfferApplications(Company $company, JobOffer $jobOffer) //OK
+    // Affiche les candidatures reçues sur une offre d'emploi
+    public function jobOfferApplications(JobOffer $jobOffer)
     {
-        // Vérification que l'offre d'emploi appartient bien à l'entreprise
-        if ($jobOffer->company_id !== $company->id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        $this->authorize('view', $jobOffer->company);
 
-        // Récupération des candidatures associées à l'offre d'emploi spécifique
-        $applications = $jobOffer->applications;
+        // Récupération des candidatures pour l'offre d'emploi, filtrées par statut
+        $applications = $jobOffer->applications()->whereIn('status', ['pending', 'accepted'])->get();
 
-        return response()->json($applications);
+        return response()->json([
+            'message' => 'Candidatures récupérées avec succès.',
+            'applications' => $applications,
+        ], 200);
     }
 }
