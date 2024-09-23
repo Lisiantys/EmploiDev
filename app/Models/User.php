@@ -55,6 +55,6 @@ class User extends Authenticatable
 
     public function company()
     {
-        return $this->hasOne(Company::class)->where('role_id', '=', 2);
+        return $this->hasOne(Company::class);
     }
 }

@@ -29,7 +29,6 @@ class JobOfferStoreRequest extends FormRequest
             'year_id' => 'required|exists:years_experiences,id',
             'location_id' => 'required|exists:locations,id',
             'type_id' => 'required|exists:types_developers,id',
-            'company_id' => 'required|exists:companies,id',
             'programming_languages' => 'required|array',
             'programming_languages.*' => 'exists:programming_languages,id',
         ];

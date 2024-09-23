@@ -7,6 +7,7 @@ use App\Models\Developer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\JobOfferStoreRequest;
 use App\Http\Requests\JobOfferFilterRequest;
 use App\Http\Requests\JobOfferUpdateRequest;
@@ -34,16 +35,26 @@ class JobOfferController extends Controller
      */
     public function store(JobOfferStoreRequest $request)
     {
+        // Autoriser l'utilisateur à créer une offre d'emploi
         $this->authorize('create', JobOffer::class);
 
-        $jobOffer = JobOffer::create($request->validated());
+        // Récupérer l'entreprise associée à l'utilisateur connecté
+        $companyId = Auth::user()->company->id;
+
+        // Création de l'offre d'emploi avec l'ID de l'entreprise connecté
+        $jobOffer = JobOffer::create(array_merge($request->validated(), [
+            'company_id' => $companyId, // Assigne l'ID de l'entreprise
+        ]));
 
         // Attachement des langages de programmation
         $jobOffer->programmingLanguages()->attach($request->programming_languages);
+
         return response()->json([
             'message' => 'Offre d\'emploi créée avec succès.',
             'job_offer' => $jobOffer,
-        ], 201);    }
+        ], 201);
+    }
+
 
     /**
      * Affiche une offre d'emploi spécifique.
@@ -59,17 +70,18 @@ class JobOfferController extends Controller
             return response()->json(['message' => 'Offre d\'emploi non validée.'], 403);
         }
     }
-    
+
     /**
      * Update the specified resource in storage. VOIR SI ON FAIT LUPDATE OU NON + POLICIES 
-     */ 
-    
+     */
+
     /**
      * Supprime une offre d'emploi.
      */
     public function destroy(JobOffer $jobOffer)
     {
-        $this->authorize('delete', $jobOffer); // Vérifie que l'utilisateur a le droit de supprimer cette offre
+        // Autoriser uniquement l'entreprise qui a crée l'offre ou un admin à supprimer l'offre
+        $this->authorize('delete', $jobOffer);
 
         $jobOffer->delete();
 
@@ -87,7 +99,7 @@ class JobOfferController extends Controller
     public function filterForm(JobOfferFilterRequest $request) //OK
     {
         $jobOffers = $this->filterResources(JobOffer::where('is_validated', 1), $request)->get();
-      // dd($jobOffers);
+        // dd($jobOffers);
         return response()->json($jobOffers);
     }
 }
