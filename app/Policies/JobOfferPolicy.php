@@ -20,6 +20,7 @@ class JobOfferPolicy
      */
     public function delete(User $user, JobOffer $jobOffer): bool
     {
-        return $user->id === $jobOffer->company_id || $user->role_id === 3;
+        return $user->id === $jobOffer->company->user_id || $user->role_id === 3; // 3 est l'ID du rôle admin
     }
+
 }

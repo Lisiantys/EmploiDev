@@ -31,8 +31,8 @@ Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK
 
 //Offres d'emplois
 Route::get('/job-offers', [JobOfferController::class, 'index']); //OK
-Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']);
-Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']); //OK
+Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK 
@@ -56,7 +56,7 @@ Route::middleware('web')->group(function () {
 
     //Offres d'emplois
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/job-offers', [JobOfferController::class, 'store']);
-        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']);
+        Route::post('/job-offers', [JobOfferController::class, 'store']); //OK
+        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK
     });
 });

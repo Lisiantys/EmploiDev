@@ -22,13 +22,12 @@ class JobOfferFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_id' => 'nullable|integer',
-            'year_id' => 'nullable|integer',
-            'location_id' => 'nullable|string',
-            'type_id' => 'nullable|integer',
-            'created_at' => 'nullable|date',
-            'programming_languages' => 'nullable|array', // Les langages de programmation doivent être un tableau
-            'programming_languages.*' => 'exists:programming_languages,id', // Assure que chaque ID de langage de programmation existe
+            'contract_id' => 'sometimes|exists:types_contracts,id',
+            'year_id' => 'sometimes|exists:years_experiences,id',
+            'location_id' => 'sometimes|exists:locations,id',
+            'type_id' => 'sometimes|exists:types_developers,id',
+            'programming_languages' => 'sometimes|array',
+            'programming_languages.*' => 'exists:programming_languages,id',
         ];
     }
 }

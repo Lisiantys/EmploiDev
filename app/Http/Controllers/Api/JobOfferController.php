@@ -96,10 +96,18 @@ class JobOfferController extends Controller
     /**
      * Filter Jobs offers based on the provided criteria.
      */
-    public function filterForm(JobOfferFilterRequest $request) //OK
+    public function filterForm(JobOfferFilterRequest $request)
     {
-        $jobOffers = $this->filterResources(JobOffer::where('is_validated', 1), $request)->get();
-        // dd($jobOffers);
-        return response()->json($jobOffers);
+        $jobOffersQuery = JobOffer::where('is_validated', 1)
+            ->orderBy('created_at', 'desc'); 
+
+        // Appliquer les filtres via le trait FilterableTrait
+        $jobOffers = $this->filterResources($jobOffersQuery, $request)->paginate(8);
+
+        return response()->json([
+            'message' => 'Liste des offres d\'emploi filtrée récupérée avec succès.',
+            'job_offers' => $jobOffers
+        ], 200);
     }
+
 }
