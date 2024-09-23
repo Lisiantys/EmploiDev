@@ -2,13 +2,14 @@
 
 namespace App\Policies;
 
+use Log;
 use App\Models\User;
-use App\Models\Application;
 use App\Models\Developer;
+use App\Models\Application;
 
 class ApplicationPolicy
 {
-     /**
+    /**
      * Seul les développeurs peuvent voir leurs candidatures en detail.
      */
     public function view(User $user, Application $application): bool
@@ -21,7 +22,7 @@ class ApplicationPolicy
      */
     public function accept(User $user, Application $application): bool
     {
-        return $user->role_id === 2 && $user->company_id === $application->jobOffer->company_id; 
+        return $user->company->id === $application->jobOffer->company_id;
     }
 
     /**
@@ -29,7 +30,7 @@ class ApplicationPolicy
      */
     public function refuse(User $user, Application $application): bool
     {
-        return $user->role_id === 2 && $user->company_id === $application->jobOffer->company_id;
+        return $user->company->id === $application->jobOffer->company_id;
     }
 
     /**
@@ -37,7 +38,7 @@ class ApplicationPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role_id === 1; 
+        return $user->role_id === 1;
     }
 
     /**
@@ -45,6 +46,6 @@ class ApplicationPolicy
      */
     public function delete(User $user, Application $application): bool
     {
-        return $user->id === $application->developer_id; 
+        return $user->id === $application->developer_id;
     }
 }

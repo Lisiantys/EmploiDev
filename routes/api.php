@@ -64,9 +64,9 @@ Route::middleware('web')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/applications', [ApplicationController::class, 'index']); //OK
         Route::post('/applications', [ApplicationController::class, 'store']); //OK
-        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
-        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);
+        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK
+        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK
         Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK
-        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']);
+        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK
     });
 });

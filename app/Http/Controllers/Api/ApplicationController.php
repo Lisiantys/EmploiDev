@@ -6,6 +6,7 @@ use App\Models\JobOffer;
 use App\Models\Developer;
 use App\Models\Application;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ApplicationStoreRequest;
@@ -82,7 +83,20 @@ class ApplicationController extends Controller
     // Accepter une candidature
     public function acceptApplication(Application $application)
     {
+        Log::info('Checking accept permission', [
+            'user_id' => Auth::id(),
+            'application_id' => $application->id,
+            'company_id' => Auth::user()->company ? Auth::user()->company->id : null,
+            'application_company_id' => $application->jobOffer->company_id,
+        ]);
         $this->authorize('accept', $application);
+
+        if ($application->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas refuser ou accepter une candidature qui n\'est pas en attente.',
+            ], 403);
+        }
 
         $application->status = 'accepted';
         $application->save();
@@ -96,6 +110,13 @@ class ApplicationController extends Controller
     public function refuseApplication(Application $application)
     {
         $this->authorize('refuse', $application);
+
+        if ($application->status !== 'pending') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Vous ne pouvez pas refuser ou accepter une candidature qui n\'est pas en attente.',
+            ], 403);
+        }
 
         $application->status = 'rejected';
         $application->save();
