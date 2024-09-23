@@ -7,20 +7,13 @@ use App\Models\Company;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 
 class CompanyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $companies = Company::all();
-        return response()->json($companies);
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -47,9 +40,15 @@ class CompanyController extends Controller
             ]
         ));
 
+        // On connecte l'utilisateur
+        Auth::login($user);
+
+        // Régénérer la session après la connexion
+        $request->session()->regenerate();
+
         // Retourner la réponse
         return response()->json([
-            'message' => 'Entreprise créée avec succès.',
+            'message' => 'Entreprise créée avec succès et vous êtes connecté.',
             'company' => $company,
             'user' => $user
         ], 201);

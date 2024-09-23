@@ -33,11 +33,11 @@ class DeveloperStoreRequest extends FormRequest
                 ->symbols()
             ],
             'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
-            'first_name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
+            'first_name' => 'required|string|min:2|max:255',
+            'surname' => 'required|string|min:2|max:255',
             'cv' => 'required|file|mimes:pdf,doc,docx|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
             'cover_letter' => 'required|file|mimes:pdf,doc,docx|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
-            'description' => 'required|string|max:255',
+            'description' => 'nullable|string|min:10|max:255',
             'is_free' => 'required|boolean',
             'contract_id' => 'required|exists:types_contracts,id',
             'year_id' => 'required|exists:years_experiences,id',
@@ -69,10 +69,12 @@ class DeveloperStoreRequest extends FormRequest
 
             'first_name.required' => 'Le prénom est obligatoire.',
             'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
+            'first_name.min' => 'Le prénom doit contenir au moins :min caractères.',
             'first_name.max' => 'Le prénom ne doit pas dépasser :max caractères.',
 
             'surname.required' => 'Le nom de famille est obligatoire.',
             'surname.string' => 'Le nom de famille doit être une chaîne de caractères.',
+            'surname.min' => 'Le nom de famille doit contenir au moins :min caractères.',
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
             'cv.required' => 'Le CV est obligatoire.',
@@ -81,8 +83,8 @@ class DeveloperStoreRequest extends FormRequest
             'cover_letter.required' => 'La lettre de motivation est obligatoire.',
             'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF, DOC ou DOCX.',
    
-            'description.required' => 'La description est obligatoire.',
             'description.string' => 'La description doit être une chaîne de caractères.',
+            'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
 
             'is_free.required' => 'Le statut de disponibilité est obligatoire.',
