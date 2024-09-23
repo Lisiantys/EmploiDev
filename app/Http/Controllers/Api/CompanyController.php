@@ -56,11 +56,17 @@ class CompanyController extends Controller
 
 
     /**
-     * Display the specified resource.
+     * Affiche les détails d'une entreprise + offres d'emplois validés.
      */
     public function show(Company $company)
     {
-        return response()->json($company);
+        $validatedJobOffers = $company->jobOffers()->where('is_validated', 1)->get();
+
+        return response()->json([
+            'message' => 'Compagnie récupérée avec succès.',
+            'company' => $company,
+            'job_offers' => $validatedJobOffers
+        ], 200);
     }
 
     /**
