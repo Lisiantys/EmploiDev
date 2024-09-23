@@ -12,11 +12,9 @@ class ApplicationPolicy
      * Seul les développeurs peuvent voir leurs candidatures en detail.
      */
     public function view(User $user, Application $application): bool
-{
-
-    return $user->id === $application->developer_id;
-}
-
+    {
+        return $user->id === $application->developer_id;
+    }
 
     /**
      * Assure que l'utilisateur est une entreprise et qu'il a le droit d'accepter
