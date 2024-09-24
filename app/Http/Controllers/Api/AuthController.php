@@ -13,7 +13,6 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
@@ -29,10 +28,9 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-            return response()->json(['message' => 'Déconnexion réussie']);
+        return response()->json(['message' => 'Déconnexion réussie']);
     }
-
 }

@@ -69,4 +69,13 @@ Route::middleware('web')->group(function () {
         Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK
         Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK
     });
+
+    //Administrateurs
+    Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
+        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']);//OK
+        Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']);//OK
+        Route::get('/admin/companies', [AdminController::class, 'handleCompanies']);//OK
+        Route::get('/admin/developers', [AdminController::class, 'handleDevelopers']);//OK
+        Route::post('/admin/filter-users', [AdminController::class, 'filterByEmail']); //OK
+    });
 });

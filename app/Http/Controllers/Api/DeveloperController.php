@@ -72,7 +72,6 @@ class DeveloperController extends Controller
         $programmingLanguages = $request->input('programming_languages');
         $developer->programmingLanguages()->attach($programmingLanguages);
 
-        //On connecte l'utilisateur
         Auth::login($user);
 
         // Régénérer la session après la connexion
@@ -86,7 +85,6 @@ class DeveloperController extends Controller
             'user' => $user,
         ], 201);
     }
-
 
     /**
      * Affiche les détails d'un développeur validé.
@@ -108,8 +106,6 @@ class DeveloperController extends Controller
      */
     public function update(DeveloperUpdateRequest $request, Developer $developer)
     {
-
-        // Autoriser l'utilisateur à mettre à jour le développeur
         $this->authorize('update', $developer);
 
         // Gestion de l'image de profil
@@ -211,22 +207,20 @@ class DeveloperController extends Controller
      * Affiche les candidatures crées par le développeur
      */
     public function developerApplications(Developer $developer) // OK
-{
-    $this->authorize('viewApplications', $developer);
+    {
+        $this->authorize('viewApplications', $developer);
 
-    // Récupération des candidatures associées au développeur
-    $applications = $developer->applications;
+        // Récupération des candidatures associées au développeur
+        $applications = $developer->applications;
 
-    // Vérifie si des candidatures existent
-    if ($applications->isEmpty()) {
-        return response()->json(['message' => 'Aucune candidature trouvée pour ce développeur.'], 404);
+        // Vérifie si des candidatures existent
+        if ($applications->isEmpty()) {
+            return response()->json(['message' => 'Aucune candidature trouvée pour ce développeur.'], 404);
+        }
+
+        return response()->json([
+            'message' => 'Candidatures récupérées avec succès.',
+            'applications' => $applications
+        ], 200);
     }
-
-    return response()->json([
-        'message' => 'Candidatures récupérées avec succès.',
-        'applications' => $applications
-    ], 200);
-}
-
-    
 }

@@ -17,7 +17,7 @@ class CompanyController extends Controller
 {
 
     /**
-     * Store a newly created resource in storage.
+     * Création d'un user + entreprise
      */
     public function store(CompanyStoreRequest $request)
     {
@@ -41,7 +41,6 @@ class CompanyController extends Controller
             ]
         ));
 
-        // On connecte l'utilisateur
         Auth::login($user);
 
         // Régénérer la session après la connexion
@@ -74,7 +73,6 @@ class CompanyController extends Controller
      */
     public function update(CompanyUpdateRequest $request, Company $company)
     {
-        // Autoriser l'utilisateur à mettre à jour l'entreprise
         $this->authorize('update', $company);
 
         // Gestion de l'image de profil

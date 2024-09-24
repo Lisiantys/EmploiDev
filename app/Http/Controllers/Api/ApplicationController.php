@@ -18,7 +18,6 @@ class ApplicationController extends Controller
 
     public function index(Request $request)
     {
-        // Récupérer l'utilisateur connecté
         $user = Auth::user();
 
         // Vérifier si l'utilisateur est un développeur
@@ -65,12 +64,19 @@ class ApplicationController extends Controller
             ], 409);
         }
 
+        // Récupérer le développeur connecté
+        $developer = Developer::where('user_id', Auth::id())->first();
+
+        // Récupérer le CV et la lettre de motivation du développeur, si non fournis
+        $cv = $request->file('cv') ? $request->file('cv')->store('cv') : $developer->cv;
+        $coverLetter = $request->file('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
+
         $application = Application::create([
             'description' => $request->description,
             'job_id' => $request->job_id,
             'developer_id' => Auth::id(),
-            'cv' => $request->cv,
-            'cover_letter' => $request->cover_letter,
+            'cv' => $cv,
+            'cover_letter' => $coverLetter,
             'status' => 'pending',
         ]);
 
@@ -83,12 +89,6 @@ class ApplicationController extends Controller
     // Accepter une candidature
     public function acceptApplication(Application $application)
     {
-        Log::info('Checking accept permission', [
-            'user_id' => Auth::id(),
-            'application_id' => $application->id,
-            'company_id' => Auth::user()->company ? Auth::user()->company->id : null,
-            'application_company_id' => $application->jobOffer->company_id,
-        ]);
         $this->authorize('accept', $application);
 
         if ($application->status !== 'pending') {

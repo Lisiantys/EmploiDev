@@ -35,7 +35,6 @@ class JobOfferController extends Controller
      */
     public function store(JobOfferStoreRequest $request)
     {
-        // Autoriser l'utilisateur à créer une offre d'emploi
         $this->authorize('create', JobOffer::class);
 
         // Récupérer l'entreprise associée à l'utilisateur connecté
@@ -55,7 +54,6 @@ class JobOfferController extends Controller
         ], 201);
     }
 
-
     /**
      * Affiche une offre d'emploi spécifique.
      */
@@ -72,15 +70,10 @@ class JobOfferController extends Controller
     }
 
     /**
-     * Update the specified resource in storage. VOIR SI ON FAIT LUPDATE OU NON + POLICIES 
-     */
-
-    /**
      * Supprime une offre d'emploi.
      */
     public function destroy(JobOffer $jobOffer)
     {
-        // Autoriser uniquement l'entreprise qui a crée l'offre ou un admin à supprimer l'offre
         $this->authorize('delete', $jobOffer);
 
         $jobOffer->delete();
@@ -99,7 +92,7 @@ class JobOfferController extends Controller
     public function filterForm(JobOfferFilterRequest $request)
     {
         $jobOffersQuery = JobOffer::where('is_validated', 1)
-            ->orderBy('created_at', 'desc'); 
+            ->orderBy('created_at', 'desc');
 
         // Appliquer les filtres via le trait FilterableTrait
         $jobOffers = $this->filterResources($jobOffersQuery, $request)->paginate(8);
@@ -109,5 +102,4 @@ class JobOfferController extends Controller
             'job_offers' => $jobOffers
         ], 200);
     }
-
 }

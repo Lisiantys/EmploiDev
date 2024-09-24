@@ -2,66 +2,71 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
+use App\Models\Company;
 use App\Models\JobOffer;
 use App\Models\Developer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
-    /**
-     * Affiche les offres d'emplois non validés
-     */
+    //Récupère les offres d'emploi en attente de validation.
     public function pendingJobOffers()
     {
-        $pendingJobOffers = JobOffer::where('is_validated', 0)->get();
-        return response()->json($pendingJobOffers);
+        $jobOffers = JobOffer::where('is_validated', 0)->paginate(15);
+
+        return response()->json([
+            'message' => 'Offres d\'emploi en attente récupérées avec succès.',
+            'job_offers' => $jobOffers,
+        ], 200);
     }
 
-    /**
-     * Affiche les développeurs non validées
-     */
+    //Récupère les développeurs en attente de validation.
     public function pendingDevelopers()
     {
-        $pendingDevelopers = Developer::where('is_validated', 0)->get();
-        return response()->json($pendingDevelopers);
+        $developers = Developer::where('is_validated', 0)->paginate(15);
+
+        return response()->json([
+            'message' => 'Développeurs en attente récupérés avec succès.',
+            'developers' => $developers,
+        ], 200);
     }
 
-    /**
-     * Accpeter ou refuser une offre d'emploi
-     */
-    public function handleJobOffer($id, $action)
+    //Récupère les entreprises
+    public function handleCompanies()
     {
-        $jobOffer = JobOffer::findOrFail($id);
+        $companies = Company::paginate(15);
 
-        if ($action === 'accept') {
-            $jobOffer->is_validated = 1;
-            $jobOffer->save();
-            return response()->json(['message' => 'Offre d\'emploi accepté OK'], 200);
-        } elseif ($action === 'reject') {
-            $jobOffer->delete();
-            return response()->json(['message' => 'Offre d\'emploi refusé OK'], 204);
-        }
-
-        return response()->json(['message' => 'Action invalide'], 400);
+        return response()->json([
+            'message' => 'Entreprises récupérées avec succès.',
+            'companies' => $companies,
+        ], 200);
     }
 
-    /**
-     * Accepter ou refuser le profil développeur
-     */
-    public function handleDeveloper($id, $action)
+    //Récupère les développeurs
+    public function handleDevelopers()
     {
-        $developer = Developer::findOrFail($id);
+        $developers = Developer::paginate(15);
 
-        if ($action === 'accept') {
-            $developer->is_validated = 1;
-            $developer->save();
-            return response()->json(['message' => 'Développeur accepté OK'], 200);
-        } elseif ($action === 'reject') {
-            $developer->delete();
-            return response()->json(['message' => 'Développeur refusé OK'], 204);
+        return response()->json([
+            'message' => 'Développeurs récupérés avec succès.',
+            'developers' => $developers,
+        ], 200);
+    }
 
-        }
-        return response()->json(['message' => 'Action invalide'], 400);
+    //Filtre les devéloppeurs et entreprises à l'aide des emails.
+    public function filterByEmail(Request $request)
+    {
+        $email = $request->input('email');
+
+        $users = User::where('email', 'like', "%{$email}%")->get();
+
+        return response()->json([
+            'message' => 'Résultats filtrés récupérés avec succès.',
+            'users' => $users,
+        ], 200);
     }
 }
