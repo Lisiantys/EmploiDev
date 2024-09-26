@@ -26,6 +26,13 @@ use App\Http\Controllers\Api\ApplicationController;
 Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel
 
+//Route pour peuplé le formulaire de filtrage
+Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);
+Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);
+Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']);
+Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);
+Route::get('/locations', [DeveloperController::class, 'getLocations']);
+
 //Entreprises
 Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
 

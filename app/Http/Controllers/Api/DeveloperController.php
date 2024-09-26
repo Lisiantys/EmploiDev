@@ -3,7 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\Location;
 use App\Models\Developer;
+use Illuminate\Http\Request;
+use App\Models\TypesContract;
+use App\Models\TypesDeveloper;
+use App\Models\YearsExperience;
+use App\Models\ProgrammingLanguage;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
@@ -13,7 +19,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\DeveloperStoreRequest;
 use App\Http\Requests\DeveloperFilterRequest;
 use App\Http\Requests\DeveloperUpdateRequest;
-use Illuminate\Http\Request;
 
 
 
@@ -26,8 +31,7 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = Developer::with(['location', 'typesDeveloper', 'typesContract']) // Eager load the location
-        ->where('is_validated', 1)
+        $developers = Developer::where('is_validated', 1)
         ->orderBy('is_free', 'desc')
         ->paginate(8);
 
@@ -199,10 +203,12 @@ class DeveloperController extends Controller
         // Appliquer les filtres via le trait FilterableTrait
         $developers = $this->filterResources($developersQuery, $request)->paginate(8);
 
-        return response()->json([
-            'message' => 'Liste des développeurs filtrée récupérée avec succès.',
-            'developers' => $developers
-        ], 200);
+        $developers->getCollection()->transform(function ($developer) {
+            $developer->profil_image = asset('storage/' . $developer->profil_image);
+            return $developer;
+        });
+    
+        return response()->json($developers, 200);
     }
 
     /**
@@ -225,4 +231,36 @@ class DeveloperController extends Controller
             'applications' => $applications
         ], 200);
     }
+
+    //** Récupération des données pour le formulaire **/
+    public function getProgrammingLanguages()
+    {
+        $languages = ProgrammingLanguage::all();
+        return response()->json($languages, 200);
+    }
+
+    public function getTypesContracts()
+    {
+        $contracts = TypesContract::all();
+        return response()->json($contracts, 200);
+    }
+
+    public function getTypesDevelopers()
+    {
+        $types = TypesDeveloper::all();
+        return response()->json($types, 200);
+    }
+
+    public function getYearsExperiences()
+    {
+        $years = YearsExperience::all();
+        return response()->json($years, 200);
+    }
+
+    public function getLocations()
+    {
+        $locations = Location::all();
+        return response()->json($locations, 200);
+    }
+
 }
