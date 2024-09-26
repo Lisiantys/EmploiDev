@@ -26,10 +26,15 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = Developer::where('is_validated', 1)
-            ->orderBy('is_free', 'desc')
-            ->inRandomOrder()
-            ->paginate(8);
+        $developers = Developer::with(['location', 'typesDeveloper', 'typesContract']) // Eager load the location
+        ->where('is_validated', 1)
+        ->orderBy('is_free', 'desc')
+        ->paginate(8);
+
+        $developers->getCollection()->transform(function ($developer) {
+            $developer->profil_image = asset('storage/' . $developer->profil_image);
+            return $developer;
+        });
 
         return response()->json($developers, 200);
     }

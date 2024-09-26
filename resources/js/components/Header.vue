@@ -1,55 +1,28 @@
 <template>
-    <!-- <div class="flex flex-row md:flex-col text-base bg-blue-500 md:h-full md:py-7 fixed custom-sidebar z-10">
-    <router-link to="/" id="logo-link" class="w-full h-16 flex items-center justify-center">
-        <img class="w-14" src="#" alt="Logo" />
-        <h1 class="sidebar-text font-bold text-xl animate-charcter">EmploiDev</h1>
-    </router-link>
+    <div
+        class="flex flex-row md:flex-col text-base bg-blue-500 md:h-full text-white  md:py-7 fixed custom-sidebar z-10">
+        <router-link :to="{ name: 'home' }" href="#" id="logo-link" class="w-full h-16 flex items-center justify-center">
+            <img class="w-14" :src="logoUrl" alt="logo"/>
+            <h1 class="sidebar-text font-bold text-xl animate-charcter ">EmploiDev</h1>
+        </router-link>
 
-    <router-link to="/developers" class="w-full h-16 flex items-center justify-center">
-        <i class="fa-regular fa-id-card fa-xl"></i>
-        <p class="sidebar-text">Développeurs</p>
-    </router-link>
-
-    <router-link to="/jobs" class="w-full h-16 flex items-center justify-center">
-        <i class="fa-solid fa-building fa-xl"></i>
-        <p class="sidebar-text">Emplois</p>
-    </router-link>
-
-    <router-link to="/login" class="w-full h-16 flex items-center justify-center">
-        <i class="fa-solid fa-right-to-bracket fa-xl"></i>
-        <p class="sidebar-text">Connexion</p>
-    </router-link>
-
-    <router-link to="/register" class="w-full h-16 flex items-center justify-center">
-        <i class="fa-solid fa-user-plus fa-xl"></i>
-        <p class="sidebar-text">Inscription</p>
-    </router-link>
-</div> -->
-<div
-            class="flex flex-row md:flex-col text-base bg-blue-500 md:h-full text-white  md:py-7 fixed custom-sidebar z-10">
-            <router-link :to="{ name: 'home' }" href="#" id="logo-link" class="w-full h-16 flex items-center justify-center">
-                <img class="w-14" :src="logoUrl" alt="logo"/>
-                <h1 class="sidebar-text font-bold text-xl animate-charcter ">EmploiDev</h1>
-            </router-link>
-
-            <router-link :to="{ name: 'home' }" class="w-full h-16 flex items-center justify-center">
-                <i class="fa-regular fa-id-card fa-xl" style="color: #ffffff;"></i>
-                <p class="sidebar-text">Développeurs</p>
-            </router-link>
-            <router-link :to="{ name: 'job' }" class="w-full h-16 flex items-center justify-center">
-                <i class="fa-solid fa-building fa-xl" style="color: #ffffff;"></i>
-                <p class="sidebar-text">Emplois</p>
-            </router-link>
-            <router-link :to="{ name: 'login' }" class="w-full h-16 flex items-center justify-center">
-                <i class="fa-solid fa-right-to-bracket fa-xl" style="color: #ffffff;"></i>
-                <p class="sidebar-text">Connexion</p>
-            </router-link>
-            <router-link :to="{ name: 'register' }" class="w-full h-16 flex items-center justify-center">
-                <i class="fa-solid fa-user-plus fa-xl" style="color: #ffffff;"></i>
-                <p class="sidebar-text">Inscription</p>
-            </router-link>
-        </div>
-
+        <router-link :to="{ name: 'home' }" class="w-full h-16 flex items-center justify-center">
+            <i class="fa-regular fa-id-card fa-xl" style="color: #ffffff;"></i>
+            <p class="sidebar-text">Développeurs</p>
+        </router-link>
+        <router-link :to="{ name: 'job' }" class="w-full h-16 flex items-center justify-center">
+            <i class="fa-solid fa-building fa-xl" style="color: #ffffff;"></i>
+            <p class="sidebar-text">Emplois</p>
+        </router-link>
+        <router-link :to="{ name: 'login' }" class="w-full h-16 flex items-center justify-center">
+            <i class="fa-solid fa-right-to-bracket fa-xl" style="color: #ffffff;"></i>
+            <p class="sidebar-text">Connexion</p>
+        </router-link>
+        <router-link :to="{ name: 'register' }" class="w-full h-16 flex items-center justify-center">
+            <i class="fa-solid fa-user-plus fa-xl" style="color: #ffffff;"></i>
+            <p class="sidebar-text">Inscription</p>
+        </router-link>
+    </div>
 </template>
 <script setup>
 import { ref } from 'vue';
