@@ -23,51 +23,51 @@ use App\Http\Controllers\Api\ApplicationController;
 // Routes publiques (ne nécessitent pas d'authentification)
 
 //Développeurs
-Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); //OK
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK
+Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel
 
 //Entreprises
-Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK
+Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
 
 //Offres d'emplois
-Route::get('/job-offers', [JobOfferController::class, 'index']); //OK
-Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']); //OK
-Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK
+Route::get('/job-offers', [JobOfferController::class, 'index']); //OK //Excel
+Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']); //OK //Excel
+Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK //Excel
 
 Route::middleware('web')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']); //OK 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK
+    Route::post('/login', [AuthController::class, 'login']); //OK //Excel
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK //Excel
 
     //Développeurs
-    Route::post('/developers', [DeveloperController::class, 'store']); //OK
+    Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel
     Route::middleware('auth:sanctum')->group(function () {
-        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK
-        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK
-        Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK
+        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
+        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
+        Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
     });
 
     //Entreprises
-    Route::post('/companies', [CompanyController::class, 'store']); //OK 
+    Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel
     Route::middleware('auth:sanctum')->group(function () {
-        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK
-        Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK
-        Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK
+        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL
+        Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL
+        Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
     });
 
     //Offres d'emplois
     Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/job-offers', [JobOfferController::class, 'store']); //OK
-        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK
+        Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL
+        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel
     });
 
     //Candidatures
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/applications', [ApplicationController::class, 'index']); //OK
-        Route::post('/applications', [ApplicationController::class, 'store']); //OK
-        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK
-        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK
-        Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK
-        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK
+        Route::get('/applications', [ApplicationController::class, 'index']); //OK //Excel
+        Route::post('/applications', [ApplicationController::class, 'store']); //OK //Excel
+        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel
+        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK Excel
+        Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel
+        Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK //Excel
     });
 
     //Administrateurs

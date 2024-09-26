@@ -31,10 +31,7 @@ class DeveloperController extends Controller
             ->inRandomOrder()
             ->paginate(8);
 
-        return response()->json([
-            'message' => 'Liste des développeurs validés récupérée avec succès.',
-            'developers' => $developers
-        ], 200);
+        return response()->json($developers, 200);
     }
 
     /**
