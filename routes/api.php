@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\ApplicationController;
 // Routes publiques (ne nécessitent pas d'authentification)
 
 //Développeurs
-Route::post('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel
 
 //Route pour peuplé le formulaire de filtrage

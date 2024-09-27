@@ -1,26 +1,44 @@
 <template>
-    <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32 ">
-        <Form/>
+    <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
+        <Form @filter="fetchDevelopers" />
         <div v-if="developers.length">
             <h3>Developers</h3>
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10">
+            <div
+                class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10"
+            >
                 <div
                     v-for="developer in developers"
                     :key="developer.id"
-                    :class="developer.is_free ? 'bg-white hover14 cursor-pointer rounded-lg shadow-lg flex flex-col h-full border-4 border-green-500' : 'bg-white hover14 cursor-pointer rounded-lg shadow-lg flex flex-col h-full border-4 border-red-500'"
+                    :class="
+                        developer.is_free
+                            ? 'bg-white hover14 cursor-pointer rounded-lg shadow-lg flex flex-col h-full border-4 border-green-500'
+                            : 'bg-white hover14 cursor-pointer rounded-lg shadow-lg flex flex-col h-full border-4 border-red-500'
+                    "
                 >
                     <div class="rounded-t overflow-hidden">
                         <figure class="m-0">
-                            <img :src="developer.profil_image" class="w-full h-48 object-cover object-center" alt="Profile picture">
+                            <img
+                                :src="developer.profil_image"
+                                class="w-full h-48 object-cover object-center"
+                                alt="Profile picture"
+                            />
                         </figure>
                     </div>
 
                     <div class="flex-grow">
-                        <div class="px-6 py-4 bg-gray-100 border-b border-gray-300">
-                            <p class="font-bold text-xl text-gray-800">{{ developer.first_name }} {{ developer.surname }}</p>
+                        <div
+                            class="px-6 py-4 bg-gray-100 border-b border-gray-300"
+                        >
+                            <p class="font-bold text-xl text-gray-800">
+                                {{ developer.first_name }}
+                                {{ developer.surname }}
+                            </p>
                             <div class="flex items-center space-x-2">
                                 <i class="fa-solid fa-location-dot fa-2xs"></i>
-                                <p class="text-black text-base">{{ developer.location.city }}, {{ developer.location.postal_code }}</p>
+                                <p class="text-black text-base">
+                                    {{ developer.location.city }},
+                                    {{ developer.location.postal_code }}
+                                </p>
                             </div>
                             <p class="text-black text-base">
                                 Développeur {{ developer.types_developer.name }}
@@ -38,9 +56,22 @@
                         </div>
                     </div>
 
-                    <div :class="developer.is_free ? 'w-full bg-green-500 text-center' : 'w-full bg-red-500 text-center'">
-                        <p class="py-2 rounded-b-full text-sm font-semibold text-white">
-                            {{ developer.is_free ? 'En recherche de ' + developer.types_contract.name : 'Non disponible' }}
+                    <div
+                        :class="
+                            developer.is_free
+                                ? 'w-full bg-green-500 text-center'
+                                : 'w-full bg-red-500 text-center'
+                        "
+                    >
+                        <p
+                            class="py-2 rounded-b-full text-sm font-semibold text-white"
+                        >
+                            {{
+                                developer.is_free
+                                    ? "En recherche de " +
+                                      developer.types_contract.name
+                                    : "Non disponible"
+                            }}
                         </p>
                     </div>
                 </div>
@@ -48,137 +79,150 @@
 
             <!-- Pagination -->
             <div v-if="totalPages > 1" class="mt-4 flex justify-between">
-                <button @click="previousPage" :disabled="currentPage === 1" class="bg-gray-200 px-4 py-2 rounded">
+                <button
+                    @click="previousPage"
+                    :disabled="currentPage === 1"
+                    class="bg-gray-200 px-4 py-2 rounded"
+                >
                     Previous
                 </button>
                 <span>Page {{ currentPage }} of {{ totalPages }}</span>
-                <button @click="nextPage" :disabled="currentPage === totalPages" class="bg-gray-200 px-4 py-2 rounded">
+                <button
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                    class="bg-gray-200 px-4 py-2 rounded"
+                >
                     Next
                 </button>
             </div>
         </div>
         <div v-else>
-            <p>No developers available.</p>
+            <p>Aucun développeur trouvé.</p>
+            <!-- Message d'absence de développeurs -->
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import Axios from 'axios';
-import Form from './FilterForm.vue';
+import { ref, onMounted } from "vue";
+import Axios from "axios";
+import Form from "./FilterForm.vue";
 
 const developers = ref([]);
 const currentPage = ref(1);
 const totalPages = ref(1);
 
-const fetchDevelopers = async (page = 1) => {
+const fetchDevelopers = async (filters = {}, page = 1) => {
     try {
-        const response = await Axios.get(`/api/developers?page=${page}`);
+        const params = {
+            ...filters,
+            page: page,
+        };
+        const response = await Axios.get("/api/developers/filter", { params });
         developers.value = response.data.data;
-        totalPages.value = response.data.last_page; // Get total pages from API response
-        currentPage.value = response.data.current_page; // Get current page from API response
+        totalPages.value = response.data.last_page;
+        currentPage.value = response.data.current_page;
     } catch (error) {
-        console.error('Failed to fetch developers:', error);
+        console.error("Failed to fetch developers:", error);
     }
 };
 
-// Fetch the first page of developers when the component mounts
-onMounted(() => fetchDevelopers(currentPage.value));
+onMounted(() => fetchDevelopers());
 
-// Function to navigate to the previous page
 const previousPage = () => {
     if (currentPage.value > 1) {
-        fetchDevelopers(currentPage.value - 1);
+        fetchDevelopers({}, currentPage.value - 1);
     }
 };
 
-// Function to navigate to the next page
 const nextPage = () => {
     if (currentPage.value < totalPages.value) {
-        fetchDevelopers(currentPage.value + 1);
+        fetchDevelopers({}, currentPage.value + 1);
     }
 };
 </script>
 
 <style scoped>
 .animate-charcter {
-            text-transform: uppercase;
-            background-image: linear-gradient(to right,
-                    rgb(183, 211, 255) 0%,
-                    rgb(231, 240, 254) 50%,
-                    rgb(183, 211, 255) 100%);
-            background-size: 200% auto;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: textclip 6s ease-in-out infinite;
-            display: inline-block;
-            font-size: 190px;
-        }
+    text-transform: uppercase;
+    background-image: linear-gradient(
+        to right,
+        rgb(183, 211, 255) 0%,
+        rgb(231, 240, 254) 50%,
+        rgb(183, 211, 255) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textclip 6s ease-in-out infinite;
+    display: inline-block;
+    font-size: 190px;
+}
 
-        @keyframes textclip {
+@keyframes textclip {
+    0%,
+    100% {
+        background-position: 100% center;
+    }
 
-            0%,
-            100% {
-                background-position: 100% center;
-            }
+    50% {
+        background-position: 0% center;
+    }
+}
 
-            50% {
-                background-position: 0% center;
-            }
-        }
+.wave-effect {
+    display: inline-block;
+    animation: wave 6s ease-in-out infinite;
+}
 
-        .wave-effect {
-            display: inline-block;
-            animation: wave 6s ease-in-out infinite;
-        }
+@keyframes wave {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
 
-        @keyframes wave {
+    25% {
+        transform: translateY(-5px);
+    }
 
-            0%,
-            100% {
-                transform: translateY(0);
-            }
+    50% {
+        transform: translateY(0);
+    }
 
-            25% {
-                transform: translateY(-5px);
-            }
+    75% {
+        transform: translateY(5px);
+    }
+}
 
-            50% {
-                transform: translateY(0);
-            }
+.hover14:hover figure::before {
+    animation: shine 0.75s;
+}
 
-            75% {
-                transform: translateY(5px);
-            }
-        }
+.hover14 figure {
+    position: relative;
+}
 
+.hover14 figure::before {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: "";
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 100%
+    );
+    transform: skewX(-25deg);
+}
 
-        .hover14:hover figure::before {
-            animation: shine .75s;
-        }
-
-        .hover14 figure {
-            position: relative;
-        }
-
-        .hover14 figure::before {
-            position: absolute;
-            top: 0;
-            left: -75%;
-            z-index: 2;
-            display: block;
-            content: '';
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .3) 100%);
-            transform: skewX(-25deg);
-        }
-
-        @keyframes shine {
-            100% {
-                left: 125%;
-            }
-        }
+@keyframes shine {
+    100% {
+        left: 125%;
+    }
+}
 </style>

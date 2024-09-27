@@ -22,15 +22,14 @@ class DeveloperFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'contract_id' => 'nullable|array', // Autoriser plusieurs contrats
-            'contract_id.*' => 'integer|exists:types_contracts,id', // Validation de chaque contrat
-            'year_id' => 'nullable|array', // Autoriser plusieurs années d'expérience
-            'year_id.*' => 'integer|exists:years_experiences,id', // Validation de chaque année d'expérience
-            'location_id' => 'nullable|integer|exists:locations,id', // Un seul ID pour la localisation
-            'type_id' => 'nullable|integer|exists:types_developers,id', // Un seul type de développeur
-            'programming_languages' => 'nullable|array', // Autoriser plusieurs langages de programmation
-            'programming_languages.*' => 'exists:programming_languages,id', // Validation de chaque langage
-            'postal_code' => 'nullable|string', // Validation pour le code postal ou la ville
+            'contract_id' => 'nullable|array',
+            'contract_id.*' => 'integer|exists:types_contracts,id',
+            'year_id' => 'nullable|array',
+            'year_id.*' => 'integer|exists:years_experiences,id',
+            'location_id' => 'nullable|integer|exists:locations,id',
+            'type_id' => 'nullable|integer|exists:types_developers,id',
+            'programming_languages' => 'nullable|array',
+            'programming_languages.*' => 'integer|exists:programming_languages,id',
         ];
     }
 }
