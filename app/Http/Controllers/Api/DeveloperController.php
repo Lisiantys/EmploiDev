@@ -207,7 +207,7 @@ class DeveloperController extends Controller
             $developer->profil_image = asset('storage/' . $developer->profil_image);
             return $developer;
         });
-    
+
         return response()->json($developers, 200);
     }
 

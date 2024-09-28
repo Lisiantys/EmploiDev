@@ -98,7 +98,6 @@
         </div>
         <div v-else>
             <p>Aucun développeur trouvé.</p>
-            <!-- Message d'absence de développeurs -->
         </div>
     </div>
 </template>

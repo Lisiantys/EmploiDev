@@ -23,8 +23,7 @@ class JobOfferController extends Controller
     public function index()
     {
         $jobOffers = JobOffer::where('is_validated', 1)
-        ->orderBy('is_free', 'desc')
-        ->paginate(8);
+        ->paginate(9);
 
         return response()->json($jobOffers, 200);
     }

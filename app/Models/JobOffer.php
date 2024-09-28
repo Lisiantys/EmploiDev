@@ -20,6 +20,8 @@ class JobOffer extends Model
         'company_id'
     ];
 
+    protected $with = ['programmingLanguages', 'location', 'typesDeveloper', 'typesContract'];
+
     public function company()
     {
         return $this->belongsTo(Company::class);
