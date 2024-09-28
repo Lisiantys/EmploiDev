@@ -129,6 +129,9 @@
                             v-model="selectedDeveloperType"
                             class="lg:mt-1 block w-full pl-3 py-3 lg:py-2 border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                         >
+                            <option value="" disabled selected>
+                                Sélectionnez un type de développeur
+                            </option>
                             <option
                                 v-for="type in developerTypes"
                                 :key="type.id"
