@@ -1,5 +1,6 @@
 <template>
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
+        <Form @filter="fetchJobOffers" />
         <div v-if="jobOffers.length">
             <h3>Jobs</h3>
             <div class="grid  lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-20 md:mt-10">
@@ -47,6 +48,24 @@
                     </div>
                 </div>
             </div>
+            <!-- Pagination -->
+            <div v-if="totalPages > 1" class="mt-4 flex justify-between">
+                <button
+                    @click="previousPage"
+                    :disabled="currentPage === 1"
+                    class="bg-gray-200 px-4 py-2 rounded"
+                >
+                    Previous
+                </button>
+                <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                <button
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                    class="bg-gray-200 px-4 py-2 rounded"
+                >
+                    Next
+                </button>
+            </div>
         </div>
         <div v-else>
             <p>Aucune offre d'emploi trouvée.</p>
@@ -58,8 +77,11 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import Axios from "axios";
+import Form from "./FilterForm.vue";
 
 const jobOffers = ref([]);
+const currentPage = ref(1);
+const totalPages = ref(1);
 
 const timeAgo = (date) => {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
@@ -76,15 +98,30 @@ const timeAgo = (date) => {
     return `il y a quelques secondes`;
 };
 
-const fetchJobOffers = async () => {
+const fetchJobOffers = async (filters = {}, page = 1) => {
     try {
-        const response = await Axios.get('/api/job-offers');
-        jobOffers.value = response.data.data; // Assuming the API response follows the same structure as developers
-        console.log(jobOffers);
+        const params = { ...filters, page: page };
+        const response = await Axios.get("/api/job-offers/filter", { params });
+        jobOffers.value = response.data.data;
+        totalPages.value = response.data.last_page;
+        currentPage.value = response.data.current_page;
     } catch (error) {
-        console.error('Failed to fetch job offers:', error);
+        console.error("Failed to fetch jobs:", error.response ? error.response.data : error);
     }
 };
 
+
 onMounted(() => fetchJobOffers());
+
+const previousPage = () => {
+    if (currentPage.value > 1) {
+        fetchJobOffers({}, currentPage.value - 1);
+    }
+};
+
+const nextPage = () => {
+    if (currentPage.value < totalPages.value) {
+        fetchJobOffers({}, currentPage.value + 1);
+    }
+};
 </script>

@@ -6,34 +6,34 @@ trait FilterableTrait
 {
     /**
      * Filtre les ressources en fonction des critères fournis.
+     *
+     * @param $query
+     * @param $request
+     * @param string $type - Type de modèle (developer ou job_offer)
+     * @return mixed
      */
-    protected function filterResources($query, $request)
+    protected function filterResources($query, $request, $type)
     {
-        // Filtrage par type de contrat
         if ($request->filled('contract_id')) {
-            $query->whereIn('contract_id', $request->contract_id);
+            $query->whereIn("{$type}.contract_id", $request->contract_id);
         }
 
-        // Filtrage par années d'expérience
         if ($request->filled('year_id')) {
-            $query->whereIn('year_id', $request->year_id);
+            $query->whereIn("{$type}.year_id", $request->year_id);
         }
 
-        // Filtrage par localisation
         if ($request->filled('location_id')) {
-            $query->where('location_id', $request->location_id);
+            $query->where("{$type}.location_id", $request->location_id);
         }
 
-        // Filtrage par langages de programmation
+        if ($request->filled('type_id')) {
+            $query->where("{$type}.type_id", $request->type_id);
+        }
+
         if ($request->filled('programming_languages')) {
             $query->whereHas('programmingLanguages', function ($query) use ($request) {
-                $query->whereIn('language_id', $request->programming_languages);
+                $query->whereIn('programming_languages.id', $request->programming_languages);
             });
-        }
-
-        // Filtrage par type de développeur
-        if ($request->filled('type_id')) {
-            $query->where('type_id', $request->type_id);
         }
 
         return $query;

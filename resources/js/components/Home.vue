@@ -117,6 +117,8 @@ const fetchDevelopers = async (filters = {}, page = 1) => {
             ...filters,
             page: page,
         };
+        console.log("Fetching dev with params:", params); // Ajoutez ceci
+
         const response = await Axios.get("/api/developers/filter", { params });
         developers.value = response.data.data;
         totalPages.value = response.data.last_page;

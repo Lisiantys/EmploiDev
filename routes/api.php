@@ -22,10 +22,6 @@ use App\Http\Controllers\Api\ApplicationController;
 
 // Routes publiques (ne nécessitent pas d'authentification)
 
-//Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY
-
 //Route pour peuplé le formulaire de filtrage
 Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);  //OK //FRONT
 Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);//OK  //FRONT
@@ -33,13 +29,19 @@ Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers
 Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);//OK  //FRONT
 Route::get('/locations', [DeveloperController::class, 'getLocations']);//OK  //FRONT
 
-//Entreprises
-Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
+
+
+
+//Développeurs
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
 
 //Offres d'emplois
-Route::get('/job-offers', [JobOfferController::class, 'index']); //OK //Excel
-Route::get('/job-offers/{jobOffer}', [JobOfferController::class, 'show']); //OK //Excel
-Route::post('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK //Excel
+Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
+
+//Entreprises
+Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK //Excel

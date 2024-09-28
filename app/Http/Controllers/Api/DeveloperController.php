@@ -201,7 +201,7 @@ class DeveloperController extends Controller
             ->orderBy('is_free', 'desc');
 
         // Appliquer les filtres via le trait FilterableTrait
-        $developers = $this->filterResources($developersQuery, $request)->paginate(8);
+        $developers = $this->filterResources($developersQuery, $request, 'developers')->paginate(8);
 
         $developers->getCollection()->transform(function ($developer) {
             $developer->profil_image = asset('storage/' . $developer->profil_image);

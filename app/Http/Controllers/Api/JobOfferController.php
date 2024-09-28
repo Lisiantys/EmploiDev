@@ -10,8 +10,6 @@ use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\JobOfferStoreRequest;
 use App\Http\Requests\JobOfferFilterRequest;
-use App\Http\Requests\JobOfferUpdateRequest;
-use App\Http\Requests\DeveloperFilterRequest;
 
 class JobOfferController extends Controller
 {
@@ -87,17 +85,16 @@ class JobOfferController extends Controller
     /**
      * Filter Jobs offers based on the provided criteria.
      */
-    public function filterForm(JobOfferFilterRequest $request)
-    {
-        $jobOffersQuery = JobOffer::where('is_validated', 1)
-            ->orderBy('created_at', 'desc');
+    public function filterForm(JobOfferFilterRequest $request) {
+
+        $jobOffersQuery = JobOffer::where('is_validated', 1);
+
 
         // Appliquer les filtres via le trait FilterableTrait
-        $jobOffers = $this->filterResources($jobOffersQuery, $request)->paginate(8);
+        $jobOffers = $this->filterResources($jobOffersQuery, $request, 'job_offers')->paginate(8);
 
-        return response()->json([
-            'message' => 'Liste des offres d\'emploi filtrée récupérée avec succès.',
-            'job_offers' => $jobOffers
-        ], 200);
+        return response()->json($jobOffers, 200);
+
     }
+
 }
