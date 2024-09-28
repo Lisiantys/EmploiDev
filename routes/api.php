@@ -23,15 +23,15 @@ use App\Http\Controllers\Api\ApplicationController;
 // Routes publiques (ne nécessitent pas d'authentification)
 
 //Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY
 
 //Route pour peuplé le formulaire de filtrage
-Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);
-Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);
-Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']);
-Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);
-Route::get('/locations', [DeveloperController::class, 'getLocations']);
+Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);  //OK //FRONT
+Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);//OK  //FRONT
+Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK //FRONT
+Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);//OK  //FRONT
+Route::get('/locations', [DeveloperController::class, 'getLocations']);//OK  //FRONT
 
 //Entreprises
 Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel

@@ -22,12 +22,11 @@ class JobOfferController extends Controller
      */
     public function index()
     {
-        $jobOffers = JobOffer::where('is_validated', 1)->inRandomOrder()->get();
+        $jobOffers = JobOffer::where('is_validated', 1)
+        ->orderBy('is_free', 'desc')
+        ->paginate(8);
 
-        return response()->json([
-            'message' => 'Offres d\'emploi validées récupérées avec succès.',
-            'job_offers' => $jobOffers,
-        ], 200);
+        return response()->json($jobOffers, 200);
     }
 
     /**
