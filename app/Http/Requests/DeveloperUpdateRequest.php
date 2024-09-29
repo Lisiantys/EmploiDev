@@ -32,9 +32,8 @@ class DeveloperUpdateRequest extends FormRequest
                 ->numbers()
                 ->symbols()
             ],
-            'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
-            'first_name' => 'required|string|min:2|max:255',
-            'surname' => 'required|string|min:2|max:255',
+            'first_name' => 'required|string|min:2|max:30',
+            'surname' => 'required|string|min:2|max:30',
             'cv' => 'sometimes|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
             'cover_letter' => 'sometimes|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'nullable|string|min:10|max:255',
@@ -47,6 +46,11 @@ class DeveloperUpdateRequest extends FormRequest
             'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
             // Note: 'user_id' is not included since it's unlikely to change in an update
         ];
+
+        // Validation conditionnelle pour l'image de profil
+        if ($this->hasFile('profil_image')) {
+            $rules['profil_image'] = 'image|mimes:jpg,png|max:2048';
+        }
     }
 
     public function messages()
@@ -62,7 +66,7 @@ class DeveloperUpdateRequest extends FormRequest
             'password.symbols' => 'Le mot de passe doit contenir au moins un symbole.',
 
             'profil_image.image' => 'Le fichier doit être une image.',
-            'profil_image.mimes' => 'L\'image doit être de type JPG, JPEG ou PNG.',
+            'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
             'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
@@ -73,11 +77,13 @@ class DeveloperUpdateRequest extends FormRequest
             'surname.min' => 'Le nom de famille doit contenir au moins :min caractères.',
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
-            'cv.string' => 'Le CV doit être un fichier valide.',
+            'cv.file' => 'Le CV doit être un fichier.',
             'cv.mimes' => 'Le CV doit être au format PDF.',
-            
-            'cover_letter.string' => 'La lettre de motivation doit être un fichier valide.',
+            'cv.max' => 'Le CV ne doit pas dépasser 5 Mo.',
+
+            'cover_letter.file' => 'La lettre de motivation doit être un fichier.',
             'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF.',
+            'cover_letter.max' => 'La lettre de motivation ne doit pas dépasser 5 Mo.',
 
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.min' => 'La description doit contenir au moins :min caractères.',

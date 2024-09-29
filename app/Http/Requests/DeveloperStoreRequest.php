@@ -32,13 +32,11 @@ class DeveloperStoreRequest extends FormRequest
                 ->numbers()
                 ->symbols()
             ],
-            'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
-            'first_name' => 'required|string|min:2|max:255',
-            'surname' => 'required|string|min:2|max:255',
+            'first_name' => 'required|string|min:2|max:30',
+            'surname' => 'required|string|min:2|max:30',
             'cv' => 'required|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
             'cover_letter' => 'required|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'nullable|string|min:10|max:255',
-            'is_free' => 'required|boolean',
             'contract_id' => 'required|exists:types_contracts,id',
             'year_id' => 'required|exists:years_experiences,id',
             'location_id' => 'required|exists:locations,id',
@@ -47,6 +45,11 @@ class DeveloperStoreRequest extends FormRequest
             'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
             // Note : 'user_id' est inséré depuis le controlleur
         ];
+
+        // Validation conditionnelle pour l'image de profil
+        if ($this->hasFile('profil_image')) {
+            $rules['profil_image'] = 'image|mimes:jpg,png|max:2048';
+        }
     }
 
     public function messages()
@@ -64,7 +67,7 @@ class DeveloperStoreRequest extends FormRequest
             'password.symbols' => 'Le mot de passe doit contenir au moins un symbole.',
 
             'profil_image.image' => 'Le fichier doit être une image.',
-            'profil_image.mimes' => 'L\'image doit être de type JPG, JPEG ou PNG.',
+            'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
             'first_name.required' => 'Le prénom est obligatoire.',
@@ -78,17 +81,18 @@ class DeveloperStoreRequest extends FormRequest
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
 
             'cv.required' => 'Le CV est obligatoire.',
+            'cv.file' => 'Le CV doit être un fichier.',
             'cv.mimes' => 'Le CV doit être au format PDF.',
-            
+            'cv.max' => 'Le CV ne doit pas dépasser 5 Mo.',
+
             'cover_letter.required' => 'La lettre de motivation est obligatoire.',
+            'cover_letter.file' => 'La lettre de motivation doit être un fichier.',
             'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF.',
+            'cover_letter.max' => 'La lettre de motivation ne doit pas dépasser 5 Mo.',
 
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
-
-            'is_free.required' => 'Le statut de disponibilité est obligatoire.',
-            'is_free.boolean' => 'Le statut de disponibilité doit être vrai ou faux.',
 
             'contract_id.required' => 'Le type de contrat est obligatoire.',
             'contract_id.exists' => 'Le type de contrat sélectionné est invalide.',

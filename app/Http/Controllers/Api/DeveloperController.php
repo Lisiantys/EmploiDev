@@ -70,7 +70,6 @@ class DeveloperController extends Controller
                 'profil_image' => $imagePath,
                 'cv' => $cvPath,
                 'cover_letter' => $coverLetterPath,
-                'is_validated' => 0,
             ]
         ));
 
