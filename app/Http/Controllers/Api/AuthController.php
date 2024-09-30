@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         $credentials = $request->only('email', 'password');
 
@@ -20,12 +18,9 @@ class AuthController extends Controller
             return response()->json(['message' => 'Connexion réussie', 'user' => Auth::user()]);
         }
 
-        return response()->json(['message' => 'Identifiants invalides'], 401);
+        return response()->json(['message' => 'Adresse e-mail ou mot de passe invalide.'], 401);
     }
 
-    /**
-     * Handle user logout.
-     */
     public function logout(Request $request)
     {
         $request->session()->invalidate();
