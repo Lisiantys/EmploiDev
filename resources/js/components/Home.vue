@@ -1,11 +1,11 @@
 <template>
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
-        <Form @filter="fetchDevelopers" />
-        <div v-if="developersStore.developers.length">
+        <Form @filter="fetchResources" />
+        <div v-if="resourcesFilteredStore.developers.length">
             <h3>Developers</h3>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10">
                 <div
-                    v-for="developer in developersStore.developers"
+                    v-for="developer in resourcesFilteredStore.developers"
                     :key="developer.id"
                     :class="
                         developer.is_free
@@ -61,18 +61,18 @@
                 </div>
             </div>
             <!-- Pagination -->
-            <div v-if="developersStore.totalPages > 1" class="mt-4 flex justify-between">
+            <div v-if="resourcesFilteredStore.totalPages > 1" class="mt-4 flex justify-between">
                 <button
                     @click="previousPage"
-                    :disabled="developersStore.currentPage === 1"
+                    :disabled="resourcesFilteredStore.currentPage === 1"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Previous
                 </button>
-                <span>Page {{ developersStore.currentPage }} of {{ developersStore.totalPages }}</span>
+                <span>Page {{ resourcesFilteredStore.currentPage }} of {{ resourcesFilteredStore.totalPages }}</span>
                 <button
                     @click="nextPage"
-                    :disabled="developersStore.currentPage === developersStore.totalPages"
+                    :disabled="resourcesFilteredStore.currentPage === resourcesFilteredStore.totalPages"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Next
@@ -87,26 +87,30 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useDevelopersStore } from '../stores/developersStore'; // Import the developers store
+import { useDeveloperAndJobStore } from '../stores/developerAndJobStore'; // Import the combined store
 import Form from "./FilterForm.vue";
 
-const developersStore = useDevelopersStore(); // Create an instance of the store
+const resourcesFilteredStore = useDeveloperAndJobStore(); // Create an instance of the store
 
-const fetchDevelopers = (filters) => {
-    developersStore.fetchDevelopers(filters, developersStore.currentPage);
+const fetchResources = (filters) => {
+    resourcesFilteredStore.setIsDeveloper(true);
+    resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
 };
 
-onMounted(() => developersStore.fetchDevelopers()); // Fetch developers when the component mounts
+onMounted(() => {
+    resourcesFilteredStore.setIsDeveloper(true); 
+
+    resourcesFilteredStore.fetchResources()}); // Fetch developers when the component mounts
 
 const previousPage = () => {
-    if (developersStore.currentPage > 1) {
-        developersStore.fetchDevelopers({}, developersStore.currentPage - 1);
+    if (resourcesFilteredStore.currentPage > 1) {
+        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
     }
 };
 
 const nextPage = () => {
-    if (developersStore.currentPage < developersStore.totalPages) {
-        developersStore.fetchDevelopers({}, developersStore.currentPage + 1);
+    if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
+        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
     }
 };
 </script>

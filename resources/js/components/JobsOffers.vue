@@ -1,10 +1,10 @@
 <template>
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
         <Form @filter="fetchJobOffers" />
-        <div v-if="jobOffersStore.jobOffers && jobOffersStore.jobOffers.length">
+        <div v-if="resourcesFilteredStore.jobOffers.length">
             <h3>Jobs</h3>
             <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-20 md:mt-10">
-                <div v-for="job in jobOffersStore.jobOffers" :key="job.id"
+                <div v-for="job in resourcesFilteredStore.jobOffers" :key="job.id"
                      class="bg-white mt-10 shadow-lg w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md cursor-pointer">
                     <div class="w-full">
                         <div class="flex justify-between">
@@ -42,18 +42,18 @@
                 </div>
             </div>
             <!-- Pagination -->
-            <div v-if="jobOffersStore.totalPages > 1" class="mt-4 flex justify-between">
+            <div v-if="resourcesFilteredStore.totalPages > 1" class="mt-4 flex justify-between">
                 <button
                     @click="previousPage"
-                    :disabled="jobOffersStore.currentPage === 1"
+                    :disabled="resourcesFilteredStore.currentPage === 1"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Previous
                 </button>
-                <span>Page {{ jobOffersStore.currentPage }} of {{ jobOffersStore.totalPages }}</span>
+                <span>Page {{ resourcesFilteredStore.currentPage }} of {{ resourcesFilteredStore.totalPages }}</span>
                 <button
                     @click="nextPage"
-                    :disabled="jobOffersStore.currentPage === jobOffersStore.totalPages"
+                    :disabled="resourcesFilteredStore.currentPage === resourcesFilteredStore.totalPages"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Next
@@ -66,16 +66,16 @@
     </div>
 </template>
 
-
 <script setup>
 import { onMounted } from "vue";
-import { useJobOffersStore } from '../stores/jobOffersStore'; // Import the job offers store
+import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
 import Form from "./FilterForm.vue";
 
-const jobOffersStore = useJobOffersStore(); // Create an instance of the store
+const resourcesFilteredStore = useDeveloperAndJobStore();
 
 const fetchJobOffers = (filters) => {
-    jobOffersStore.fetchJobOffers(filters, jobOffersStore.currentPage);
+    resourcesFilteredStore.setIsDeveloper(false);
+    resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
 };
 
 const timeAgo = (date) => {
@@ -93,17 +93,21 @@ const timeAgo = (date) => {
     return `il y a quelques secondes`;
 };
 
-onMounted(() => jobOffersStore.fetchJobOffers()); // Fetch job offers when the component mounts
+onMounted(() => {
+    console.log('Component mounted, fetching job offers');
+    resourcesFilteredStore.setIsDeveloper(false); 
+    resourcesFilteredStore.fetchResources();
+});
 
 const previousPage = () => {
-    if (jobOffersStore.currentPage > 1) {
-        jobOffersStore.fetchJobOffers({}, jobOffersStore.currentPage - 1);
+    if (resourcesFilteredStore.currentPage > 1) {
+        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
     }
 };
 
 const nextPage = () => {
-    if (jobOffersStore.currentPage < jobOffersStore.totalPages) {
-        jobOffersStore.fetchJobOffers({}, jobOffersStore.currentPage + 1);
+    if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
+        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
     }
 };
 </script>
