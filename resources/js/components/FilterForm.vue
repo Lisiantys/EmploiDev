@@ -164,7 +164,10 @@
 
 <script setup>
 import { ref, onMounted, defineEmits } from "vue";
-import Axios from "axios";
+import { useResourcesStore } from '../stores/resourcesStore'; 
+
+const emit = defineEmits();
+const resourcesStore = useResourcesStore();
 
 const contracts = ref([]); // Pour stocker les types de contrat
 const developerTypes = ref([]); // Pour stocker les types de développeur
@@ -177,8 +180,6 @@ const selectedYearsExperiences = ref([]); // Pour stocker les années d'expérie
 const selectedDeveloperType = ref(null); // Un seul type de développeur
 const selectedProgrammingLanguages = ref([]); // Tableau pour les langages de programmation sélectionnés
 const selectedLocalisation = ref(""); // Localisation
-
-const emit = defineEmits();
 
 const applyFilters = () => {
     emit("filter", {
@@ -198,56 +199,13 @@ const resetFilters = () => {
     selectedLocalisation.value = "";
 };
 
-const fetchContracts = async () => {
-    try {
-        const response = await Axios.get("/api/types-contracts");
-        contracts.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch contracts:", error);
-    }
-};
-
-const fetchDeveloperTypes = async () => {
-    try {
-        const response = await Axios.get("/api/types-developers");
-        developerTypes.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch developer types:", error);
-    }
-};
-
-const fetchProgrammingLanguages = async () => {
-    try {
-        const response = await Axios.get("/api/programming-languages");
-        programmingLanguages.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch programming languages:", error);
-    }
-};
-
-const fetchLocations = async () => {
-    try {
-        const response = await Axios.get("/api/locations");
-        localisations.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch locations:", error);
-    }
-};
-
-const fetchYearsExperiences = async () => {
-    try {
-        const response = await Axios.get("/api/years-experiences");
-        yearsExperiences.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch years of experience:", error);
-    }
-};
-
-onMounted(() => {
-    fetchContracts();
-    fetchDeveloperTypes();
-    fetchProgrammingLanguages();
-    fetchLocations();
-    fetchYearsExperiences();
+onMounted(async () => {
+    await resourcesStore.fetchAllResources(); // Fetch all resources
+    // Assign data from the store to local references
+    contracts.value = resourcesStore.contracts;
+    developerTypes.value = resourcesStore.developerTypes;
+    programmingLanguages.value = resourcesStore.programmingLanguages;
+    localisations.value = resourcesStore.localisations;
+    yearsExperiences.value = resourcesStore.yearsExperiences;
 });
 </script>

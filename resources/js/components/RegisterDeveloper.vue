@@ -57,7 +57,7 @@
                 </select>
             </div>
             <div class="mb-5">
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Langages de
+                <label class="block mb-2 text-sm font-medium text-gray-900">Langages de
                     Programmation</label>
                 <div class="flex flex-col overflow-y-auto h-40">
                     <div v-for="language in programmingLanguages" :key="language.id" class="flex items-center mb-2">
@@ -158,9 +158,31 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
+import { useResourcesStore } from '../stores/resourcesStore';
 
 const router = useRouter();
+
 const authStore = useAuthStore();
+const resourcesStore = useResourcesStore();
+
+const step = ref(1);
+const passwordsDoNotMatch = ref(false);
+
+const contracts = ref([]);
+const programmingLanguages = ref([]);
+const developerTypes = ref([]);
+const localisations = ref([]);
+const yearsExperiences = ref([]);
+
+//Chargement données en async provenant du store (Types de devs, contrats, années, langages, localisations)
+onMounted(async () => {
+    await resourcesStore.fetchAllResources();
+    contracts.value = resourcesStore.contracts;
+    programmingLanguages.value = resourcesStore.programmingLanguages;
+    developerTypes.value = resourcesStore.developerTypes;
+    localisations.value = resourcesStore.localisations;
+    yearsExperiences.value = resourcesStore.yearsExperiences;
+});
 
 const developer = ref({
     first_name: '',
@@ -180,14 +202,6 @@ const developer = ref({
     year_id: null,
     errors: {}
 });
-
-const step = ref(1);
-const contracts = ref([]);
-const programmingLanguages = ref([]);
-const developerTypes = ref([]);
-const localisations = ref([]);
-const yearsExperiences = ref([]);
-const passwordsDoNotMatch = ref(false);
 
 const handleStepSubmission = async () => {
     if (step.value === 4) {
@@ -249,58 +263,4 @@ const registerDeveloper = async () => {
     }
 };
 
-
-
-const fetchContracts = async () => {
-    try {
-        const response = await Axios.get("/api/types-contracts");
-        contracts.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch contracts:", error);
-    }
-};
-
-const fetchDeveloperTypes = async () => {
-    try {
-        const response = await Axios.get("/api/types-developers");
-        developerTypes.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch developer types:", error);
-    }
-};
-
-const fetchProgrammingLanguages = async () => {
-    try {
-        const response = await Axios.get("/api/programming-languages");
-        programmingLanguages.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch programming languages:", error);
-    }
-};
-
-const fetchLocations = async () => {
-    try {
-        const response = await Axios.get("/api/locations");
-        localisations.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch locations:", error);
-    }
-};
-
-const fetchYearsExperiences = async () => {
-    try {
-        const response = await Axios.get("/api/years-experiences");
-        yearsExperiences.value = response.data;
-    } catch (error) {
-        console.error("Failed to fetch years of experience:", error);
-    }
-};
-
-onMounted(() => {
-    fetchContracts();
-    fetchDeveloperTypes();
-    fetchProgrammingLanguages();
-    fetchLocations();
-    fetchYearsExperiences();
-});
 </script>
