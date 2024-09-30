@@ -157,8 +157,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
+import { useAuthStore } from '../stores/authStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const developer = ref({
     first_name: '',
@@ -235,6 +237,7 @@ const registerDeveloper = async () => {
         });
 
         console.log('Inscription réussie:', response.data);
+        authStore.setUser(response.data.user);
         router.push('/');
     } catch (error) {
         if (error.response && error.response.status === 422) {

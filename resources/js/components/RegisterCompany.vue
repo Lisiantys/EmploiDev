@@ -81,8 +81,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
+import { useAuthStore } from '../stores/authStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const company = ref({
     name: '',
@@ -138,6 +140,7 @@ const registerCompany = async () => {
         });
 
         console.log('Inscription réussie:', response.data);
+        authStore.setUser(response.data.user);
         router.push('/'); // Redirection vers la page d'accueil après l'inscription réussie
     } catch (error) {
         if (error.response && error.response.status === 422) {

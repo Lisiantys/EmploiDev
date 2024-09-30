@@ -1,4 +1,6 @@
 <template>
+        <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 m-auto pt-48">
+
     <form @submit.prevent="login">
         <h2>Connexion</h2>
 
@@ -28,14 +30,18 @@
             </button>
         </div>
     </form>
+    </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import Axios from "axios";
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/authStore';
 
 const router = useRouter();
+const authStore = useAuthStore();
+
 const credentials = ref({
     email: '',
     password: ''
@@ -44,10 +50,10 @@ const loginError = ref('');
 
 const login = async () => {
     try {
-       const cookie =  await Axios.get('/csrf-cookie'); // Si nécessaire pour le CSRF token
-        console.log(cookie);
+       await Axios.get('/csrf-cookie'); 
         const response = await Axios.post('/api/login', credentials.value);
-        console.log('Connexion réussie:', response.data);
+        console.log(response.data.user);
+        authStore.setUser(response.data.user)
         router.push('/'); // Redirection vers la page d'accueil après la connexion réussie
     } catch (error) {
         if (error.response && error.response.status === 401) {
