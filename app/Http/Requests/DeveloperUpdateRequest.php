@@ -23,7 +23,7 @@ class DeveloperUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'sometimes|email|unique:users,email,' . $this->developer->user_id, // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
+            'email' => 'sometimes|email|unique:users,email|max:255' . $this->developer->user_id, // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
             'password' => [
                 'sometimes',
                 Password::min(8)
@@ -58,6 +58,7 @@ class DeveloperUpdateRequest extends FormRequest
         return [
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
 
             'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',
             'password.mixedCase' => 'Le mot de passe doit contenir des lettres majuscules et minuscules.',

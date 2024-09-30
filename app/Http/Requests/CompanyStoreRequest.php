@@ -23,7 +23,7 @@ class CompanyStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email', //user
+            'email' => 'required|email|unique:users,email|max:255', //user
             'password' => [
                 'required',
                 Password::min(8)
@@ -32,11 +32,15 @@ class CompanyStoreRequest extends FormRequest
                     ->numbers()
                     ->symbols()
             ],
-            'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
             'name' => 'required|string|min:2|max:50',
             'description' => 'nullable|string|min:10|max:255',
             // 'user_id' est automatiquement assigné dans le controller
         ];
+
+        // Validation conditionnelle pour l'image de profil
+        if ($this->hasFile('profil_image')) {
+            $rules['profil_image'] = 'image|mimes:jpg,png|max:2048';
+        }
     }
 
     public function messages()
@@ -45,6 +49,7 @@ class CompanyStoreRequest extends FormRequest
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
 
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',
@@ -54,7 +59,7 @@ class CompanyStoreRequest extends FormRequest
             'password.symbols' => 'Le mot de passe doit contenir au moins un symbole.',
 
             'profil_image.image' => 'Le fichier doit être une image.',
-            'profil_image.mimes' => 'L\'image doit être de type JPG, JPEG ou PNG.',
+            'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
             'name.required' => 'Le nom de l\'entreprise est obligatoire.',

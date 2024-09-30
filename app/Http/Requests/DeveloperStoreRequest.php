@@ -23,7 +23,7 @@ class DeveloperStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email', //user
+            'email' => 'required|email|unique:users,email|max:255', //user
             'password' => [
                 'required',
                 Password::min(8)
@@ -58,6 +58,7 @@ class DeveloperStoreRequest extends FormRequest
             'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
 
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',

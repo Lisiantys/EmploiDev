@@ -23,7 +23,7 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'sometimes|email|unique:users,email,' . $this->company->user_id,
+            'email' => 'sometimes|email|unique:users,email|max:255,' . $this->company->user_id,
             'password' => [
                 'sometimes',
                 Password::min(8)
@@ -32,19 +32,23 @@ class CompanyUpdateRequest extends FormRequest
                 ->numbers()
                 ->symbols()
             ],
-            'profil_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Image non obligatoire
             'name' => 'sometimes|string|min:2|max:50',
             'description' => 'nullable|string|max:255',
             // 'user_id' est automatiquement assigné dans le controller
         ];
+
+        // Validation conditionnelle pour l'image de profil
+        if ($this->hasFile('profil_image')) {
+            $rules['profil_image'] = 'image|mimes:jpg,png|max:2048';
+        }
     }
 
     public function messages()
     {
         return [
-            'email.sometimes' => 'L\'adresse email est obligatoire si fournie.',
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
+            'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
 
             'password.sometimes' => 'Le mot de passe est obligatoire si fourni.',
             'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',
@@ -54,7 +58,7 @@ class CompanyUpdateRequest extends FormRequest
             'password.symbols' => 'Le mot de passe doit contenir au moins un symbole.',
 
             'profil_image.image' => 'Le fichier doit être une image.',
-            'profil_image.mimes' => 'L\'image doit être de type JPG, JPEG ou PNG.',
+            'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
             'name.sometimes' => 'Le nom de l\'entreprise est obligatoire si fourni.',
