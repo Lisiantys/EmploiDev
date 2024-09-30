@@ -1,13 +1,11 @@
 <template>
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
         <Form @filter="fetchDevelopers" />
-        <div v-if="developers.length">
+        <div v-if="developersStore.developers.length">
             <h3>Developers</h3>
-            <div
-                class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10"
-            >
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10">
                 <div
-                    v-for="developer in developers"
+                    v-for="developer in developersStore.developers"
                     :key="developer.id"
                     :class="
                         developer.is_free
@@ -24,27 +22,21 @@
                             />
                         </figure>
                     </div>
-
                     <div class="flex-grow">
-                        <div
-                            class="px-6 py-4 bg-gray-100 border-b border-gray-300"
-                        >
+                        <div class="px-6 py-4 bg-gray-100 border-b border-gray-300">
                             <p class="font-bold text-xl text-gray-800">
-                                {{ developer.first_name }}
-                                {{ developer.surname }}
+                                {{ developer.first_name }} {{ developer.surname }}
                             </p>
                             <div class="flex items-center space-x-2">
                                 <i class="fa-solid fa-location-dot fa-2xs"></i>
                                 <p class="text-black text-base">
-                                    {{ developer.location.city }},
-                                    {{ developer.location.postal_code }}
+                                    {{ developer.location.city }}, {{ developer.location.postal_code }}
                                 </p>
                             </div>
                             <p class="text-black text-base">
                                 Développeur {{ developer.types_developer.name }}
                             </p>
                         </div>
-
                         <div class="px-6 py-2">
                             <span
                                 v-for="language in developer.programming_languages"
@@ -55,7 +47,6 @@
                             </span>
                         </div>
                     </div>
-
                     <div
                         :class="
                             developer.is_free
@@ -63,33 +54,25 @@
                                 : 'w-full bg-red-500 text-center'
                         "
                     >
-                        <p
-                            class="py-2 rounded-b-full text-sm font-semibold text-white"
-                        >
-                            {{
-                                developer.is_free
-                                    ? "En recherche de " +
-                                      developer.types_contract.name
-                                    : "Non disponible"
-                            }}
+                        <p class="py-2 rounded-b-full text-sm font-semibold text-white">
+                            {{"En recherche de " + developer.types_contract.name}}
                         </p>
                     </div>
                 </div>
             </div>
-
             <!-- Pagination -->
-            <div v-if="totalPages > 1" class="mt-4 flex justify-between">
+            <div v-if="developersStore.totalPages > 1" class="mt-4 flex justify-between">
                 <button
                     @click="previousPage"
-                    :disabled="currentPage === 1"
+                    :disabled="developersStore.currentPage === 1"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Previous
                 </button>
-                <span>Page {{ currentPage }} of {{ totalPages }}</span>
+                <span>Page {{ developersStore.currentPage }} of {{ developersStore.totalPages }}</span>
                 <button
                     @click="nextPage"
-                    :disabled="currentPage === totalPages"
+                    :disabled="developersStore.currentPage === developersStore.totalPages"
                     class="bg-gray-200 px-4 py-2 rounded"
                 >
                     Next
@@ -103,42 +86,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import Axios from "axios";
+import { onMounted } from "vue";
+import { useDevelopersStore } from '../stores/developersStore'; // Import the developers store
 import Form from "./FilterForm.vue";
 
-const developers = ref([]);
-const currentPage = ref(1);
-const totalPages = ref(1);
+const developersStore = useDevelopersStore(); // Create an instance of the store
 
-const fetchDevelopers = async (filters = {}, page = 1) => {
-    try {
-        const params = {
-            ...filters,
-            page: page,
-        };
-        console.log("Fetching dev with params:", params); // Ajoutez ceci
-
-        const response = await Axios.get("/api/developers/filter", { params });
-        developers.value = response.data.data;
-        totalPages.value = response.data.last_page;
-        currentPage.value = response.data.current_page;
-    } catch (error) {
-        console.error("Failed to fetch developers:", error);
-    }
+const fetchDevelopers = (filters) => {
+    developersStore.fetchDevelopers(filters, developersStore.currentPage);
 };
 
-onMounted(() => fetchDevelopers());
+onMounted(() => developersStore.fetchDevelopers()); // Fetch developers when the component mounts
 
 const previousPage = () => {
-    if (currentPage.value > 1) {
-        fetchDevelopers({}, currentPage.value - 1);
+    if (developersStore.currentPage > 1) {
+        developersStore.fetchDevelopers({}, developersStore.currentPage - 1);
     }
 };
 
 const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-        fetchDevelopers({}, currentPage.value + 1);
+    if (developersStore.currentPage < developersStore.totalPages) {
+        developersStore.fetchDevelopers({}, developersStore.currentPage + 1);
     }
 };
 </script>

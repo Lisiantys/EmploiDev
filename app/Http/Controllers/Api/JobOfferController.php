@@ -91,7 +91,7 @@ class JobOfferController extends Controller
 
 
         // Appliquer les filtres via le trait FilterableTrait
-        $jobOffers = $this->filterResources($jobOffersQuery, $request, 'job_offers')->paginate(8);
+        $jobOffers = $this->filterResources($jobOffersQuery, $request, 'job_offers')->paginate(9);
 
         return response()->json($jobOffers, 200);
 
