@@ -8,6 +8,12 @@
             </h1>
         </router-link>
 
+        <router-link v-if="isAuthenticated" :to="{ name: 'developerProfile' }"
+            class="w-full h-16 flex items-center justify-center">
+            <i class="fa-solid fa-user fa-xl" style="color: #ffffff"></i>
+            <p class="sidebar-text">Profil</p>
+        </router-link>
+
         <router-link :to="{ name: 'home' }" class="w-full h-16 flex items-center justify-center">
             <i class="fa-regular fa-id-card fa-xl" style="color: #ffffff;"></i>
             <p class="sidebar-text">Développeurs</p>

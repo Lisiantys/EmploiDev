@@ -57,11 +57,11 @@ class DeveloperController extends Controller
 
         // Gestion des fichiers
         $imagePath = $request->hasFile('profil_image')
-            ? $request->file('profil_image')->store('public/images')
-            : 'public/images/user.jpg';
+            ? $request->file('profil_image')->store('images')
+            : 'images/user.jpg';
 
-        $cvPath = $request->file('cv')->store('public/cv');
-        $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
+        $cvPath = $request->file('cv')->store('cv');
+        $coverLetterPath = $request->file('cover_letter')->store('cover_letters');
 
         // Création du développeur
         $developer = $user->developer()->create(array_merge(
@@ -92,7 +92,7 @@ class DeveloperController extends Controller
     }
 
     /**
-     * Affiche les détails d'un développeur validé.
+     * Affiche les détails d'un développeur validé pour la consultation d'un profil public.
      */
     public function show(Developer $developer)
     {
@@ -105,6 +105,36 @@ class DeveloperController extends Controller
             return response()->json(['message' => 'Développeur non validé.'], 403);
         }
     }
+
+    /**
+     * APour l'affichage du profil personnel du développeur
+     */
+    public function profil()
+    {
+        $user = Auth::user(); // Récupérer l'utilisateur authentifié
+    
+        // Charger les informations liées au rôle
+        if ($user->role_id == 1) { // Développeur
+            $developer = $user->developer->with('programmingLanguages')->first();
+            return response()->json([
+                'user' => $user,
+                'developer' => $developer,
+            ], 200);
+        } else if ($user->role_id == 2) { // Entreprise
+            $company = $user->company->first();
+            return response()->json([
+                'user' => $user,
+                'company' => $company,
+            ], 200);
+        }
+    
+        // Si l'utilisateur n'est ni développeur ni entreprise
+        return response()->json(['message' => 'Role not found.'], 404);
+    }
+    
+
+    
+
 
     /**
      * Met à jour les informations d'un développeur.

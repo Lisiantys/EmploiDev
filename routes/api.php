@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\ApplicationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::middleware(['auth:sanctum', 'web'])->get('/profile', [DeveloperController::class, 'profil']);
 
 // Routes publiques (ne nécessitent pas d'authentification)
 
@@ -44,11 +45,11 @@ Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'sho
 Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
 
 Route::middleware('web')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']); //OK //Excel
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK //Excel
+    Route::post('/login', [AuthController::class, 'login']); //OK //Excel //FRONT
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK //Excel //FRONT
 
     //Développeurs
-    Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel
+    Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel //FRONT
     Route::middleware('auth:sanctum')->group(function () {
         Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
         Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
@@ -56,7 +57,7 @@ Route::middleware('web')->group(function () {
     });
 
     //Entreprises
-    Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel
+    Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT
     Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL
         Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL

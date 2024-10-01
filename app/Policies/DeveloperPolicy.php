@@ -9,11 +9,16 @@ class DeveloperPolicy
 {
 
     /**
-     * Détermine si l'utilisateur peut voir un développeur.
+     * Détermine qui à accès au profil personnel de la personne
      */
     public function view(Developer $developer): bool
     {
         return $developer->is_validated === 1;
+    }
+
+    public function viewProfil(User $user, Developer $developer)
+    {
+        return $user->id === $developer->user_id;
     }
 
     /**
