@@ -32,8 +32,8 @@ class DeveloperController extends Controller
     public function index()
     {
         $developers = Developer::where('is_validated', 1)
-        ->orderBy('is_free', 'desc')
-        ->paginate(8);
+            ->orderBy('is_free', 'desc')
+            ->paginate(8);
 
         $developers->getCollection()->transform(function ($developer) {
             $developer->profil_image = asset('storage/' . $developer->profil_image);
@@ -91,6 +91,90 @@ class DeveloperController extends Controller
         ], 201);
     }
 
+
+     /**
+     * Met à jour les informations d'un développeur.
+     */
+    public function update(DeveloperUpdateRequest $request, Developer $developer)
+    {
+        // Logging the incoming request data
+        Log::info('Update request received for developer:', ['id' => $developer->id, 'data' => $request->all()]);
+    
+        // Gestion de l'image de profil
+        if ($request->hasFile('profil_image')) {
+            // Log the existing image
+            Log::info('Existing profil_image:', [$developer->profil_image]);
+    
+            if ($developer->profil_image !== 'public/images/user.jpg') {
+                Storage::delete($developer->profil_image);
+            }
+            $imagePath = $request->file('profil_image')->store('public/images');
+            Log::info('New profil_image stored at:', [$imagePath]);
+        } else {
+            $imagePath = $developer->profil_image;
+        }
+    
+        // Gestion du CV
+        if ($request->hasFile('cv')) {
+            // Log the existing CV
+            Log::info('Deleting existing CV:', [$developer->cv]);
+            Storage::delete($developer->cv);
+            $cvPath = $request->file('cv')->store('public/cv');
+            Log::info('New CV stored at:', [$cvPath]);
+        } else {
+            $cvPath = $developer->cv;
+        }
+    
+        // Gestion de la lettre de motivation
+        if ($request->hasFile('cover_letter')) {
+            // Log the existing cover letter
+            Log::info('Deleting existing cover letter:', [$developer->cover_letter]);
+            Storage::delete($developer->cover_letter);
+            $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
+            Log::info('New cover letter stored at:', [$coverLetterPath]);
+        } else {
+            $coverLetterPath = $developer->cover_letter;
+        }
+    
+        // Fusionner les données validées avec les nouveaux chemins des fichiers
+        $developerData = array_merge($request->validated(), [
+            'profil_image' => $imagePath,
+            'cv' => $cvPath,
+            'cover_letter' => $coverLetterPath,
+        ]);
+    
+        // Log the data to be updated
+        Log::info('Updating developer with data:', $developerData);
+    
+        // Mettre à jour le développeur
+        $developer->update($developerData);
+    
+        // Log successful update
+        Log::info('Developer updated successfully:', [$developer->id]);
+    
+        // Mettre à jour l'utilisateur associé (si nécessaire)
+        if ($request->has('email') || $request->has('password')) {
+            $userData = $request->only('email', 'password');
+            if (isset($userData['password'])) {
+                $userData['password'] = Hash::make($userData['password']);
+            }
+            $developer->user->update($userData);
+            Log::info('User associated with developer updated:', $userData);
+        }
+    
+        // Mise à jour des langages du développeur
+        if ($request->has('programming_languages')) {
+            $developer->programmingLanguages()->sync($request->programming_languages);
+            Log::info('Programming languages updated:', $request->programming_languages);
+        }
+    
+        return response()->json([
+            'message' => 'Développeur / user mis à jour',
+            'developer' => $developer
+        ], 200);
+    }
+    
+
     /**
      * Affiche les détails d'un développeur validé pour la consultation d'un profil public.
      */
@@ -106,104 +190,33 @@ class DeveloperController extends Controller
         }
     }
 
+
+    
+
     /**
      * APour l'affichage du profil personnel du développeur
      */
-    public function profil()
+    public function profile()
     {
         $user = Auth::user(); // Récupérer l'utilisateur authentifié
-    
+
         // Charger les informations liées au rôle
         if ($user->role_id == 1) { // Développeur
-            $developer = $user->developer->with('programmingLanguages')->first();
-            return response()->json([
-                'user' => $user,
-                'developer' => $developer,
-            ], 200);
+            $developer = $user->developer; // Le modèle Developer inclut déjà les données utilisateur
+            return response()->json($developer, 200);
         } else if ($user->role_id == 2) { // Entreprise
-            $company = $user->company->first();
-            return response()->json([
-                'user' => $user,
-                'company' => $company,
-            ], 200);
+            $company = $user->company; // Charge les données de l'entreprise
+            return response()->json($company, 200);
         }
-    
+
         // Si l'utilisateur n'est ni développeur ni entreprise
         return response()->json(['message' => 'Role not found.'], 404);
     }
-    
-
-    
 
 
-    /**
-     * Met à jour les informations d'un développeur.
-     */
-    public function update(DeveloperUpdateRequest $request, Developer $developer)
-    {
-        $this->authorize('update', $developer);
 
-        // Gestion de l'image de profil
-        if ($request->hasFile('profil_image')) {
-            if ($developer->profil_image !== 'public/images/user.jpg') {
-                Storage::delete($developer->profil_image);
-            }
-            $imagePath = $request->file('profil_image')->store('public/images');
-        } else {
-            $imagePath = $developer->profil_image;
-        }
 
-        // Gestion du CV
-        if ($request->hasFile('cv')) {
-
-            Storage::delete($developer->cv);
-
-            $cvPath = $request->file('cv')->store('public/cv');
-        } else {
-            $cvPath = $developer->cv;
-        }
-
-        // Gestion de la lettre de motivation
-        if ($request->hasFile('cover_letter')) {
-            Storage::delete($developer->cover_letter);
-            $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
-        } else {
-            $coverLetterPath = $developer->cover_letter;
-        }
-
-        // Invalider le développeur jusqu'à revalidation
-        $developer->is_validated = 0;
-
-        // Fusionner les données validées avec les nouveaux chemins des fichiers
-        $developerData = array_merge($request->validated(), [
-            'profil_image' => $imagePath,
-            'cv' => $cvPath,
-            'cover_letter' => $coverLetterPath,
-        ]);
-
-        // Mettre à jour le développeur
-        $developer->update($developerData);
-
-        // Mettre à jour l'utilisateur associé (si nécessaire)
-        if ($request->has('email') || $request->has('password')) {
-            $userData = $request->only('email', 'password');
-            if (isset($userData['password'])) {
-                $userData['password'] = Hash::make($userData['password']);
-            }
-            $developer->user->update($userData);
-        }
-
-        // Mise à jour des langages du développeur
-        if ($request->has('programming_languages')) {
-            $developer->programmingLanguages()->sync($request->programming_languages);
-        }
-
-        return response()->json([
-            'message' => 'Développeur mis à jour avec succès et en attente de validation.',
-            'developer' => $developer
-        ], 200);
-    }
-
+   
     /**
      * Supprime un développeur et l'utilisateur associé.
      */
@@ -291,5 +304,4 @@ class DeveloperController extends Controller
         $locations = Location::all();
         return response()->json($locations, 200);
     }
-
 }

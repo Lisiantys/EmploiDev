@@ -19,30 +19,9 @@ use App\Http\Controllers\Api\ApplicationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::middleware(['auth:sanctum', 'web'])->get('/profile', [DeveloperController::class, 'profil']);
-
-// Routes publiques (ne nécessitent pas d'authentification)
-
-//Route pour peuplé le formulaire de filtrage
-Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);  //OK //FRONT
-Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);//OK  //FRONT
-Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK //FRONT
-Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);//OK  //FRONT
-Route::get('/locations', [DeveloperController::class, 'getLocations']);//OK  //FRONT
+Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
 
 
-
-
-//Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
-
-//Offres d'emplois
-Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
-Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
-
-//Entreprises
-Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK //Excel //FRONT
@@ -52,10 +31,12 @@ Route::middleware('web')->group(function () {
     Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel //FRONT
     Route::middleware('auth:sanctum')->group(function () {
         Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
+    
         Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
         Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
     });
-
+    
+ 
     //Entreprises
     Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT
     Route::middleware('auth:sanctum')->group(function () {
@@ -89,3 +70,25 @@ Route::middleware('web')->group(function () {
         Route::post('/admin/filter-users', [AdminController::class, 'filterByEmail']); //OK
     });
 });
+
+
+
+// Routes publiques (ne nécessitent pas d'authentification)
+
+//Route pour peuplé le formulaire de filtrage
+Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);  //OK //FRONT
+Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);//OK  //FRONT
+Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK //FRONT
+Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);//OK  //FRONT
+Route::get('/locations', [DeveloperController::class, 'getLocations']);//OK  //FRONT
+
+//Développeurs
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
+
+//Offres d'emplois
+Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
+
+//Entreprises
+Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel

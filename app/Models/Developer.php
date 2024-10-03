@@ -18,13 +18,14 @@ class Developer extends Model
         'description',
         'is_free',
         'contract_id',
+        'is_validated',
         'year_id',
         'location_id',
         'type_id',
         'user_id'
     ];
 
-    protected $with = ['programmingLanguages', 'location', 'typesDeveloper', 'typesContract'];
+    protected $with = ['user','programmingLanguages', 'location', 'typesDeveloper', 'typesContract'];
 
     public function location()
     {

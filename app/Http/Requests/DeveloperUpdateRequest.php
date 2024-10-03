@@ -32,8 +32,8 @@ class DeveloperUpdateRequest extends FormRequest
                 ->numbers()
                 ->symbols()
             ],
-            'first_name' => 'required|string|min:2|max:30',
-            'surname' => 'required|string|min:2|max:30',
+            'first_name' => 'sometimes|string|min:2|max:30',
+            'surname' => 'sometimes|string|min:2|max:30',
             'cv' => 'sometimes|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
             'cover_letter' => 'sometimes|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'nullable|string|min:10|max:255',
