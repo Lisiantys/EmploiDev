@@ -292,6 +292,14 @@
                 >
                     Sauvegarder
                 </button>
+
+                <!-- Bouton Supprimer mon compte -->
+                <button
+                    @click.prevent="deleteAccount"
+                    class="bg-red-500 text-white p-2 rounded mt-4"
+                >
+                    Supprimer mon compte
+                </button>
             </div>
         </form>
     </div>
@@ -301,7 +309,11 @@
 import { ref, onMounted, watch } from "vue";
 import { useResourcesStore } from "../stores/resourcesStore";
 import Axios from "axios";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/authStore';
 
+const router = useRouter();
+const authStore = useAuthStore();
 const resourcesStore = useResourcesStore();
 
 const developer = ref({
@@ -459,6 +471,24 @@ const submitProfile = async () => {
             developer.value.errors = error.response.data.errors || {};
         } else {
             console.error("Failed to update profile:", error);
+        }
+    }
+};
+
+const deleteAccount = async () => {
+    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Toutes vos données présentes sur ce site seront définitivement supprimées.");
+    if (confirmed) {
+        try {
+            const response = await Axios.delete(`/api/developers/${developer.value.id}`);
+            console.log("Account deleted:", response.data);
+            // Déconnecter l'utilisateur
+            authStore.logout();
+            // Rediriger vers la page d'accueil
+            router.push({ name: 'home' });
+        } catch (error) {
+            console.error("Failed to delete account:", error.response ? error.response.data : error);
+            // Afficher un message d'erreur à l'utilisateur
+            alert("Une erreur s'est produite lors de la suppression de votre compte.");
         }
     }
 };

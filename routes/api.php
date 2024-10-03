@@ -21,7 +21,7 @@ use App\Http\Controllers\Api\ApplicationController;
 */
 Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
 Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
+    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
 
     Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
     Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
