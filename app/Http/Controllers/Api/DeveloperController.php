@@ -92,80 +92,50 @@ class DeveloperController extends Controller
     }
 
 
-     /**
-     * Met à jour les informations d'un développeur.
-     */
     public function update(DeveloperUpdateRequest $request, Developer $developer)
     {
+        $this->authorize('update', $developer);
+    
         // Logging the incoming request data
         Log::info('Update request received for developer:', ['id' => $developer->id, 'data' => $request->all()]);
     
-        // Gestion de l'image de profil
-        if ($request->hasFile('profil_image')) {
-            // Log the existing image
-            Log::info('Existing profil_image:', [$developer->profil_image]);
+        // Prepare the developer data to update
+        $developerData = [
+            'first_name' => $request->input('first_name'),
+            'surname' => $request->input('surname'),
+            'description' => $request->input('description'), // Keep current description if not provided
+            'is_free' => $request->input('is_free'),
+            'contract_id' => $request->input('contract_id'),
+            'year_id' => $request->input('year_id'),
+            'location_id' => $request->input('location_id'),
+            'type_id' => $request->input('type_id'),
+        ];
     
-            if ($developer->profil_image !== 'public/images/user.jpg') {
-                Storage::delete($developer->profil_image);
-            }
-            $imagePath = $request->file('profil_image')->store('public/images');
-            Log::info('New profil_image stored at:', [$imagePath]);
-        } else {
-            $imagePath = $developer->profil_image;
-        }
+        // Keep current CV, cover letter, and image if not updated
+        $developerData['cv'] = $request->hasFile('cv') ? $request->file('cv')->store('cv') : $developer->cv;
+        $developerData['cover_letter'] = $request->hasFile('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
+        $developerData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $developer->profil_image;
     
-        // Gestion du CV
-        if ($request->hasFile('cv')) {
-            // Log the existing CV
-            Log::info('Deleting existing CV:', [$developer->cv]);
-            Storage::delete($developer->cv);
-            $cvPath = $request->file('cv')->store('public/cv');
-            Log::info('New CV stored at:', [$cvPath]);
-        } else {
-            $cvPath = $developer->cv;
-        }
-    
-        // Gestion de la lettre de motivation
-        if ($request->hasFile('cover_letter')) {
-            // Log the existing cover letter
-            Log::info('Deleting existing cover letter:', [$developer->cover_letter]);
-            Storage::delete($developer->cover_letter);
-            $coverLetterPath = $request->file('cover_letter')->store('public/cover_letters');
-            Log::info('New cover letter stored at:', [$coverLetterPath]);
-        } else {
-            $coverLetterPath = $developer->cover_letter;
-        }
-    
-        // Fusionner les données validées avec les nouveaux chemins des fichiers
-        $developerData = array_merge($request->validated(), [
-            'profil_image' => $imagePath,
-            'cv' => $cvPath,
-            'cover_letter' => $coverLetterPath,
-        ]);
-    
-        // Log the data to be updated
-        Log::info('Updating developer with data:', $developerData);
-    
-        // Mettre à jour le développeur
+        // Perform the update on the developer model
         $developer->update($developerData);
     
-        // Log successful update
-        Log::info('Developer updated successfully:', [$developer->id]);
-    
-        // Mettre à jour l'utilisateur associé (si nécessaire)
+        // Update user if necessary
         if ($request->has('email') || $request->has('password')) {
             $userData = $request->only('email', 'password');
-            if (isset($userData['password'])) {
+
+            if (!empty($userData['password'])) {
                 $userData['password'] = Hash::make($userData['password']);
+            } else {
+                unset($userData['password']);
             }
+
             $developer->user->update($userData);
-            Log::info('User associated with developer updated:', $userData);
         }
+
     
-        // Mise à jour des langages du développeur
+        // Update programming languages
         if ($request->has('programming_languages')) {
             $developer->programmingLanguages()->sync($request->programming_languages);
-            Log::info('Programming languages updated:', $request->programming_languages);
         }
     
         return response()->json([
@@ -173,6 +143,11 @@ class DeveloperController extends Controller
             'developer' => $developer
         ], 200);
     }
+    
+
+
+    
+
     
 
     /**

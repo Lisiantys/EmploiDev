@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,40 +23,48 @@ class DeveloperUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => 'sometimes|email|unique:users,email|max:255' . $this->developer->user_id, // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
+        $userId = $this->route('developer')->user_id; // Assurez-vous que cela récupère bien l'utilisateur
+
+    return [
+        'email' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('users')->ignore($userId), // Ignorer l'e-mail de l'utilisateur actuel
+        ], // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
             'password' => [
-                'sometimes',
+                'nullable',
                 Password::min(8)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
             ],
-            'first_name' => 'sometimes|string|min:2|max:30',
-            'surname' => 'sometimes|string|min:2|max:30',
-            'cv' => 'sometimes|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
-            'cover_letter' => 'sometimes|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
+            'first_name' => 'required|string|min:2|max:30',
+            'surname' => 'required|string|min:2|max:30',
+            'cv' => 'nullable|file|mimes:pdf|max:5120', // CV obligatoire (pdf, doc, docx, max 5 Mo)
+            'cover_letter' => 'nullable|file|mimes:pdf|max:5120', // Lettre de motivation obligatoire (pdf, doc, docx, max 5 Mo)
             'description' => 'nullable|string|min:10|max:255',
-            'is_free' => 'sometimes|boolean',
-            'contract_id' => 'sometimes|exists:types_contracts,id',
-            'year_id' => 'sometimes|exists:years_experiences,id',
-            'location_id' => 'sometimes|exists:locations,id',
-            'type_id' => 'sometimes|exists:types_developers,id',
-            'programming_languages' => 'sometimes|array', // le champ doit être un tableau
+            'is_free' => 'required|boolean',
+            'contract_id' => 'required|exists:types_contracts,id',
+            'year_id' => 'required|exists:years_experiences,id',
+            'location_id' => 'required|exists:locations,id',
+            'type_id' => 'required|exists:types_developers,id',
+            'programming_languages' => 'required|array', // le champ doit être un tableau
             'programming_languages.*' => 'exists:programming_languages,id', // S'assure que chaque élément du tableau existe dans la table des langages de programmation
-            // Note: 'user_id' is not included since it's unlikely to change in an update
+            // Note : 'user_id' est inséré depuis le controlleur
         ];
 
         // Validation conditionnelle pour l'image de profil
         if ($this->hasFile('profil_image')) {
             $rules['profil_image'] = 'image|mimes:jpg,png|max:2048';
-        }
+        };
     }
 
     public function messages()
     {
         return [
+            'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
             'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
@@ -70,10 +79,12 @@ class DeveloperUpdateRequest extends FormRequest
             'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
+            'first_name.required' => 'Le prénom est obligatoire.',
             'first_name.string' => 'Le prénom doit être une chaîne de caractères.',
             'first_name.min' => 'Le prénom doit contenir au moins :min caractères.',
             'first_name.max' => 'Le prénom ne doit pas dépasser :max caractères.',
 
+            'surname.required' => 'Le nom de famille est obligatoire.',
             'surname.string' => 'Le nom de famille doit être une chaîne de caractères.',
             'surname.min' => 'Le nom de famille doit contenir au moins :min caractères.',
             'surname.max' => 'Le nom de famille ne doit pas dépasser :max caractères.',
@@ -90,18 +101,22 @@ class DeveloperUpdateRequest extends FormRequest
             'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
 
-            'is_free.boolean' => 'Le statut de disponibilité doit être vrai ou faux.',
-
-            'is_validated.boolean' => 'Le statut de validation doit être vrai ou faux.',
-
+            'contract_id.required' => 'Le type de contrat est obligatoire.',
             'contract_id.exists' => 'Le type de contrat sélectionné est invalide.',
 
+            'year_id.required' => 'Les années d\'expérience sont obligatoires.',
             'year_id.exists' => 'L\'année d\'expérience sélectionnée est invalide.',
 
+            'location_id.required' => 'La localisation est obligatoire.',
             'location_id.exists' => 'La localisation sélectionnée est invalide.',
 
+            'type_id.required' => 'Le type de développeur est obligatoire.',
             'type_id.exists' => 'Le type de développeur sélectionné est invalide.',
 
+            'is_free.required' => 'Le statut est obligatoire.',
+            'is_free.boolean' => 'Le statut de disponibilité doit être vrai ou faux.',
+
+            'programming_languages.required' => 'Les langages de programmation sont obligatoires.',
             'programming_languages.array' => 'Les langages de programmation doivent être un tableau.',
             'programming_languages.*.exists' => 'Le langage de programmation sélectionné est invalide.',
         ];

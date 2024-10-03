@@ -20,6 +20,12 @@ use App\Http\Controllers\Api\ApplicationController;
 |
 */
 Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
+
+    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
+    Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
+});
 
 
 
@@ -29,13 +35,7 @@ Route::middleware('web')->group(function () {
 
     //Développeurs
     Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel //FRONT
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel
-    
-        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
-        Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
-    });
-    
+  
  
     //Entreprises
     Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT

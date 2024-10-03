@@ -4,12 +4,28 @@
             <div class="flex flex-col gap-4">
                 <div class="flex w-full gap-4">
                     <div class="w-1/2">
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Prénom:</label>
-                        <input v-model="developer.first_name" placeholder="Prénom..." required class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        <label
+                            class="block mb-2 text-sm font-medium text-gray-900"
+                            >Prénom:</label
+                        >
+                        <input
+                            v-model="developer.first_name"
+                            placeholder="Prénom..."
+                            required
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        />
                     </div>
                     <div class="w-1/2">
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Nom:</label>
-                        <input v-model="developer.surname" placeholder="Nom..." required class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        <label
+                            class="block mb-2 text-sm font-medium text-gray-900"
+                            >Nom:</label
+                        >
+                        <input
+                            v-model="developer.surname"
+                            placeholder="Nom..."
+                            required
+                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        />
                     </div>
                 </div>
                 <div>
@@ -203,6 +219,28 @@
                     }}</span>
                 </div>
 
+                <div class="flex items-center">
+                    <label class="inline-flex items-center cursor-pointer">
+                        <input
+                            type="checkbox"
+                            v-model="developer.is_free"
+                            class="sr-only peer"
+                        />
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors"
+                        >
+                            <div
+                                class="absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5"
+                            ></div>
+                        </div>
+                        <span class="ml-3 text-sm font-medium text-gray-900">
+                            Disponible pour de nouvelles opportunités
+                        </span>
+                    </label>
+                </div>
+                <div
+                    class="absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5"
+                ></div>
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-900"
                         >Nouveau mot de passe:</label
@@ -211,7 +249,6 @@
                         v-model="developer.password"
                         type="password"
                         placeholder="Mot de passe"
-                        required
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                 </div>
@@ -224,7 +261,6 @@
                         v-model="developer.confirmPassword"
                         type="password"
                         placeholder="Confirmer le mot de passe"
-                        required
                         class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     />
                     <div v-if="passwordsDoNotMatch" class="text-red-500 mb-2">
@@ -263,36 +299,38 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
-import { useResourcesStore } from "../stores/resourcesStore"; // Ensure the path is correct
+import { useResourcesStore } from "../stores/resourcesStore";
 import Axios from "axios";
 
 const resourcesStore = useResourcesStore();
 
 const developer = ref({
+    id: null,
     first_name: "",
     surname: "",
     email: "",
     password: "",
     confirmPassword: "",
-    cv: "",
-    cover_letter: "",
-    profil_image: "",
+    cv: null,
+    cover_letter: null,
+    profil_image: null,
     description: "",
     contract_id: "",
     programming_languages: [],
     type_id: "",
     location_id: "",
     year_id: "",
+    is_free: true,
     errors: {},
 });
 
-const contracts = ref([]); // For storing contract types
-const developerTypes = ref([]); // For storing developer types
-const programmingLanguages = ref([]); // For storing programming languages
-const localisations = ref([]); // For storing locations
-const yearsExperiences = ref([]); // For storing years of experience
+const contracts = ref([]);
+const developerTypes = ref([]);
+const programmingLanguages = ref([]);
+const localisations = ref([]);
+const yearsExperiences = ref([]);
 
-// Property to check if passwords match
+// Vérification des mots de passe
 const passwordsDoNotMatch = ref(false);
 
 watch(
@@ -315,12 +353,25 @@ const fetchUserProfile = async () => {
     try {
         const response = await Axios.get("/api/developers/profile");
         console.log("Fetched developer profile:", response.data);
+
+        // Mettez à jour le profil du développeur
         developer.value = {
-            ...response.data, // Directly assign the returned developer data
+            ...developer.value, // Conserver les propriétés existantes
+            ...response.data, // Les données du serveur
             programming_languages: response.data.programming_languages.map(
                 (lang) => lang.id
-            ), // Map to get only IDs if needed
+            ),
+            email: response.data.user.email, // Récupérer l'email de l'utilisateur
+            password: "", // Réinitialiser le mot de passe
+            confirmPassword: "",
+            errors: {},
         };
+
+        // Assurez-vous que l'ID est défini
+        developer.value.id = response.data.id;
+
+        // S'assurer que is_free est un booléen
+        developer.value.is_free = !!response.data.is_free;
     } catch (error) {
         console.error("Failed to fetch user profile:", error.response);
     }
@@ -332,20 +383,60 @@ const handleFileUpload = (fieldName, event) => {
 };
 
 const submitProfile = async () => {
+    if (developer.value.password) {
+        // Vérifier si les mots de passe correspondent
+        if (passwordsDoNotMatch.value) {
+            developer.value.errors = {
+                password: ["Les mots de passe ne correspondent pas."],
+            };
+            return;
+        }
+    }
     try {
         console.log("Submitting Profile:", developer.value);
 
         const formData = new FormData();
-        Object.entries(developer.value).forEach(([key, value]) => {
-            console.log(`Appending ${key}: ${value}`); // Log each field being appended
-            if (value) {
-                formData.append(key, value);
-            }
+
+        // Ajout du 'method spoofing' pour la méthode PUT
+        formData.append("_method", "PUT");
+
+        // Ajouter les champs au FormData
+        formData.append("first_name", developer.value.first_name);
+        formData.append("surname", developer.value.surname);
+        formData.append("email", developer.value.email);
+        formData.append("description", developer.value.description || "");
+        formData.append("contract_id", developer.value.contract_id);
+        formData.append("type_id", developer.value.type_id);
+        formData.append("location_id", developer.value.location_id);
+        formData.append("year_id", developer.value.year_id);
+        formData.append("is_free", developer.value.is_free ? 1 : 0);
+
+        // Ajouter les langages de programmation
+        developer.value.programming_languages.forEach((langId) => {
+            formData.append("programming_languages[]", langId);
         });
 
-        console.log("Form Data being sent:", Object.fromEntries(formData)); // Log the form data for debugging
+        // Ajouter les fichiers si présents
+        if (developer.value.cv instanceof File) {
+            formData.append("cv", developer.value.cv);
+        }
 
-        const response = await Axios.put(
+        if (developer.value.cover_letter instanceof File) {
+            formData.append("cover_letter", developer.value.cover_letter);
+        }
+
+        if (developer.value.profil_image instanceof File) {
+            formData.append("profil_image", developer.value.profil_image);
+        }
+
+        // Ajouter le mot de passe si l'utilisateur souhaite le changer
+        if (developer.value.password) {
+            formData.append("password", developer.value.password);
+        }
+
+        console.log("Form Data being sent:", formData);
+
+        const response = await Axios.post(
             `/api/developers/${developer.value.id}`,
             formData,
             {
@@ -356,16 +447,21 @@ const submitProfile = async () => {
         );
 
         console.log("Profile updated successfully", response.data);
+
+        // Réinitialiser les erreurs
+        developer.value.errors = {};
+
+        // Afficher un message de succès ou rediriger l'utilisateur si nécessaire
     } catch (error) {
         if (error.response) {
             console.error("Failed to update profile:", error.response.data);
+            // Mettre à jour les erreurs pour les afficher dans le formulaire
+            developer.value.errors = error.response.data.errors || {};
         } else {
             console.error("Failed to update profile:", error);
         }
     }
 };
-
-
 
 onMounted(async () => {
     await resourcesStore.fetchAllResources();
@@ -374,6 +470,6 @@ onMounted(async () => {
     programmingLanguages.value = resourcesStore.programmingLanguages;
     localisations.value = resourcesStore.localisations;
     yearsExperiences.value = resourcesStore.yearsExperiences;
-    fetchUserProfile();
+    await fetchUserProfile();
 });
 </script>
