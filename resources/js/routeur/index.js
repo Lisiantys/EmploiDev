@@ -6,6 +6,9 @@ import register from '../components/Register.vue';
 import job from '../components/JobsOffers.vue';
 import developerProfile from '../components/DeveloperProfile.vue';
 import companyProfile from '../components/CompanyProfile.vue';
+import mentionsLegales from '../components/MentionsLegales.vue';
+import politiqueConfidentialite from '../components/Politique.vue';
+
 import { useAuthStore } from '../stores/authStore';
 
 const routes = [
@@ -16,6 +19,8 @@ const routes = [
   { path: '/offres-emploi', name: 'job', component: job },
   { path: '/profil-dev', name: 'developerProfile', component: developerProfile },
   { path: '/profil-comp', name: 'companyProfile', component: companyProfile },
+  { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
+  { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite },
   { 
     path: '/logout', 
     name: 'logout', 

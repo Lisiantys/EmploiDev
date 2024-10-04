@@ -18,14 +18,15 @@
                     <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
                     <a href="#" class="hover:underline">Contactez-nous</a>
                 </li>
-                <li class="space-x-3">
+                <router-link :to="{ name: 'mentionsLegales' }" class="space-x-3">
                     <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
                     <a href="#" class="hover:underline">Mentions Légales</a>
-                </li>
-                <li class="space-x-3">
+                </router-link>
+                <router-link :to="{ name: 'politiqueConfidentialite' }"  class="space-x-3">
                     <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
                     <a href="#" class="hover:underline">Politique de Confidentialité</a>
-                </li>
+                </router-link>
+    
             </ul>
         </div>
         <hr class="my-6 w-full sm:w-1/2 border-white mx-auto lg:my-8" />
