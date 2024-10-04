@@ -7,6 +7,8 @@
                 <div
                     v-for="developer in resourcesFilteredStore.developers"
                     :key="developer.id"
+                              @click="openModal(developer.id)"
+
                     :class="
                         developer.is_free
                             ? 'bg-white hover14 cursor-pointer rounded-lg shadow-lg flex flex-col h-full border-4 border-green-500'
@@ -82,36 +84,51 @@
         <div v-else>
             <p>Aucun développeur trouvé.</p>
         </div>
+
+        <DeveloperModal
+      :isOpen="showModal"
+      :developerId="selectedDeveloperId"
+      @close="showModal = false"
+    />
     </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
-import { useDeveloperAndJobStore } from '../stores/developerAndJobStore'; // Import the combined store
-import Form from "./FilterForm.vue";
+import { ref, onMounted } from 'vue';
+import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
+import Form from './FilterForm.vue';
+import DeveloperModal from './DeveloperModal.vue';
 
-const resourcesFilteredStore = useDeveloperAndJobStore(); // Create an instance of the store
+const resourcesFilteredStore = useDeveloperAndJobStore();
+
+const showModal = ref(false);
+const selectedDeveloperId = ref(null);
+
+const openModal = (id) => {
+  selectedDeveloperId.value = id;
+  showModal.value = true;
+};
 
 const fetchResources = (filters) => {
-    resourcesFilteredStore.setIsDeveloper(true);
-    resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
+  resourcesFilteredStore.setIsDeveloper(true);
+  resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
 };
 
 onMounted(() => {
-    resourcesFilteredStore.setIsDeveloper(true); 
-
-    resourcesFilteredStore.fetchResources()}); // Fetch developers when the component mounts
+  resourcesFilteredStore.setIsDeveloper(true);
+  resourcesFilteredStore.fetchResources();
+});
 
 const previousPage = () => {
-    if (resourcesFilteredStore.currentPage > 1) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
-    }
+  if (resourcesFilteredStore.currentPage > 1) {
+    resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
+  }
 };
 
 const nextPage = () => {
-    if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
-    }
+  if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
+    resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
+  }
 };
 </script>
 

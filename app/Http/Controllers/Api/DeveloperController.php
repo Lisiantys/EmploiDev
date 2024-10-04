@@ -279,4 +279,27 @@ class DeveloperController extends Controller
         $locations = Location::all();
         return response()->json($locations, 200);
     }
+
+
+
+    public function downloadCv(Developer $developer)
+    {
+        // Vérifier si le fichier existe
+        if (!$developer->cv || !Storage::exists($developer->cv)) {
+            return response()->json(['message' => 'CV non disponible.'], 404);
+        }
+    
+        return Storage::download($developer->cv);
+    }
+    
+    public function downloadCoverLetter(Developer $developer)
+    {
+        // Vérifier si le fichier existe
+        if (!$developer->cover_letter || !Storage::exists($developer->cover_letter)) {
+            return response()->json(['message' => 'Lettre de motivation non disponible.'], 404);
+        }
+    
+        return Storage::download($developer->cover_letter);
+    }
+    
 }

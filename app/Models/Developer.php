@@ -25,7 +25,7 @@ class Developer extends Model
         'user_id'
     ];
 
-    protected $with = ['user','programmingLanguages', 'location', 'typesDeveloper', 'typesContract'];
+    protected $with = ['user','programmingLanguages', 'location', 'typesDeveloper', 'typesContract', 'yearsExperience'];
 
     public function location()
     {

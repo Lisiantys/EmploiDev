@@ -5,7 +5,9 @@
             <h3>Jobs</h3>
             <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-20 md:mt-10">
                 <div v-for="job in resourcesFilteredStore.jobOffers" :key="job.id"
+                     @click="openModal(job.id)"
                      class="bg-white mt-10 shadow-lg w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md cursor-pointer">
+                    <!-- Votre code existant pour afficher les offres d'emploi -->
                     <div class="w-full">
                         <div class="flex justify-between">
                             <h3 class="font-bold mt-px text-blue-800">{{ job.name }}</h3>
@@ -63,15 +65,31 @@
         <div v-else>
             <p>Aucune offre d'emploi trouvée.</p>
         </div>
+
+        <!-- Inclure le composant JobOfferModal -->
+        <JobOfferModal
+          :isOpen="showModal"
+          :jobOfferId="selectedJobOfferId"
+          @close="showModal = false"
+        />
     </div>
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
 import Form from "./FilterForm.vue";
+import JobOfferModal from './JobOfferModal.vue'; // Importer le composant modal
 
 const resourcesFilteredStore = useDeveloperAndJobStore();
+
+const showModal = ref(false);
+const selectedJobOfferId = ref(null);
+
+const openModal = (id) => {
+  selectedJobOfferId.value = id;
+  showModal.value = true;
+};
 
 const fetchJobOffers = (filters) => {
     resourcesFilteredStore.setIsDeveloper(false);

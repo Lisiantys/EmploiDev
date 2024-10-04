@@ -20,7 +20,7 @@ class JobOffer extends Model
         'company_id'
     ];
 
-    protected $with = ['programmingLanguages', 'location', 'typesDeveloper', 'typesContract'];
+    protected $with = ['company', 'programmingLanguages', 'location', 'typesDeveloper', 'typesContract' , 'yearsExperience'];
 
     public function company()
     {

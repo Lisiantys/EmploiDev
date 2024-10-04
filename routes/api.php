@@ -27,6 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
     Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel //FRONT
     Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
+
+    // routes/api.php
+
 });
 
 //Entreprises
@@ -85,11 +88,14 @@ Route::get('/locations', [DeveloperController::class, 'getLocations']);//OK  //F
 
 //Développeurs
 Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT
 
 //Offres d'emplois
 Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
+Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT
 
 //Entreprises
 Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
+
+Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']);//A modifier le code
+Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code
