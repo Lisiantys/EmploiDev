@@ -15,6 +15,8 @@ class Company extends Model
         'description',
     ];
 
+    protected $with = ['user'];
+
     public function jobOffers()
     {
         return $this->hasMany(JobOffer::class);

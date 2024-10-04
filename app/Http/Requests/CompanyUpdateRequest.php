@@ -23,16 +23,16 @@ class CompanyUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'sometimes|email|unique:users,email|max:255,' . $this->company->user_id,
+            'email' => 'required|email|unique:users,email|max:255,' . $this->company->user_id,
             'password' => [
-                'sometimes',
+                'nullable',
                 Password::min(8)
                 ->mixedCase()
                 ->letters()
                 ->numbers()
                 ->symbols()
             ],
-            'name' => 'sometimes|string|min:2|max:50',
+            'name' => 'required|string|min:2|max:50',
             'description' => 'nullable|string|max:255',
             // 'user_id' est automatiquement assigné dans le controller
         ];
@@ -46,11 +46,11 @@ class CompanyUpdateRequest extends FormRequest
     public function messages()
     {
         return [
+            'email.required' => 'L\'adresse email est obligatoire.',
             'email.email' => 'Veuillez fournir une adresse email valide.',
             'email.unique' => 'Cette adresse email est déjà utilisée.',
             'email.max' => 'L\'email ne doit pas dépasser :max caractères.',
 
-            'password.sometimes' => 'Le mot de passe est obligatoire si fourni.',
             'password.min' => 'Le mot de passe doit contenir au moins :min caractères.',
             'password.mixedCase' => 'Le mot de passe doit contenir des lettres majuscules et minuscules.',
             'password.letters' => 'Le mot de passe doit contenir au moins une lettre.',
@@ -61,7 +61,7 @@ class CompanyUpdateRequest extends FormRequest
             'profil_image.mimes' => 'L\'image doit être de type JPG ou PNG.',
             'profil_image.max' => 'L\'image ne doit pas dépasser 2 Mo.',
 
-            'name.sometimes' => 'Le nom de l\'entreprise est obligatoire si fourni.',
+            'name.required' => 'Le nom de l\'entreprise est obligatoire.',
             'name.string' => 'Le nom de l\'entreprise doit être une chaîne de caractères.',
             'name.min' => 'Le nom de l\'entreprise doit contenir au moins :min caractères.',
             'name.max' => 'Le nom de l\'entreprise ne doit pas dépasser :max caractères.',

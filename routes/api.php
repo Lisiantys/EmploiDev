@@ -19,15 +19,22 @@ use App\Http\Controllers\Api\ApplicationController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+//Développeurs
+//ajouter le auth a cette route /profile. cette rtoute la rename peut etre la mettre dans auth elle fait dev + company
 Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
-
-    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel
+    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel //FRONT
     Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
 });
 
-
+//Entreprises
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL //FRONT UPDATE ET DELETE
+    Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL
+    Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
+});
 
 Route::middleware('web')->group(function () {
     Route::post('/login', [AuthController::class, 'login']); //OK //Excel //FRONT
@@ -36,15 +43,9 @@ Route::middleware('web')->group(function () {
     //Développeurs
     Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel //FRONT
   
- 
     //Entreprises
     Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL
-        Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL
-        Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
-    });
-
+   
     //Offres d'emplois
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL
@@ -87,7 +88,7 @@ Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
 
 //Offres d'emplois
-Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK //Excel //FRONT
 Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT INDEX ONLY FAIRE SHOW
 
 //Entreprises

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Company;
 use App\Models\JobOffer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -72,34 +73,43 @@ class CompanyController extends Controller
      * Met à jour les informations d'une entreprise.
      */
     public function update(CompanyUpdateRequest $request, Company $company)
-    {
-        $this->authorize('update', $company);
+{
+    $this->authorize('update', $company);
 
-        // Gestion de l'image de profil
-        if ($request->hasFile('profil_image')) {
-            // Supprimer l'ancienne image si elle existe
-            if ($company->profil_image && $company->profil_image !== 'public/images/company.jpg') {
-                Storage::delete($company->profil_image);
-            }
-            // Stocker la nouvelle image
-            $imagePath = $request->file('profil_image')->store('public/images');
+    // Journalisation des données de la requête entrante
+    Log::info('Requête de mise à jour reçue pour l\'entreprise :', ['id' => $company->id, 'data' => $request->all()]);
+
+    // Préparation des données de l'entreprise à mettre à jour
+    $companyData = [
+        'name' => $request->input('name'),
+        'description' => $request->input('description'),
+    ];
+
+    // Gestion de l'image de profil
+    $companyData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $company->profil_image;
+
+    // Effectuer la mise à jour sur le modèle de l'entreprise
+    $company->update($companyData);
+
+    // Mise à jour de l'utilisateur si nécessaire
+    if ($request->has('email') || $request->has('password')) {
+        $userData = $request->only('email', 'password');
+
+        if (!empty($userData['password'])) {
+            $userData['password'] = Hash::make($userData['password']);
         } else {
-            $imagePath = $company->profil_image; // Garder l'ancienne image si aucune nouvelle n'est fournie
+            unset($userData['password']);
         }
 
-        // Fusionner les données validées avec le nouveau chemin de l'image
-        $companyData = array_merge($request->validated(), [
-            'profil_image' => $imagePath,
-        ]);
-
-        // Mettre à jour l'entreprise
-        $company->update($companyData);
-
-        return response()->json([
-            'message' => 'Entreprise mise à jour avec succès.',
-            'company' => $company
-        ], 200);
+        $company->user->update($userData);
     }
+
+    return response()->json([
+        'message' => 'Entreprise / utilisateur mis à jour avec succès',
+        'company' => $company
+    ], 200);
+}
+
 
     /**
      * Supprime une entreprise et l'utilisateur associé.

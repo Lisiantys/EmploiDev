@@ -180,9 +180,9 @@
                         @change="handleFileUpload('profil_image', $event)"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                     />
-                    <span v-if="developer.profil_image" class="text-sm">{{
-                        developer.profil_image
-                    }}</span>
+                    <span v-if="developer.profil_image" class="text-sm">
+                        {{ getFileName(developer.profil_image) }}
+                    </span>
                 </div>
 
                 <div class="mb-5">
@@ -197,9 +197,9 @@
                         @change="handleFileUpload('cv', $event)"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                     />
-                    <span v-if="developer.cv" class="text-sm">{{
-                        developer.cv
-                    }}</span>
+                    <span v-if="developer.cv" class="text-sm">
+                        {{ getFileName(developer.cv) }}
+                    </span>
                 </div>
 
                 <div class="mb-5">
@@ -214,9 +214,9 @@
                         @change="handleFileUpload('cover_letter', $event)"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                     />
-                    <span v-if="developer.cover_letter" class="text-sm">{{
-                        developer.cover_letter
-                    }}</span>
+                    <span v-if="developer.cover_letter" class="text-sm">
+                        {{ getFileName(developer.cover_letter) }}
+                    </span>
                 </div>
 
                 <div class="flex items-center">
@@ -309,8 +309,8 @@
 import { ref, onMounted, watch } from "vue";
 import { useResourcesStore } from "../stores/resourcesStore";
 import Axios from "axios";
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../stores/authStore';
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../stores/authStore";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -360,6 +360,18 @@ watch(
             developer.value.password !== newConfirmPassword;
     }
 );
+
+// Fonction pour obtenir le nom du fichier à partir d'un objet File ou d'une chaîne
+const getFileName = (file) => {
+    if (!file) return "";
+    if (typeof file === "string") {
+        // Extraire le nom du fichier du chemin
+        return file.split("/").pop();
+    } else if (file instanceof File) {
+        return file.name;
+    }
+    return "";
+};
 
 const fetchUserProfile = async () => {
     try {
@@ -476,19 +488,28 @@ const submitProfile = async () => {
 };
 
 const deleteAccount = async () => {
-    const confirmed = confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Toutes vos données présentes sur ce site seront définitivement supprimées.");
+    const confirmed = confirm(
+        "Êtes-vous sûr de vouloir supprimer votre compte ? Toutes vos données présentes sur ce site seront définitivement supprimées."
+    );
     if (confirmed) {
         try {
-            const response = await Axios.delete(`/api/developers/${developer.value.id}`);
+            const response = await Axios.delete(
+                `/api/developers/${developer.value.id}`
+            );
             console.log("Account deleted:", response.data);
             // Déconnecter l'utilisateur
             authStore.logout();
             // Rediriger vers la page d'accueil
-            router.push({ name: 'home' });
+            router.push({ name: "home" });
         } catch (error) {
-            console.error("Failed to delete account:", error.response ? error.response.data : error);
+            console.error(
+                "Failed to delete account:",
+                error.response ? error.response.data : error
+            );
             // Afficher un message d'erreur à l'utilisateur
-            alert("Une erreur s'est produite lors de la suppression de votre compte.");
+            alert(
+                "Une erreur s'est produite lors de la suppression de votre compte."
+            );
         }
     }
 };

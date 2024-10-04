@@ -5,8 +5,8 @@ import login from '../components/Login.vue';
 import register from '../components/Register.vue';
 import job from '../components/JobsOffers.vue';
 import developerProfile from '../components/DeveloperProfile.vue';
+import companyProfile from '../components/CompanyProfile.vue';
 import { useAuthStore } from '../stores/authStore';
-
 
 const routes = [
   { path: '/', name: 'home', component: home },
@@ -14,7 +14,8 @@ const routes = [
   { path: '/connexion', name: 'login', component: login },
   { path: '/inscription', name: 'register', component: register },
   { path: '/offres-emploi', name: 'job', component: job },
-  { path: '/profil', name: 'developerProfile', component: developerProfile },
+  { path: '/profil-dev', name: 'developerProfile', component: developerProfile },
+  { path: '/profil-comp', name: 'companyProfile', component: companyProfile },
   { 
     path: '/logout', 
     name: 'logout', 
