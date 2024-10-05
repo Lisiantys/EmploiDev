@@ -90,23 +90,53 @@
       :developerId="selectedDeveloperId"
       @close="showModal = false"
     />
+
+  
+    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal">
+  + Ajouter une offre d'emploi
+</FloatingButton>
+
+
+    <!-- Modal de création d'offre d'emploi -->
+    <CreateJobOfferModal
+      :isOpen="showCreateModal"
+      @close="closeCreateModal"
+      @jobCreated="jobCreated"
+    />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
+import { useAuthStore } from '../stores/authStore';
 import Form from './FilterForm.vue';
 import DeveloperModal from './DeveloperModal.vue';
+import FloatingButton from './FloatingButton.vue';
+import CreateJobOfferModal from './CreateJobOfferModal.vue'; 
 
+const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
 
 const showModal = ref(false);
 const selectedDeveloperId = ref(null);
 
+//Pour la création d'une offre d'emploi uniquement les entreprises
+const showCreateModal = ref(false);
+
 const openModal = (id) => {
   selectedDeveloperId.value = id;
   showModal.value = true;
+};
+
+// Fonction pour ouvrir le modal
+const openCreateModal = () => {
+  showCreateModal.value = true;
+};
+
+// Fonction pour fermer le modal
+const closeCreateModal = () => {
+  showCreateModal.value = false;
 };
 
 const fetchResources = (filters) => {
@@ -130,6 +160,7 @@ const nextPage = () => {
     resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
   }
 };
+
 </script>
 
 <style scoped>

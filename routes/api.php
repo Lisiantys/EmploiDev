@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\JobOfferController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\Api\ApplicationController;
 |
 */
 
+
+
 //Développeurs
 //ajouter le auth a cette route /profile. cette rtoute la rename peut etre la mettre dans auth elle fait dev + company
 Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
@@ -27,16 +30,20 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
     Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel //FRONT
     Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
-
-    // routes/api.php
-
 });
+
 
 //Entreprises
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL //FRONT UPDATE ET DELETE
     Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL
     Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
+});
+
+ //Offres d'emplois
+ Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL
+    Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel
 });
 
 Route::middleware('web')->group(function () {
@@ -49,11 +56,7 @@ Route::middleware('web')->group(function () {
     //Entreprises
     Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT
    
-    //Offres d'emplois
-    Route::middleware('auth:sanctum')->group(function () {
-        Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL
-        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel
-    });
+   
 
     //Candidatures
     Route::middleware('auth:sanctum')->group(function () {

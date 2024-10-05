@@ -24,7 +24,6 @@ class JobOfferStoreRequest extends FormRequest
         return [
             'name' => 'required|string|min:10|max:255',
             'description' => 'required|string|min:20|max:1024',
-            'is_validated' => 'sometimes|boolean',
             'contract_id' => 'required|exists:types_contracts,id',
             'year_id' => 'required|exists:years_experiences,id',
             'location_id' => 'required|exists:locations,id',
@@ -46,8 +45,6 @@ class JobOfferStoreRequest extends FormRequest
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
-
-            'is_validated.boolean' => 'Le statut de validation doit être vrai ou faux.',
 
             'contract_id.required' => 'Le type de contrat est obligatoire.',
             'contract_id.exists' => 'Le type de contrat sélectionné est invalide.',

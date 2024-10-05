@@ -72,6 +72,19 @@
           :jobOfferId="selectedJobOfferId"
           @close="showModal = false"
         />
+
+        
+        <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal" class="floating-button ">
+  + Ajouter une offre d'emploi
+</FloatingButton>
+
+
+    <!-- Modal de création d'offre d'emploi -->
+    <CreateJobOfferModal
+      :isOpen="showCreateModal"
+      @close="closeCreateModal"
+      @jobCreated="jobCreated"
+    />
     </div>
 </template>
 
@@ -80,15 +93,41 @@ import { ref, onMounted } from "vue";
 import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
 import Form from "./FilterForm.vue";
 import JobOfferModal from './JobOfferModal.vue'; // Importer le composant modal
+import { useAuthStore } from '../stores/authStore';
+import CreateJobOfferModal from './CreateJobOfferModal.vue'; 
 
+
+
+const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
 
 const showModal = ref(false);
 const selectedJobOfferId = ref(null);
 
+//Pour la création d'une offre d'emploi uniquement les entreprises
+const showCreateModal = ref(false);
+
 const openModal = (id) => {
   selectedJobOfferId.value = id;
   showModal.value = true;
+};
+
+// Fonction pour ouvrir le modal
+const openCreateModal = () => {
+  showCreateModal.value = true;
+};
+
+// Fonction pour fermer le modal
+const closeCreateModal = () => {
+  showCreateModal.value = false;
+};
+
+
+const jobCreated = (newJobOffer) => {
+  // Actualisez la liste des offres d'emploi ou affichez un message de succès
+  console.log('Nouvelle offre créée:', newJobOffer);
+  // Optionnel : Ajouter la nouvelle offre à la liste si nécessaire
+  resourcesFilteredStore.jobOffers.unshift(newJobOffer);
 };
 
 const fetchJobOffers = (filters) => {
@@ -129,3 +168,24 @@ const nextPage = () => {
     }
 };
 </script>
+
+<style scoped>
+.floating-button {
+  position: fixed;
+  bottom: 20px; /* Ajustez selon vos besoins */
+  right: 20px;  /* Ajustez selon vos besoins */
+  background-color: #3b82f6; /* Bleu Tailwind (bg-blue-500) */
+  color: white;
+  padding: 12px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1000; /* Assurez-vous que le bouton est au-dessus des autres éléments */
+}
+
+.floating-button:hover {
+  background-color: #2563eb; /* Bleu foncé Tailwind (bg-blue-600) */
+}
+</style>
