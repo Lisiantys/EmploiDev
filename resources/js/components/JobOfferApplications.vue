@@ -7,6 +7,9 @@
       <!-- Affichage du message d'erreur -->
       <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
   
+      <!-- Affichage du message de succès -->
+      <div v-if="successMessage" class="text-green-500 mb-4">{{ successMessage }}</div>
+  
       <!-- Aucune candidature disponible -->
       <div v-if="applications.length === 0 && !errorMessage">
         <p>Aucune candidature pour cette offre d'emploi.</p>
@@ -47,6 +50,22 @@
           <p><strong>Email :</strong> {{ application.developer.user.email }}</p>
           <p><strong>Description :</strong> {{ application.description }}</p>
           <!-- Ajouter d'autres informations si nécessaire -->
+  
+          <!-- Boutons Accepter et Refuser -->
+          <div class="mt-4">
+            <button
+              @click="acceptApplication(application.id)"
+              class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600 mr-2"
+            >
+              Accepter
+            </button>
+            <button
+              @click="rejectApplication(application.id)"
+              class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600"
+            >
+              Refuser
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -65,22 +84,56 @@
   const acceptedApplications = ref([]);
   const pendingApplications = ref([]);
   const errorMessage = ref('');
+  const successMessage = ref('');
   
   const fetchApplications = async () => {
+    successMessage.value = '';
     try {
       const response = await axios.get(`/api/job-offers/${jobOfferId}/applications`);
       console.log(response.data);
       jobOffer.value = response.data.jobOffer;
       const allApplications = response.data.applications;
   
-      // Filtrer les candidatures par status
-      acceptedApplications.value = allApplications.filter(app => app.status === 'accepted');
-      pendingApplications.value = allApplications.filter(app => app.status === 'pending');
+      // Filtrer les candidatures par statut
+      acceptedApplications.value = allApplications.filter(
+        (app) => app.status === 'accepted'
+      );
+      pendingApplications.value = allApplications.filter(
+        (app) => app.status === 'pending'
+      );
   
       applications.value = allApplications;
     } catch (error) {
       console.error('Erreur lors de la récupération des candidatures :', error);
       errorMessage.value = 'Erreur lors de la récupération des candidatures.';
+    }
+  };
+  
+  // Méthode pour accepter une candidature
+  const acceptApplication = async (applicationId) => {
+    try {
+      const response = await axios.post(`/api/applications/${applicationId}/accept`);
+      // Après l'action, recharger les candidatures
+      fetchApplications();
+      successMessage.value =
+        response.data.message || 'Candidature acceptée avec succès.';
+    } catch (error) {
+      console.error("Erreur lors de l'acceptation de la candidature :", error);
+      errorMessage.value = "Erreur lors de l'acceptation de la candidature.";
+    }
+  };
+  
+  // Méthode pour refuser une candidature
+  const rejectApplication = async (applicationId) => {
+    try {
+      const response = await axios.post(`/api/applications/${applicationId}/refuse`);
+      // Après l'action, recharger les candidatures
+      fetchApplications();
+      successMessage.value =
+        response.data.message || 'Candidature refusée avec succès.';
+    } catch (error) {
+      console.error('Erreur lors du refus de la candidature :', error);
+      errorMessage.value = 'Erreur lors du refus de la candidature.';
     }
   };
   
