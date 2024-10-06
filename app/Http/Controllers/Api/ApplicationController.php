@@ -42,6 +42,8 @@ class ApplicationController extends Controller
     {
         $this->authorize('create', $application);
 
+        Log::info($request);
+        Log::info($application);
         // Vérifier que l'offre d'emploi est validée
         $jobOffer = JobOffer::find($request->job_id);
 
@@ -52,21 +54,9 @@ class ApplicationController extends Controller
             ], 403);
         }
 
-        // Vérifier si le développeur a déjà une candidature pour cette offre
-        $existingApplication = Application::where('job_id', $request->job_id)
-            ->where('developer_id', Auth::id())
-            ->first();
-
-        if ($existingApplication) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Vous avez déjà envoyé une candidature pour cette offre d\'emploi.'
-            ], 409);
-        }
-
         // Récupérer le développeur connecté
         $developer = Developer::where('user_id', Auth::id())->first();
-
+        Log::info($developer);
         // Récupérer le CV et la lettre de motivation du développeur, si non fournis
         $cv = $request->file('cv') ? $request->file('cv')->store('cv') : $developer->cv;
         $coverLetter = $request->file('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
@@ -74,7 +64,7 @@ class ApplicationController extends Controller
         $application = Application::create([
             'description' => $request->description,
             'job_id' => $request->job_id,
-            'developer_id' => Auth::id(),
+            'developer_id' => $developer->id,
             'cv' => $cv,
             'cover_letter' => $coverLetter,
             'status' => 'pending',

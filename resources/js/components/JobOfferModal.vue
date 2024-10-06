@@ -48,42 +48,44 @@
             </div>
           
              <!-- Formulaire de candidature visible uniquement pour les utilisateurs avec role_id = 1 -->
-          <div v-if="authStore.user && authStore.user.role_id === 1">
-            <div v-if="hasAlreadyApplied">
-              <p class="text-red-500 font-bold">Vous avez déjà postulé à cette offre d'emploi.</p>
-            </div>
-            <div v-else>
-              <p class="text-gray-600 mb-4">
-                Si vous ne fournissez pas de CV ou de lettre de motivation, ceux de votre profil seront utilisés par défaut.
-              </p>
-              <form @submit.prevent="submitApplication">
-                <!-- Description -->
-                <div class="mb-4">
-                  <label class="block text-gray-700">Description (obligatoire)</label>
-                  <textarea v-model="applicationForm.description" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
-                  <p v-if="errors.description" class="text-red-500 text-sm mt-1">{{ errors.description[0] }}</p>
-                </div>
-                <!-- CV -->
-                <div class="mb-4">
-                  <label class="block text-gray-700">CV (optionnel)</label>
-                  <input type="file" @change="handleFileUpload($event, 'cv')" class="w-full border rounded px-3 py-2">
-                  <p v-if="errors.cv" class="text-red-500 text-sm mt-1">{{ errors.cv[0] }}</p>
-                </div>
-                <!-- Lettre de motivation -->
-                <div class="mb-4">
-                  <label class="block text-gray-700">Lettre de motivation (optionnel)</label>
-                  <input type="file" @change="handleFileUpload($event, 'cover_letter')" class="w-full border rounded px-3 py-2">
-                  <p v-if="errors.cover_letter" class="text-red-500 text-sm mt-1">{{ errors.cover_letter[0] }}</p>
-                </div>
-                <!-- Bouton de soumission -->
-                <div class="flex justify-end">
-                  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Postuler
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+             <div v-if="authStore.user && authStore.user.role_id === 1">
+  <!-- Afficher le message si l'utilisateur a déjà postulé -->
+  <div v-if="hasAlreadyApplied">
+    <p class="text-red-500 font-bold">Vous avez déjà postulé à cette offre d'emploi.</p>
+  </div>
+  <!-- Afficher le formulaire si l'utilisateur n'a pas encore postulé -->
+  <div v-else>
+    <p class="text-gray-600 mb-4">
+      Si vous ne fournissez pas de CV ou de lettre de motivation, ceux de votre profil seront utilisés par défaut.
+    </p>
+    <form @submit.prevent="submitApplication">
+      <!-- Description -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Description (obligatoire)</label>
+        <textarea v-model="applicationForm.description" class="w-full border rounded px-3 py-2" rows="3" required></textarea>
+        <p v-if="errors.description" class="text-red-500 text-sm mt-1">{{ errors.description[0] }}</p>
+      </div>
+      <!-- CV -->
+      <div class="mb-4">
+        <label class="block text-gray-700">CV (optionnel)</label>
+        <input type="file" @change="handleFileUpload($event, 'cv')" class="w-full border rounded px-3 py-2">
+        <p v-if="errors.cv" class="text-red-500 text-sm mt-1">{{ errors.cv[0] }}</p>
+      </div>
+      <!-- Lettre de motivation -->
+      <div class="mb-4">
+        <label class="block text-gray-700">Lettre de motivation (optionnel)</label>
+        <input type="file" @change="handleFileUpload($event, 'cover_letter')" class="w-full border rounded px-3 py-2">
+        <p v-if="errors.cover_letter" class="text-red-500 text-sm mt-1">{{ errors.cover_letter[0] }}</p>
+      </div>
+      <!-- Bouton de soumission -->
+      <div class="flex justify-end">
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          Postuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
              
           </div>
@@ -157,15 +159,16 @@
     }
   };
 
-  // Fonction pour vérifier si l'utilisateur a déjà candidaté
+// Fonction pour vérifier si l'utilisateur a déjà candidaté
 const checkExistingApplication = async () => {
   try {
     const response = await Axios.get(`/api/applications/check?job_id=${props.jobOfferId}`);
-    hasAlreadyApplied.value = response.data.has_applied;
+    hasAlreadyApplied.value = response.data.has_applied;  // Met à jour hasAlreadyApplied
   } catch (error) {
     console.error('Failed to check existing application:', error);
   }
 };
+
   
   // Calculer l'URL du logo de l'entreprise
   const companyLogoUrl = computed(() => {
