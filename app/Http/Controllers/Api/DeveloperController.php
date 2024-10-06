@@ -144,12 +144,6 @@ class DeveloperController extends Controller
         ], 200);
     }
     
-
-
-    
-
-    
-
     /**
      * Affiche les détails d'un développeur validé pour la consultation d'un profil public.
      */
@@ -164,9 +158,6 @@ class DeveloperController extends Controller
             return response()->json(['message' => 'Développeur non validé.'], 403);
         }
     }
-
-
-    
 
     /**
      * APour l'affichage du profil personnel du développeur
@@ -187,11 +178,7 @@ class DeveloperController extends Controller
         // Si l'utilisateur n'est ni développeur ni entreprise
         return response()->json(['message' => 'Role not found.'], 404);
     }
-
-
-
-
-   
+ 
     /**
      * Supprime un développeur et l'utilisateur associé.
      */
@@ -259,8 +246,6 @@ class DeveloperController extends Controller
         return response()->json($locations, 200);
     }
 
-
-
     public function downloadCv(Developer $developer)
     {
         // Vérifier si le fichier existe
@@ -280,5 +265,5 @@ class DeveloperController extends Controller
     
         return Storage::download($developer->cover_letter);
     }
-    
+
 }

@@ -9,6 +9,7 @@ import companyProfile from '../components/CompanyProfile.vue';
 import developerApplication from '../components/DeveloperApplication.vue';
 import jobOfferApplications from '../components/JobOfferApplications.vue';
 import companyJobOffer from '../components/CompanyJobOffer.vue';
+import adminDashboard from '../components/AdminDashboard.vue';
 import mentionsLegales from '../components/MentionsLegales.vue';
 import politiqueConfidentialite from '../components/Politique.vue';
 
@@ -25,6 +26,7 @@ const routes = [
   { path: '/candidatures', name: 'developerApplication', component: developerApplication },
   { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer },
   { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications },
+  { path: '/dashboard', name: 'adminDashboard', component: adminDashboard },
   { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
   { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite },
   { 

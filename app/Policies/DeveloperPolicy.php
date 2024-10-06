@@ -34,7 +34,7 @@ class DeveloperPolicy
      */
     public function delete(User $user, Developer $developer): bool
     {
-        return $user->id === $developer->user_id || $user->role_id === 3;
+        return $user->id === $developer->user_id;
     }
 
     /**

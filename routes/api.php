@@ -57,6 +57,12 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
     Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); //OK
     Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']); //OK
+
+    // Routes pour valider les offres d'emploi et les développeurs
+    Route::post('/admin/job-offers/{jobOffer}/validate', [AdminController::class, 'validateJobOffer']);
+    Route::post('/admin/developers/{developer}/validate', [AdminController::class, 'validateDeveloper']);
+
+    Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']); //FRONT
 });
 
 Route::middleware('web')->group(function () {

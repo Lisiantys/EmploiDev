@@ -79,7 +79,6 @@ class JobOfferController extends Controller
         ], 200);
     }
 
-
     /* ===== Customs methods  ===== */
 
 

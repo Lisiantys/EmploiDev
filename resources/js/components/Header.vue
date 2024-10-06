@@ -32,6 +32,12 @@
             <p class="sidebar-text">Vos offres</p>
         </router-link>
 
+        <router-link v-if="isAuthenticated" :to="{ name: 'adminDashboard' }"
+            class="w-full h-16 flex items-center justify-center">
+            <i class="fa-solid fa-list-ul fa-xl" style="color: #ffffff"></i>            
+            <p class="sidebar-text">Dashboard</p>
+        </router-link>
+
         <router-link :to="{ name: 'home' }" class="w-full h-16 flex items-center justify-center">
             <i class="fa-regular fa-id-card fa-xl" style="color: #ffffff;"></i>
             <p class="sidebar-text">Développeurs</p>
