@@ -14,6 +14,7 @@
         <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
         <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}</p>
         <p><strong>Description :</strong> {{ application.description }}</p>
+        <button @click.stop="deleteApplication(application.id)" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
       </div>
     </div>
 
@@ -25,6 +26,7 @@
         <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
         <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}</p>
         <p><strong>Description :</strong> {{ application.description }}</p>
+        <button @click.stop="deleteApplication(application.id)" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
       </div>
     </div>
 
@@ -36,6 +38,7 @@
         <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
         <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}</p>
         <p><strong>Description :</strong> {{ application.description }}</p>
+        <button @click.stop="deleteApplication(application.id)" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
       </div>
     </div>
 
@@ -80,6 +83,18 @@ const openModal = (applicationId) => {
 
 const closeModal = () => {
     isModalOpen.value = false;
+};
+
+// Méthode pour supprimer une candidature
+const deleteApplication = async (applicationId) => {
+  if (confirm('Voulez-vous vraiment supprimer cette candidature ?')) {
+    try {
+      await Axios.delete(`/api/applications/${applicationId}`);
+      fetchApplications(); // Recharger les candidatures après suppression
+    } catch (error) {
+      console.error('Erreur lors de la suppression de la candidature :', error);
+    }
+  }
 };
 
 onMounted(() => {

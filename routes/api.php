@@ -52,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']); //FRONT
     Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel
     Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK Excel
-    Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel
+    Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel //FRONT
     Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK //Excel
 });
 
