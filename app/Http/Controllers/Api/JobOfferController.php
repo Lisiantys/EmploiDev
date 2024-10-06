@@ -83,22 +83,27 @@ class JobOfferController extends Controller
     /* ===== Customs methods  ===== */
 
 
-    public function getCompanyJobOffers(Request $request)
-    {
-        // Récupérer l'utilisateur authentifié
-        $user = Auth::user();
+    public function getCompanyJobOffers()
+{
+    $user = Auth::user();
 
-        // Vérifier si l'utilisateur a une entreprise associée
-        if (!$user->company) {
-            return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
-        }
-
-        // Récupérer les offres d'emploi de l'entreprise
-        $jobOffers = $user->company->jobOffers;
-
-        // Retourner les offres d'emploi sous forme de JSON
-        return response()->json($jobOffers, 200);
+    if (!$user->company) {
+        return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
     }
+
+    $company = $user->company;
+
+    // Récupérer les offres d'emploi de l'entreprise avec le comptage des candidatures en attente
+    $jobOffers = JobOffer::with('location')
+        ->where('company_id', $company->id)
+        ->withCount(['applications as pending_applications_count' => function ($query) {
+            $query->where('status', 'pending');
+        }])
+        ->get();
+
+    return response()->json($jobOffers);
+}
+
 
         // Affiche les candidatures reçues sur une offre d'emploi
         public function jobOfferApplications(JobOffer $jobOffer)

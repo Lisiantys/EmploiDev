@@ -30,7 +30,26 @@
           </p>
           <p><strong>Email :</strong> {{ application.developer.user.email }}</p>
           <p><strong>Description :</strong> {{ application.description }}</p>
-          <!-- Ajouter d'autres informations si nécessaire -->
+  
+          <!-- Boutons de téléchargement -->
+          <div class="mt-4">
+            <a
+              :href="application.cv_url"
+              class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mr-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Télécharger le CV
+            </a>
+            <a
+              :href="application.cover_letter_url"
+              class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Télécharger la Lettre de Motivation
+            </a>
+          </div>
         </div>
       </div>
   
@@ -49,7 +68,26 @@
           </p>
           <p><strong>Email :</strong> {{ application.developer.user.email }}</p>
           <p><strong>Description :</strong> {{ application.description }}</p>
-          <!-- Ajouter d'autres informations si nécessaire -->
+  
+          <!-- Boutons de téléchargement -->
+          <div class="mt-4">
+            <a
+              :href="application.cv_url"
+              class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mr-2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Télécharger le CV
+            </a>
+            <a
+              :href="application.cover_letter_url"
+              class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Télécharger la Lettre de Motivation
+            </a>
+          </div>
   
           <!-- Boutons Accepter et Refuser -->
           <div class="mt-4">
@@ -111,29 +149,33 @@
   
   // Méthode pour accepter une candidature
   const acceptApplication = async (applicationId) => {
-    try {
-      const response = await axios.post(`/api/applications/${applicationId}/accept`);
-      // Après l'action, recharger les candidatures
-      fetchApplications();
-      successMessage.value =
-        response.data.message || 'Candidature acceptée avec succès.';
-    } catch (error) {
-      console.error("Erreur lors de l'acceptation de la candidature :", error);
-      errorMessage.value = "Erreur lors de l'acceptation de la candidature.";
+    if (confirm('Voulez-vous vraiment accepter cette candidature ?')) {
+      try {
+        const response = await axios.post(`/api/applications/${applicationId}/accept`);
+        // Après l'action, recharger les candidatures
+        fetchApplications();
+        successMessage.value =
+          response.data.message || 'Candidature acceptée avec succès.';
+      } catch (error) {
+        console.error("Erreur lors de l'acceptation de la candidature :", error);
+        errorMessage.value = "Erreur lors de l'acceptation de la candidature.";
+      }
     }
   };
   
   // Méthode pour refuser une candidature
   const rejectApplication = async (applicationId) => {
-    try {
-      const response = await axios.post(`/api/applications/${applicationId}/refuse`);
-      // Après l'action, recharger les candidatures
-      fetchApplications();
-      successMessage.value =
-        response.data.message || 'Candidature refusée avec succès.';
-    } catch (error) {
-      console.error('Erreur lors du refus de la candidature :', error);
-      errorMessage.value = 'Erreur lors du refus de la candidature.';
+    if (confirm('Voulez-vous vraiment refuser cette candidature ?')) {
+      try {
+        const response = await axios.post(`/api/applications/${applicationId}/refuse`);
+        // Après l'action, recharger les candidatures
+        fetchApplications();
+        successMessage.value =
+          response.data.message || 'Candidature refusée avec succès.';
+      } catch (error) {
+        console.error('Erreur lors du refus de la candidature :', error);
+        errorMessage.value = 'Erreur lors du refus de la candidature.';
+      }
     }
   };
   

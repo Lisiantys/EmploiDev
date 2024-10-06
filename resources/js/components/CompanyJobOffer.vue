@@ -17,6 +17,7 @@
           <p><strong>Nom de l'offre :</strong> {{ offer.name }}</p>
           <p><strong>Description :</strong> {{ offer.description }}</p>
           <p><strong>Ville :</strong> {{ offer.location.city }}</p>
+          <p><strong>Candidatures en attente :</strong> {{ offer.pending_applications_count }}</p>
           <!-- Bouton Supprimer -->
           <button
             @click.stop="deleteJobOffer(offer.id)"
