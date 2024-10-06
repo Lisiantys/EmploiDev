@@ -92,10 +92,10 @@
     />
 
   
-    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal">
-  + Ajouter une offre d'emploi
-</FloatingButton>
-
+       <!-- Bouton flottant pour ajouter une offre d'emploi -->
+       <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal">
+      + Ajouter une offre d'emploi
+    </FloatingButton>
 
     <!-- Modal de création d'offre d'emploi -->
     <CreateJobOfferModal
@@ -120,8 +120,6 @@ const resourcesFilteredStore = useDeveloperAndJobStore();
 
 const showModal = ref(false);
 const selectedDeveloperId = ref(null);
-
-//Pour la création d'une offre d'emploi uniquement les entreprises
 const showCreateModal = ref(false);
 
 const openModal = (id) => {
@@ -137,6 +135,13 @@ const openCreateModal = () => {
 // Fonction pour fermer le modal
 const closeCreateModal = () => {
   showCreateModal.value = false;
+};
+
+
+//Après la création d'une offre d'emploi
+const jobCreated = (newJobOffer) => {
+  console.log('Nouvelle offre créée:', newJobOffer);
+  closeCreateModal();
 };
 
 const fetchResources = (filters) => {

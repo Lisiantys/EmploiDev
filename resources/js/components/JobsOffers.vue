@@ -94,6 +94,7 @@ import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
 import Form from "./FilterForm.vue";
 import JobOfferModal from './JobOfferModal.vue'; // Importer le composant modal
 import { useAuthStore } from '../stores/authStore';
+import FloatingButton from './FloatingButton.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue'; 
 
 
@@ -122,12 +123,10 @@ const closeCreateModal = () => {
   showCreateModal.value = false;
 };
 
-
+//Après la création d'une offre d'emploi
 const jobCreated = (newJobOffer) => {
-  // Actualisez la liste des offres d'emploi ou affichez un message de succès
   console.log('Nouvelle offre créée:', newJobOffer);
-  // Optionnel : Ajouter la nouvelle offre à la liste si nécessaire
-  resourcesFilteredStore.jobOffers.unshift(newJobOffer);
+  closeCreateModal();
 };
 
 const fetchJobOffers = (filters) => {
@@ -168,24 +167,3 @@ const nextPage = () => {
     }
 };
 </script>
-
-<style scoped>
-.floating-button {
-  position: fixed;
-  bottom: 20px; /* Ajustez selon vos besoins */
-  right: 20px;  /* Ajustez selon vos besoins */
-  background-color: #3b82f6; /* Bleu Tailwind (bg-blue-500) */
-  color: white;
-  padding: 12px 20px;
-  border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  z-index: 1000; /* Assurez-vous que le bouton est au-dessus des autres éléments */
-}
-
-.floating-button:hover {
-  background-color: #2563eb; /* Bleu foncé Tailwind (bg-blue-600) */
-}
-</style>
