@@ -228,27 +228,6 @@ class DeveloperController extends Controller
         return response()->json($developers, 200);
     }
 
-    /**
-     * Affiche les candidatures crées par le développeur -- a supprimer je pense
-     */
-    public function developerApplications(Developer $developer) // OK
-    {
-        $this->authorize('viewApplications', $developer);
-
-        // Récupération des candidatures associées au développeur
-        $applications = $developer->applications;
-
-        // Vérifie si des candidatures existent
-        if ($applications->isEmpty()) {
-            return response()->json(['message' => 'Aucune candidature trouvée pour ce développeur.'], 404);
-        }
-
-        return response()->json([
-            'message' => 'Candidatures récupérées avec succès.',
-            'applications' => $applications
-        ], 200);
-    }
-
     //** Récupération des données pour le formulaire **/
     public function getProgrammingLanguages()
     {

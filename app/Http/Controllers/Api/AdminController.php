@@ -34,39 +34,4 @@ class AdminController extends Controller
             'developers' => $developers,
         ], 200);
     }
-
-    //Récupère les entreprises
-    public function handleCompanies()
-    {
-        $companies = Company::paginate(15);
-
-        return response()->json([
-            'message' => 'Entreprises récupérées avec succès.',
-            'companies' => $companies,
-        ], 200);
-    }
-
-    //Récupère les développeurs
-    public function handleDevelopers()
-    {
-        $developers = Developer::paginate(15);
-
-        return response()->json([
-            'message' => 'Développeurs récupérés avec succès.',
-            'developers' => $developers,
-        ], 200);
-    }
-
-    //Filtre les devéloppeurs et entreprises à l'aide des emails.
-    public function filterByEmail(Request $request)
-    {
-        $email = $request->input('email');
-
-        $users = User::where('email', 'like', "%{$email}%")->get();
-
-        return response()->json([
-            'message' => 'Résultats filtrés récupérés avec succès.',
-            'users' => $users,
-        ], 200);
-    }
 }
