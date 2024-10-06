@@ -14,7 +14,7 @@ class ApplicationPolicy
      */
     public function view(User $user, Application $application): bool
     {
-        return $user->id === $application->developer_id;
+        return $user->developer && $user->developer->id === $application->developer_id;
     }
 
     /**

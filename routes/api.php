@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
   //Candidatures
   Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/applications', [ApplicationController::class, 'index']); //OK //Excel
+    Route::get('/applications', [ApplicationController::class, 'index']); //OK //Excel //FRONT
     Route::post('/applications', [ApplicationController::class, 'store']); //OK //Excel //FRONT
     Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']); //FRONT
     Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel
@@ -97,7 +97,7 @@ Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //O
 Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT
 
 //Entreprises
-Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel
+Route::get('/companies/{company}', [CompanyController::class, 'show']);//OK //EXcel //NE PAS LA FAIRE, profil inutile
 
 Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']);//A modifier le code
 Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code

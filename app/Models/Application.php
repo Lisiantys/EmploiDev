@@ -18,6 +18,8 @@ class Application extends Model
         'status',
     ];
 
+    protected $with = ['jobOffer'];
+
     public function jobOffer()
     {
         return $this->belongsTo(JobOffer::class, 'job_id');
