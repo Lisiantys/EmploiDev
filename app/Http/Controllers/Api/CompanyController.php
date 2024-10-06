@@ -128,20 +128,6 @@ class CompanyController extends Controller
 
     /* ===== Customs methods  ===== */
 
-    //Affiche les offres d'emplois de l'entreprise
-    public function jobOffersCompany(Company $company)
-    {
-        $this->authorize('view', $company);
-
-        // Récupération de toutes les offres d'emploi de l'entreprise
-        $jobOffers = $company->jobOffers;
-
-        return response()->json([
-            'message' => 'Offres d\'emploi récupérées avec succès.',
-            'job_offers' => $jobOffers,
-        ], 200);
-    }
-
     // Affiche les candidatures reçues sur une offre d'emploi
     public function jobOfferApplications(JobOffer $jobOffer)
     {

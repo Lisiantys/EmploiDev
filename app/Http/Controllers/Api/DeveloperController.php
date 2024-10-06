@@ -229,7 +229,7 @@ class DeveloperController extends Controller
     }
 
     /**
-     * Affiche les candidatures crées par le développeur
+     * Affiche les candidatures crées par le développeur -- a supprimer je pense
      */
     public function developerApplications(Developer $developer) // OK
     {

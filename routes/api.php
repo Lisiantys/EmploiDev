@@ -23,26 +23,27 @@ use App\Http\Controllers\Api\ApplicationController;
 
 
 
+
 //Développeurs
 //ajouter le auth a cette route /profile. cette rtoute la rename peut etre la mettre dans auth elle fait dev + company
 Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
     Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel //FRONT
-    Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
+   // Route::get('/developers/applications/{developer}', [DeveloperController::class, 'developerApplications']); // OK //Excel
 });
 
 //Entreprises
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL //FRONT UPDATE ET DELETE
-    Route::get('/companies/{company}/job-offers', [CompanyController::class, 'jobOffersCompany']);//OK //EXCEL
-    Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
+   // Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
 });
 
  //Offres d'emplois
  Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']); // ok FRONT
     Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL //FRONT
-    Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel
+    Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel //FRONT
 });
 
   //Candidatures
@@ -53,7 +54,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel
     Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK Excel
     Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel //FRONT
-    Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK //Excel
+    Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK //Excel //FRONT
 });
 
 

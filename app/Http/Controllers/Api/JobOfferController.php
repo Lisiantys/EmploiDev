@@ -82,13 +82,30 @@ class JobOfferController extends Controller
 
     /* ===== Customs methods  ===== */
 
+
+    public function getCompanyJobOffers(Request $request)
+    {
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur a une entreprise associée
+        if (!$user->company) {
+            return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
+        }
+
+        // Récupérer les offres d'emploi de l'entreprise
+        $jobOffers = $user->company->jobOffers;
+
+        // Retourner les offres d'emploi sous forme de JSON
+        return response()->json($jobOffers, 200);
+    }
+
     /**
      * Filter Jobs offers based on the provided criteria.
      */
     public function filterForm(JobOfferFilterRequest $request) {
 
         $jobOffersQuery = JobOffer::where('is_validated', 1);
-
 
         // Appliquer les filtres via le trait FilterableTrait
         $jobOffers = $this->filterResources($jobOffersQuery, $request, 'job_offers')->paginate(9);
