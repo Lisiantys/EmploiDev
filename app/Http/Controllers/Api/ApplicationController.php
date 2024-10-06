@@ -56,7 +56,6 @@ class ApplicationController extends Controller
 
         // Récupérer le développeur connecté
         $developer = Developer::where('user_id', Auth::id())->first();
-        Log::info($developer);
         // Récupérer le CV et la lettre de motivation du développeur, si non fournis
         $cv = $request->file('cv') ? $request->file('cv')->store('cv') : $developer->cv;
         $coverLetter = $request->file('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
@@ -143,14 +142,15 @@ class ApplicationController extends Controller
 
     public function checkExistingApplication(Request $request)
     {
-        $developerId = Auth::id();
+        $developer = Developer::where('user_id', Auth::id())->first();
+
         $jobId = $request->query('job_id');
 
+        // Log pour voir si une application existe
         $applicationExists = Application::where('job_id', $jobId)
-            ->where('developer_id', $developerId)
+            ->where('developer_id', $developer->id)
             ->exists();
 
         return response()->json(['has_applied' => $applicationExists]);
     }
-
 }

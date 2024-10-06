@@ -48,8 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
   //Candidatures
   Route::middleware('auth:sanctum')->group(function () {
     Route::get('/applications', [ApplicationController::class, 'index']); //OK //Excel
-    Route::post('/applications', [ApplicationController::class, 'store']); //OK //Excel
-    Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']);
+    Route::post('/applications', [ApplicationController::class, 'store']); //OK //Excel //FRONT
+    Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']); //FRONT
     Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel
     Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK Excel
     Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel
