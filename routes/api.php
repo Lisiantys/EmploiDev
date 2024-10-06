@@ -36,11 +36,11 @@ Route::middleware('auth:sanctum')->group(function () {
 //Entreprises
 Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);//OK //EXCEL //FRONT UPDATE ET DELETE
-   // Route::get('/companies/{jobOffer}/applications', [CompanyController::class, 'jobOfferApplications']);//OK //EXCEL
 });
 
  //Offres d'emplois
  Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']);//OK FRONT
     Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']); // ok FRONT
     Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL //FRONT
     Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel //FRONT

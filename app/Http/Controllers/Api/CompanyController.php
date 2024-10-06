@@ -110,7 +110,6 @@ class CompanyController extends Controller
     ], 200);
 }
 
-
     /**
      * Supprime une entreprise et l'utilisateur associé.
      */
@@ -124,21 +123,5 @@ class CompanyController extends Controller
         $user->delete();
 
         return response()->json(['message' => 'Entreprise supprimée avec succès']);
-    }
-
-    /* ===== Customs methods  ===== */
-
-    // Affiche les candidatures reçues sur une offre d'emploi
-    public function jobOfferApplications(JobOffer $jobOffer)
-    {
-        $this->authorize('view', $jobOffer->company);
-
-        // Récupération des candidatures pour l'offre d'emploi, filtrées par statut
-        $applications = $jobOffer->applications()->whereIn('status', ['pending', 'accepted'])->get();
-
-        return response()->json([
-            'message' => 'Candidatures récupérées avec succès.',
-            'applications' => $applications,
-        ], 200);
     }
 }

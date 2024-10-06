@@ -11,14 +11,15 @@
         <div
           v-for="offer in validatedJobOffers"
           :key="offer.id"
-          class="border-2 border-green-500 shadow-lg rounded-lg p-4 mb-4"
+          class="border-2 border-green-500 shadow-lg rounded-lg p-4 mb-4 cursor-pointer"
+          @click="viewApplications(offer)"
         >
           <p><strong>Nom de l'offre :</strong> {{ offer.name }}</p>
           <p><strong>Description :</strong> {{ offer.description }}</p>
           <p><strong>Ville :</strong> {{ offer.location.city }}</p>
           <!-- Bouton Supprimer -->
           <button
-            @click="deleteJobOffer(offer.id)"
+            @click.stop="deleteJobOffer(offer.id)"
             class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
             Supprimer
@@ -62,7 +63,10 @@
   
   <script setup>
   import { ref, onMounted } from 'vue';
+  import { useRouter } from 'vue-router';
   import axios from 'axios';
+  
+  const router = useRouter();
   
   const jobOffers = ref([]);
   const validatedJobOffers = ref([]);
@@ -115,6 +119,12 @@
           "Erreur lors de la suppression de l'offre d'emploi.";
       }
     }
+  };
+  
+  // Méthode pour afficher les candidatures liées à une offre d'emploi validée
+  const viewApplications = (offer) => {
+    // Rediriger vers le composant JobOfferApplications avec l'ID de l'offre
+    router.push({ name: 'jobOfferApplications', params: { id: offer.id } });
   };
   
   onMounted(() => {

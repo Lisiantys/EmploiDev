@@ -100,6 +100,29 @@ class JobOfferController extends Controller
         return response()->json($jobOffers, 200);
     }
 
+        // Affiche les candidatures reçues sur une offre d'emploi
+        public function jobOfferApplications(JobOffer $jobOffer)
+    {
+        $user = Auth::user();
+
+        // Vérifier que l'utilisateur est bien le propriétaire de l'entreprise associée à l'offre
+        if (!$user->company || $user->company->id !== $jobOffer->company_id) {
+            return response()->json(['error' => 'Action non autorisée.'], 403);
+        }
+
+        // Récupération des candidatures pour l'offre d'emploi, filtrées par statut (sauf 'rejected')
+        $applications = $jobOffer->applications()
+            ->whereIn('status', ['pending', 'accepted'])
+            ->with('developer.user') // Inclure les informations du développeur
+            ->get();
+
+        return response()->json([
+            'message' => 'Candidatures récupérées avec succès.',
+            'jobOffer' => $jobOffer,
+            'applications' => $applications,
+        ], 200);
+    }
+
     /**
      * Filter Jobs offers based on the provided criteria.
      */
