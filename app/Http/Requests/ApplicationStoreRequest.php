@@ -23,9 +23,8 @@ class ApplicationStoreRequest extends FormRequest
     {
         return [
             'description' => 'required|string|min:20|max:1024',
-            'job_id' => 'required|exists:job_offers,id',
-            'cv' => 'sometimes|file|mimes:pdf|max:5120', 
-            'cover_letter' => 'sometimes|file|mimes:pdf|max:5120',
+            'cv' => 'nullable|file|mimes:pdf|max:5120',
+            'cover_letter' => 'nullable|file|mimes:pdf|max:5120',
         ];
     }
 
@@ -36,11 +35,14 @@ class ApplicationStoreRequest extends FormRequest
             'description.string' => 'La description doit être une chaîne de caractères.',
             'description.min' => 'La description doit contenir au moins :min caractères.',
             'description.max' => 'La description ne doit pas dépasser :max caractères.',
-            'job_id.required' => 'L\'ID de l\'offre d\'emploi est obligatoire.',
-            'job_id.exists' => 'L\'offre d\'emploi spécifiée n\'existe pas.',
 
+            'cv.file' => 'Le CV doit être un fichier.',
             'cv.mimes' => 'Le CV doit être au format PDF.',
+            'cv.max' => 'Le CV ne doit pas dépasser 5 Mo.',
+
+            'cover_letter.file' => 'La lettre de motivation doit être un fichier.',
             'cover_letter.mimes' => 'La lettre de motivation doit être au format PDF.',
+            'cover_letter.max' => 'La lettre de motivation ne doit pas dépasser 5 Mo.',
         ];
     }
 }

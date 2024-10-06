@@ -148,4 +148,19 @@ class ApplicationController extends Controller
             'message' => 'Candidature supprimée avec succès.',
         ], 200);
     }
+
+    //custom
+
+    public function checkExistingApplication(Request $request)
+    {
+        $developerId = Auth::id();
+        $jobId = $request->query('job_id');
+
+        $applicationExists = Application::where('job_id', $jobId)
+            ->where('developer_id', $developerId)
+            ->exists();
+
+        return response()->json(['has_applied' => $applicationExists]);
+    }
+
 }
