@@ -149,7 +149,8 @@ class DeveloperController extends Controller
      */
     public function show(Developer $developer)
     {
-        if ($developer->is_validated == 1) {
+        $user = Auth::user()->role_id;
+        if ($developer->is_validated == 1 || $user === 3) {
             return response()->json([
                 'message' => 'Développeur récupéré avec succès.',
                 'developer' => $developer

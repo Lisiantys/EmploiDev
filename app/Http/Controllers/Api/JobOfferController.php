@@ -55,7 +55,8 @@ class JobOfferController extends Controller
      */
     public function show(JobOffer $jobOffer)
     {
-        if ($jobOffer->is_validated == 1) {
+        $user = Auth::user()->role_id;
+        if ($jobOffer->is_validated == 1 || $user === 3) {
             return response()->json([
                 'message' => 'Offre d\'emploi récupérée avec succès.',
                 'job_offer' => $jobOffer
