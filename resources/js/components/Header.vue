@@ -8,31 +8,31 @@
             </h1>
         </router-link>
 
-        <router-link v-if="isAuthenticated" :to="{ name: 'developerProfile' }"
+        <router-link v-if="isAuthenticated && isDeveloper" :to="{ name: 'developerProfile' }"
             class="w-full h-16 flex items-center justify-center">
             <i class="fa-solid fa-user fa-xl" style="color: #ffffff"></i>
             <p class="sidebar-text">Profil-Dev</p>
         </router-link>
 
-        <router-link v-if="isAuthenticated" :to="{ name: 'companyProfile' }"
+        <router-link v-if="isAuthenticated && isCompany" :to="{ name: 'companyProfile' }"
             class="w-full h-16 flex items-center justify-center">
             <i class="fa-solid fa-user fa-xl" style="color: #ffffff"></i>
             <p class="sidebar-text">Profil-Comp</p>
         </router-link>
 
-        <router-link v-if="isAuthenticated" :to="{ name: 'developerApplication' }"
+        <router-link v-if="isAuthenticated && isDeveloper" :to="{ name: 'developerApplication' }"
             class="w-full h-16 flex items-center justify-center">
             <i class="fa-solid fa-list-ul fa-xl" style="color: #ffffff"></i>            
             <p class="sidebar-text">Candidatures</p>
         </router-link>
 
-        <router-link v-if="isAuthenticated" :to="{ name: 'companyJobOffer' }"
+        <router-link v-if="isAuthenticated && isCompany" :to="{ name: 'companyJobOffer' }"
             class="w-full h-16 flex items-center justify-center">
             <i class="fa-solid fa-list-ul fa-xl" style="color: #ffffff"></i>            
             <p class="sidebar-text">Vos offres</p>
         </router-link>
 
-        <router-link v-if="isAuthenticated" :to="{ name: 'adminDashboard' }"
+        <router-link v-if="isAuthenticated && isAdmin" :to="{ name: 'adminDashboard' }"
             class="w-full h-16 flex items-center justify-center">
             <i class="fa-solid fa-list-ul fa-xl" style="color: #ffffff"></i>            
             <p class="sidebar-text">Dashboard</p>
@@ -75,6 +75,11 @@ import { useAuthStore } from "../stores/authStore";
 const authStore = useAuthStore();
 const logoUrl = ref("/storage/images/logo.webp");
 const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+// Vérifier les rôles de l'utilisateur
+const isDeveloper = computed(() => authStore.user?.role_id === 1);
+const isCompany = computed(() => authStore.user?.role_id === 2);
+const isAdmin = computed(() => authStore.user?.role_id === 3);
 
 const logout = () => {
     authStore.logout();

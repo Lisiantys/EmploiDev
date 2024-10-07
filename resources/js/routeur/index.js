@@ -21,13 +21,13 @@ const routes = [
   { path: '/connexion', name: 'login', component: login },
   { path: '/inscription', name: 'register', component: register },
   { path: '/offres-emploi', name: 'job', component: job },
-  { path: '/profil-dev', name: 'developerProfile', component: developerProfile },
-  { path: '/profil-comp', name: 'companyProfile', component: companyProfile },
-  { path: '/candidatures', name: 'developerApplication', component: developerApplication },
-  { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer },
-  { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications },
-  { path: '/dashboard', name: 'adminDashboard', component: adminDashboard },
-  { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
+  { path: '/profil-dev', name: 'developerProfile', component: developerProfile, meta: { requiresAuth: true, role: 1 } }, // Dev uniquement
+  { path: '/profil-comp', name: 'companyProfile', component: companyProfile, meta: { requiresAuth: true, role: 2 } }, // Company uniquement
+  { path: '/candidatures', name: 'developerApplication', component: developerApplication, meta: { requiresAuth: true, role: 1 } }, // Dev uniquement
+  { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer, meta: { requiresAuth: true, role: 2 } }, // Company uniquement
+  { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications, meta: { requiresAuth: true } }, 
+  { path: '/dashboard', name: 'adminDashboard', component: adminDashboard, meta: { requiresAuth: true, role: 3 } }, // Admin uniquement
+{ path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
   { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite },
   { 
     path: '/logout', 
@@ -43,6 +43,23 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+});
+
+// Garde de navigation pour protéger les routes selon le rôle
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const userRole = authStore.user?.role_id;
+
+  if (requiresAuth && !authStore.isAuthenticated) {
+    // Si la route nécessite une authentification et que l'utilisateur n'est pas connecté
+    next({ name: 'login' });
+  } else if (to.meta.role && userRole !== to.meta.role) {
+    // Si l'utilisateur n'a pas le rôle requis pour accéder à la route
+    next({ name: 'home' });
+  } else {
+    next();
+  }
 });
 
 export default router;
