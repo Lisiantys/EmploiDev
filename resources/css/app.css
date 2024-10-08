@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Matonne';
+    src: url('../../public/storage/fonts/Mattone-Regular.eot'); /* IE9 Compat Modes */
+    src: url('../../public/storage/fonts/Mattone-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../../public/storage/fonts/Mattone-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../../public/storage/fonts/Mattone-Regular.woff') format('woff'), /* Modern Browsers */
+         url('../../public/storage/fonts/Mattone-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../../public/storage/fonts/Mattone-Regular.svg#Matonne') format('svg'); /* Legacy iOS */
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Visage';
+    src: url('../../public/storage/fonts/Visage-Bold.eot'); /* IE9 Compat Modes */
+    src: url('../../public/storage/fonts/Visage-Bold.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+         url('../../public/storage/fonts/Visage-Bold.woff2') format('woff2'), /* Super Modern Browsers */
+         url('../../public/storage/fonts/Visage-Bold.woff') format('woff'), /* Modern Browsers */
+         url('../../public/storage/fonts/Visage-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
+         url('../../public/storage/fonts/Visage-Bold.svg#Visage-Bold') format('svg'); /* Legacy iOS */
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Définir la police par défaut */
+body {
+    @apply font-matonne font-normal;
+}
+
+/* Définir les styles des titres */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-visage font-bold;
+  }
+}

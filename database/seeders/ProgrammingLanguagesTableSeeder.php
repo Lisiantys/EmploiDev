@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ProgrammingLanguage;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ProgrammingLanguagesTableSeeder extends Seeder
 {

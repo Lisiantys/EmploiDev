@@ -2,7 +2,7 @@
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
         <Form @filter="fetchResources" />
         <div v-if="resourcesFilteredStore.developers.length">
-            <h3>Developers</h3>
+            <h1>Developers</h1>
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10">
                 <div
                     v-for="developer in resourcesFilteredStore.developers"
@@ -26,9 +26,9 @@
                     </div>
                     <div class="flex-grow">
                         <div class="px-6 py-4 bg-gray-100 border-b border-gray-300">
-                            <p class="font-bold text-xl text-gray-800">
+                            <h2 class="font-bold text-xl text-gray-800">
                                 {{ developer.first_name }} {{ developer.surname }}
-                            </p>
+                            </h2>
                             <div class="flex items-center space-x-2">
                                 <i class="fa-solid fa-location-dot fa-2xs"></i>
                                 <p class="text-black text-base">

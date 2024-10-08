@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-
 class UsersTableSeeder extends Seeder
 {
     /**
@@ -16,13 +15,13 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'email' => 'user@example.com',
+            'email' => 'sky@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456789'),
             'remember_token' => Str::random(10),
             'created_at' => now(),
             'updated_at' => now(),
-            'role_id' => 1
+            'role_id' => 3
         ]);
     }
 }

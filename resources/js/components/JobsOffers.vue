@@ -2,15 +2,15 @@
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
         <Form @filter="fetchJobOffers" />
         <div v-if="resourcesFilteredStore.jobOffers.length">
-            <h3>Jobs</h3>
-            <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-20 md:mt-10">
+            <h1>Les offres d'emploi</h1>
+            <div class="grid lg:grid-cols-2 gap-4 mt-20 md:mt-10">
                 <div v-for="job in resourcesFilteredStore.jobOffers" :key="job.id"
                      @click="openModal(job.id)"
                      class="bg-white mt-10 shadow-lg w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md cursor-pointer">
                     <!-- Votre code existant pour afficher les offres d'emploi -->
                     <div class="w-full">
                         <div class="flex justify-between">
-                            <h3 class="font-bold mt-px text-blue-800">{{ job.name }}</h3>
+                            <h2 class="font-bold mt-px text-blue-800">{{ job.name }}</h2>
                             <button class="bg-blue-500 text-white font-medium p-2 rounded-3xl flex gap-1 items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                      stroke="currentColor" stroke-width="2">
