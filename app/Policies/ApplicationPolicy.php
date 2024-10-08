@@ -18,22 +18,6 @@ class ApplicationPolicy
     }
 
     /**
-     * Assure que l'utilisateur est une entreprise et qu'il a le droit d'accepter
-     */
-    public function accept(User $user, Application $application): bool
-    {
-        return $user->company->id === $application->jobOffer->company_id;
-    }
-
-    /**
-     * Assure que l'utilisateur est une entreprise et qu'il a le droit de refuser
-     */
-    public function refuse(User $user, Application $application): bool
-    {
-        return $user->company->id === $application->jobOffer->company_id;
-    }
-
-    /**
      * Seul les développeurs peuvent créer une candidature
      */
     public function create(User $user): bool
@@ -48,4 +32,23 @@ class ApplicationPolicy
     {
         return $user->developer && $user->developer->id === $application->developer_id;
     }
+
+    //Entreprises -> candidatures
+
+    /**
+    * Assure que l'utilisateur est une entreprise et qu'il a le droit d'accepter
+    */
+    public function accept(User $user, Application $application): bool
+    {
+        return $user->company->id === $application->jobOffer->company_id;
+    }
+
+    /**
+    * Assure que l'utilisateur est une entreprise et qu'il a le droit de refuser
+    */
+    public function refuse(User $user, Application $application): bool
+    {
+        return $user->company->id === $application->jobOffer->company_id;
+    }
+
 }

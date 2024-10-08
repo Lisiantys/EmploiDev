@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class IsCompany
 {
     /**
      * Handle an incoming request.
@@ -17,12 +17,12 @@ class IsAdmin
     */
     public function handle(Request $request, Closure $next)
     {
-        // Vérifier si l'utilisateur est connecté et a le role_id = 3
-        if (Auth::check() && Auth::user()->role_id === 3) {
+        // Vérifier si l'utilisateur est connecté et a le role_id = 2 (Entreprise)
+        if (Auth::check() && Auth::user()->role_id === 2) {
             return $next($request);
         }
 
-        // Si l'utilisateur n'est pas administrateur, retourner une réponse d'erreur
+        // Si l'utilisateur n'est pas une entreprise, retourner une réponse d'erreur
         return response()->json(['message' => 'Unauthorized.'], 403);
     }
 }

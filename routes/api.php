@@ -1,9 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\JobOfferController;
@@ -21,77 +19,87 @@ use App\Http\Controllers\Api\ApplicationController;
 |
 */
 
-//Développeurs
-//ajouter le auth a cette route /profile. cette rtoute la rename peut etre la mettre dans auth elle fait dev + company
-Route::get('/developers/profile', [DeveloperController::class, 'profile']);
+//Authentification
 Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); 
-    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']);
-});
 
-//Entreprises
-Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']); //OK //EXCEL //FRONT UPDATE ET DELETE
-});
+    //Autorisation => Entreprises et Développeurs
+    Route::middleware(['isCompany', 'isDeveloper'])->group(function () {
+        Route::get('/developers/profile', [DeveloperController::class, 'profile']);
+    });
 
-//Offres d'emplois
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']); //OK FRONT
-    Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']); // ok FRONT
-    Route::post('/job-offers', [JobOfferController::class, 'store']); //OK //EXCEL //FRONT
-    Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK //Excel //FRONT
-});
+    //Autorisation => Développeurs
+    Route::middleware('isDeveloper')->group(function () {
+        Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']);
 
-//Candidatures
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/applications', [ApplicationController::class, 'index']); //OK //Excel //FRONT
-    Route::post('/applications', [ApplicationController::class, 'store']); //OK //Excel //FRONT
-    Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']); //FRONT
-    Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK //Excel //FRONT
-    Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK Excel //FRONT
-    Route::get('/applications/{application}', [ApplicationController::class, 'show']); //OK //Excel //FRONT
-    Route::delete('/applications/{application}', [ApplicationController::class, 'destroy']); //OK //Excel //FRONT
-});
+        //Développeurs
+        Route::put('/developers/{developer}', [DeveloperController::class, 'update']);
+        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']);
+        
+        //Candidatures
+        Route::apiResource('applications', ApplicationController::class)->except(['update']);
+    });
 
-//Administrateurs
-Route::middleware(['auth:sanctum', 'isAdmin'])->group(function () {
-    Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); //OK
-    Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']); //OK
+    //Autorisation => Entreprises
+    Route::middleware('isCompany')->group(function () {
+        //Entreprises
+        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']); //UPDATE ET DELETE
+        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
+        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);     
+   
+        //Offres d'emplois
+        Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']);
+        Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']);
+        Route::post('/job-offers', [JobOfferController::class, 'store']);
+    });
 
-    // Routes pour valider les offres d'emploi et les développeurs
-    Route::post('/admin/job-offers/{jobOffer}/validate', [AdminController::class, 'validateJobOffer']);
-    Route::post('/admin/developers/{developer}/validate', [AdminController::class, 'validateDeveloper']);
+    //Autorisation => Entreprises et Administrateurs
+    Route::middleware(['isCompany', 'isAdmin'])->group(function () {
+        //Offres d'emplois
+        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']);
+    });
 
-    Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']); //FRONT
+   
+    //Autorisation => Administrateurs uniquement
+    Route::middleware('isAdmin')->group(function () {
+        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']);
+        Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']);
+
+        // Routes pour valider les offres d'emploi et les développeurs
+        Route::post('/admin/job-offers/{jobOffer}/validate', [AdminController::class, 'validateJobOffer']);
+        Route::post('/admin/developers/{developer}/validate', [AdminController::class, 'validateDeveloper']);
+
+        Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']);
+    });
 });
 
 Route::middleware('web')->group(function () {
-    Route::post('/login', [AuthController::class, 'login']); //OK //Excel //FRONT
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum'); //OK //Excel //FRONT
+    //Authentification
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth:sanctum');
 
     //Développeurs
-    Route::post('/developers', [DeveloperController::class, 'store']); //OK //Excel //FRONT
+    Route::post('/developers', [DeveloperController::class, 'store']);
 
     //Entreprises
-    Route::post('/companies', [CompanyController::class, 'store']); //OK  //Excel //FRONT
+    Route::post('/companies', [CompanyController::class, 'store']);
 });
 
-// Routes publiques (ne nécessitent pas d'authentification)
+// Routes publiques 
 
-//Route pour peuplé le formulaire de filtrage
-Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']);  //OK //FRONT
-Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']); //OK  //FRONT
-Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK //FRONT
-Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']); //OK  //FRONT
-Route::get('/locations', [DeveloperController::class, 'getLocations']); //OK  //FRONT
+//Route pour peupler le resourcesStore
+Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']); 
+Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);
+Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']);
+Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);
+Route::get('/locations', [DeveloperController::class, 'getLocations']);
 
 //Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK //Excel //FRONT
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']);
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);
 Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']); //A modifier le code
-Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code
+Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code 
 
 //Offres d'emplois
-Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK //Excel //FRONT
-Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK //Excel //FRONT
+Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
+Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']);
 

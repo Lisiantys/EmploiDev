@@ -6,35 +6,26 @@ use App\Models\JobOffer;
 use App\Models\Developer;
 use App\Models\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ApplicationStoreRequest;
-use App\Http\Requests\ApplicationUpdateRequest;
-use Illuminate\Auth\Access\AuthorizationException;
 
 class ApplicationController extends Controller
 {
-
+    //Récupère les candiatures du développeur pour le développeur
     public function index(Request $request)
     {
+        $this->authorize('view', $request);
+
         $user = Auth::user();
 
-        // Vérifier si l'utilisateur est un développeur
-        if ($user->developer) {
-            // Récupérer toutes les applications du développeur
-            $applications = Application::where('developer_id', $user->developer->id)->get();
+        // Récupérer toutes les applications du développeur
+        $applications = Application::where('developer_id', $user->developer->id)->get();
 
-            return response()->json([
-                'success' => true,
-                'data' => $applications
-            ], 200);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized. Seul un développeur peut voir ses candidatures'
-            ], 403);
-        }
+        return response()->json([
+            'success' => true,
+            'data' => $applications
+        ], 200);
     }
 
     // Déposer une candidature
@@ -42,8 +33,6 @@ class ApplicationController extends Controller
     {
         $this->authorize('create', $application);
 
-        Log::info($request);
-        Log::info($application);
         // Vérifier que l'offre d'emploi est validée
         $jobOffer = JobOffer::find($request->job_id);
 
@@ -73,6 +62,45 @@ class ApplicationController extends Controller
             'message' => 'Candidature posté avec succès.',
             'application' => $application,
         ], 201);
+    }
+
+    // Afficher une candidature en détail
+    public function show(Application $application)
+    {
+        $this->authorize('view', $application);
+
+        return response()->json([
+            'message' => 'Candidature récupérée avec succès.',
+            'application' => $application,
+        ], 200);
+    }
+
+    // Supprimer une candidature
+    public function destroy(Application $application)
+    {
+        $this->authorize('delete', $application);
+
+        $application->delete();
+
+        return response()->json([
+            'message' => 'Candidature supprimée avec succès.',
+        ], 200);
+    }
+
+    /* ===== Customs methods  ===== */
+
+    //Vérifie l'existence d'une candidature sur une offre d'emploi par rapport à un développeur
+    public function checkExistingApplication(Request $request)
+    {
+        $developer = Developer::where('user_id', Auth::id())->first();
+
+        $jobId = $request->query('job_id');
+
+        $applicationExists = Application::where('job_id', $jobId)
+            ->where('developer_id', $developer->id)
+            ->exists();
+
+        return response()->json(['has_applied' => $applicationExists]);
     }
 
     // Accepter une candidature
@@ -113,44 +141,5 @@ class ApplicationController extends Controller
         return response()->json([
             'message' => 'Candidature refusée avec succès.',
         ], 200);
-    }
-
-    // Afficher une candidature en détail
-    public function show(Application $application)
-    {
-        $this->authorize('view', $application);
-
-        return response()->json([
-            'message' => 'Candidature récupérée avec succès.',
-            'application' => $application,
-        ], 200);
-    }
-
-    // Supprimer une candidature
-    public function destroy(Application $application)
-    {
-        $this->authorize('delete', $application);
-
-        $application->delete();
-
-        return response()->json([
-            'message' => 'Candidature supprimée avec succès.',
-        ], 200);
-    }
-
-    //custom
-
-    public function checkExistingApplication(Request $request)
-    {
-        $developer = Developer::where('user_id', Auth::id())->first();
-
-        $jobId = $request->query('job_id');
-
-        // Log pour voir si une application existe
-        $applicationExists = Application::where('job_id', $jobId)
-            ->where('developer_id', $developer->id)
-            ->exists();
-
-        return response()->json(['has_applied' => $applicationExists]);
     }
 }

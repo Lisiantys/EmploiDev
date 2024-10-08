@@ -18,7 +18,7 @@ class CompanyPolicy
      */
     public function update(User $user, Company $company): bool
     {
-        return $user->id === $company->user_id || $user->role_id === 3;
+        return $user->id === $company->user_id;
     }
 
     /**
@@ -26,6 +26,6 @@ class CompanyPolicy
      */
     public function delete(User $user, Company $company): bool
     {
-        return $user->id === $company->user_id || $user->role_id === 3; 
+        return $user->id === $company->user_id; 
     }
 }

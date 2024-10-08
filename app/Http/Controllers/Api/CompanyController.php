@@ -4,19 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\User;
 use App\Models\Company;
-use App\Models\JobOffer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 
 class CompanyController extends Controller
 {
-
     /**
      * Création d'un user + entreprise
      */
@@ -59,42 +55,39 @@ class CompanyController extends Controller
      * Met à jour les informations d'une entreprise.
      */
     public function update(CompanyUpdateRequest $request, Company $company)
-{
-    $this->authorize('update', $company);
+    {
+        $this->authorize('update', $company);
 
-    // Journalisation des données de la requête entrante
-    Log::info('Requête de mise à jour reçue pour l\'entreprise :', ['id' => $company->id, 'data' => $request->all()]);
+        // Préparation des données de l'entreprise à mettre à jour
+        $companyData = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ];
 
-    // Préparation des données de l'entreprise à mettre à jour
-    $companyData = [
-        'name' => $request->input('name'),
-        'description' => $request->input('description'),
-    ];
+        // Gestion de l'image de profil
+        $companyData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $company->profil_image;
 
-    // Gestion de l'image de profil
-    $companyData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $company->profil_image;
+        // Effectuer la mise à jour sur le modèle de l'entreprise
+        $company->update($companyData);
 
-    // Effectuer la mise à jour sur le modèle de l'entreprise
-    $company->update($companyData);
+        // Mise à jour de l'utilisateur si nécessaire
+        if ($request->has('email') || $request->has('password')) {
+            $userData = $request->only('email', 'password');
 
-    // Mise à jour de l'utilisateur si nécessaire
-    if ($request->has('email') || $request->has('password')) {
-        $userData = $request->only('email', 'password');
+            if (!empty($userData['password'])) {
+                $userData['password'] = Hash::make($userData['password']);
+            } else {
+                unset($userData['password']);
+            }
 
-        if (!empty($userData['password'])) {
-            $userData['password'] = Hash::make($userData['password']);
-        } else {
-            unset($userData['password']);
+            $company->user->update($userData);
         }
 
-        $company->user->update($userData);
+        return response()->json([
+            'message' => 'Entreprise / utilisateur mis à jour avec succès',
+            'company' => $company
+        ], 200);
     }
-
-    return response()->json([
-        'message' => 'Entreprise / utilisateur mis à jour avec succès',
-        'company' => $company
-    ], 200);
-}
 
     /**
      * Supprime une entreprise et l'utilisateur associé.

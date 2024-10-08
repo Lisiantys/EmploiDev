@@ -10,7 +10,6 @@ use App\Models\TypesContract;
 use App\Models\TypesDeveloper;
 use App\Models\YearsExperience;
 use App\Models\ProgrammingLanguage;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Auth;
@@ -20,14 +19,12 @@ use App\Http\Requests\DeveloperStoreRequest;
 use App\Http\Requests\DeveloperFilterRequest;
 use App\Http\Requests\DeveloperUpdateRequest;
 
-
-
 class DeveloperController extends Controller
 {
     use FilterableTrait;
 
     /**
-     * Affiche les développeurs validés libres en premier (is_validated = 1) dans un ordre aléatoire, puis les non libres.
+     * Affiche les développeurs validés,  libres en premier puis les non libres.
      */
     public function index()
     {
@@ -91,13 +88,10 @@ class DeveloperController extends Controller
         ], 201);
     }
 
-
+    //Met à jour un développeur
     public function update(DeveloperUpdateRequest $request, Developer $developer)
     {
         $this->authorize('update', $developer);
-
-        // Logging the incoming request data
-        Log::info('Update request received for developer:', ['id' => $developer->id, 'data' => $request->all()]);
 
         // Prepare the developer data to update
         $developerData = [
@@ -132,8 +126,6 @@ class DeveloperController extends Controller
             $developer->user->update($userData);
         }
 
-
-        // Update programming languages
         if ($request->has('programming_languages')) {
             $developer->programmingLanguages()->sync($request->programming_languages);
         }
@@ -158,7 +150,24 @@ class DeveloperController extends Controller
     }
 
     /**
-     * APour l'affichage du profil personnel du développeur
+     * Supprime un développeur et l'utilisateur associé.
+     */
+    public function destroy(Developer $developer, Request $request)
+    {
+        $this->authorize('delete', $developer);
+
+        $user = $request->user();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        $user->delete();
+
+        return response()->json(['message' => 'Utilisateur supprimé avec succès']);
+    }
+
+    /* ===== Customs methods  ===== */
+
+    /**
+     * Pour l'affichage du profil personnel du développeur
      */
     public function profile()
     {
@@ -178,26 +187,9 @@ class DeveloperController extends Controller
     }
 
     /**
-     * Supprime un développeur et l'utilisateur associé.
-     */
-    public function destroy(Developer $developer, Request $request)
-    {
-        $this->authorize('delete', $developer);
-
-        $user = $request->user();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        $user->delete();
-
-        return response()->json(['message' => 'Utilisateur supprimé avec succès']);
-    }
-
-    /* ===== Customs methods  ===== */
-
-    /**
      * Filtre les développeurs
      */
-    public function filterForm(DeveloperFilterRequest $request) //OK
+    public function filterForm(DeveloperFilterRequest $request)
     {
         $developersQuery = Developer::where('is_validated', 1)
             ->orderBy('is_free', 'desc');

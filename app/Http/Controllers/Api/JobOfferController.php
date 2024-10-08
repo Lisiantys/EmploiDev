@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\JobOffer;
-use App\Models\Developer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Auth;
@@ -79,14 +77,10 @@ class JobOfferController extends Controller
 
     /* ===== Customs methods  ===== */
 
-
+    //Récupère les offres d'emploi personnelles de l'entreprise qui en fait la requête 
     public function getCompanyJobOffers()
     {
         $user = Auth::user();
-
-        if (!$user->company) {
-            return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
-        }
 
         $company = $user->company;
 
@@ -101,14 +95,13 @@ class JobOfferController extends Controller
         return response()->json($jobOffers);
     }
 
-
     // Affiche les candidatures reçues sur une offre d'emploi
     public function jobOfferApplications(JobOffer $jobOffer)
     {
         $user = Auth::user();
 
         // Vérifier que l'utilisateur est bien le propriétaire de l'entreprise associée à l'offre
-        if (!$user->company || $user->company->id !== $jobOffer->company_id) {
+        if ($user->company->id !== $jobOffer->company_id) {
             return response()->json(['error' => 'Action non autorisée.'], 403);
         }
 
@@ -130,7 +123,6 @@ class JobOfferController extends Controller
      */
     public function filterForm(JobOfferFilterRequest $request)
     {
-
         $jobOffersQuery = JobOffer::where('is_validated', 1);
 
         // Appliquer les filtres via le trait FilterableTrait

@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\User;
-use App\Models\Company;
 use App\Models\JobOffer;
 use App\Models\Developer;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
@@ -83,6 +79,7 @@ class AdminController extends Controller
         return response()->json(['message' => 'Développeur validé avec succès.'], 200);
     }
 
+    //Supprime le développeur et le user 
     public function deleteDeveloper(Developer $developer)
     {
         $user = Auth::user();

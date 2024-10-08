@@ -7,7 +7,6 @@ use App\Models\User;
 
 class DeveloperPolicy
 {
-
     /**
      * Détermine qui à accès au profil personnel de la personne
      */
@@ -22,17 +21,12 @@ class DeveloperPolicy
         return $user && $user->role_id === 3;
     }
 
-    public function viewProfil(User $user, Developer $developer)
-    {
-        return $user->id === $developer->user_id;
-    }
-
     /**
      * Détermine si l'utilisateur peut mettre à jour un développeur.
      */
     public function update(User $user, Developer $developer): bool
     {
-        return $user->id === $developer->user_id || $user->role_id === 3;
+        return $user->id === $developer->user_id;
     }
 
     /**
@@ -40,15 +34,6 @@ class DeveloperPolicy
      */
     public function delete(User $user, Developer $developer): bool
     {
-        return $user->id === $developer->user_id;
-    }
-
-    /**
-     * Détermine si l'utilisateur peut voir les candidatures du développeur.
-     */
-    public function viewApplications(User $user, Developer $developer)
-    {
-        // Seul le développeur lui-même peut voir ses propres candidatures
         return $user->id === $developer->user_id;
     }
 }
