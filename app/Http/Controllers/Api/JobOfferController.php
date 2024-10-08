@@ -21,7 +21,7 @@ class JobOfferController extends Controller
     public function index()
     {
         $jobOffers = JobOffer::where('is_validated', 1)
-        ->paginate(9);
+            ->paginate(9);
 
         return response()->json($jobOffers, 200);
     }
@@ -55,15 +55,12 @@ class JobOfferController extends Controller
      */
     public function show(JobOffer $jobOffer)
     {
-        $user = Auth::user()->role_id;
-        if ($jobOffer->is_validated == 1 || $user === 3) {
-            return response()->json([
-                'message' => 'Offre d\'emploi récupérée avec succès.',
-                'job_offer' => $jobOffer
-            ], 200);
-        } else {
-            return response()->json(['message' => 'Offre d\'emploi non validée.'], 403);
-        }
+        $this->authorize('view', $jobOffer);
+
+        return response()->json([
+            'message' => 'Offre d\'emploi récupérée avec succès.',
+            'job_offer' => $jobOffer
+        ], 200);
     }
 
     /**
@@ -84,29 +81,29 @@ class JobOfferController extends Controller
 
 
     public function getCompanyJobOffers()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if (!$user->company) {
-        return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
+        if (!$user->company) {
+            return response()->json(['error' => 'Aucune entreprise associée à cet utilisateur.'], 404);
+        }
+
+        $company = $user->company;
+
+        // Récupérer les offres d'emploi de l'entreprise avec le comptage des candidatures en attente
+        $jobOffers = JobOffer::with('location')
+            ->where('company_id', $company->id)
+            ->withCount(['applications as pending_applications_count' => function ($query) {
+                $query->where('status', 'pending');
+            }])
+            ->get();
+
+        return response()->json($jobOffers);
     }
 
-    $company = $user->company;
 
-    // Récupérer les offres d'emploi de l'entreprise avec le comptage des candidatures en attente
-    $jobOffers = JobOffer::with('location')
-        ->where('company_id', $company->id)
-        ->withCount(['applications as pending_applications_count' => function ($query) {
-            $query->where('status', 'pending');
-        }])
-        ->get();
-
-    return response()->json($jobOffers);
-}
-
-
-        // Affiche les candidatures reçues sur une offre d'emploi
-        public function jobOfferApplications(JobOffer $jobOffer)
+    // Affiche les candidatures reçues sur une offre d'emploi
+    public function jobOfferApplications(JobOffer $jobOffer)
     {
         $user = Auth::user();
 
@@ -131,7 +128,8 @@ class JobOfferController extends Controller
     /**
      * Filter Jobs offers based on the provided criteria.
      */
-    public function filterForm(JobOfferFilterRequest $request) {
+    public function filterForm(JobOfferFilterRequest $request)
+    {
 
         $jobOffersQuery = JobOffer::where('is_validated', 1);
 
@@ -139,7 +137,5 @@ class JobOfferController extends Controller
         $jobOffers = $this->filterResources($jobOffersQuery, $request, 'job_offers')->paginate(9);
 
         return response()->json($jobOffers, 200);
-
     }
-
 }

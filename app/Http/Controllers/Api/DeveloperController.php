@@ -95,10 +95,10 @@ class DeveloperController extends Controller
     public function update(DeveloperUpdateRequest $request, Developer $developer)
     {
         $this->authorize('update', $developer);
-    
+
         // Logging the incoming request data
         Log::info('Update request received for developer:', ['id' => $developer->id, 'data' => $request->all()]);
-    
+
         // Prepare the developer data to update
         $developerData = [
             'first_name' => $request->input('first_name'),
@@ -110,15 +110,15 @@ class DeveloperController extends Controller
             'location_id' => $request->input('location_id'),
             'type_id' => $request->input('type_id'),
         ];
-    
+
         // Keep current CV, cover letter, and image if not updated
         $developerData['cv'] = $request->hasFile('cv') ? $request->file('cv')->store('cv') : $developer->cv;
         $developerData['cover_letter'] = $request->hasFile('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
         $developerData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $developer->profil_image;
-    
+
         // Perform the update on the developer model
         $developer->update($developerData);
-    
+
         // Update user if necessary
         if ($request->has('email') || $request->has('password')) {
             $userData = $request->only('email', 'password');
@@ -132,32 +132,29 @@ class DeveloperController extends Controller
             $developer->user->update($userData);
         }
 
-    
+
         // Update programming languages
         if ($request->has('programming_languages')) {
             $developer->programmingLanguages()->sync($request->programming_languages);
         }
-    
+
         return response()->json([
             'message' => 'Développeur / user mis à jour',
             'developer' => $developer
         ], 200);
     }
-    
+
     /**
      * Affiche les détails d'un développeur validé pour la consultation d'un profil public.
      */
     public function show(Developer $developer)
     {
-        $user = Auth::user()->role_id;
-        if ($developer->is_validated == 1 || $user === 3) {
-            return response()->json([
-                'message' => 'Développeur récupéré avec succès.',
-                'developer' => $developer
-            ], 200);
-        } else {
-            return response()->json(['message' => 'Développeur non validé.'], 403);
-        }
+        $this->authorize('view', $developer);
+
+        return response()->json([
+            'message' => 'Développeur récupéré avec succès.',
+            'developer' => $developer
+        ], 200);
     }
 
     /**
@@ -179,7 +176,7 @@ class DeveloperController extends Controller
         // Si l'utilisateur n'est ni développeur ni entreprise
         return response()->json(['message' => 'Role not found.'], 404);
     }
- 
+
     /**
      * Supprime un développeur et l'utilisateur associé.
      */
@@ -253,18 +250,17 @@ class DeveloperController extends Controller
         if (!$developer->cv || !Storage::exists($developer->cv)) {
             return response()->json(['message' => 'CV non disponible.'], 404);
         }
-    
+
         return Storage::download($developer->cv);
     }
-    
+
     public function downloadCoverLetter(Developer $developer)
     {
         // Vérifier si le fichier existe
         if (!$developer->cover_letter || !Storage::exists($developer->cover_letter)) {
             return response()->json(['message' => 'Lettre de motivation non disponible.'], 404);
         }
-    
+
         return Storage::download($developer->cover_letter);
     }
-
 }

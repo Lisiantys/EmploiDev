@@ -7,6 +7,17 @@ use App\Models\JobOffer;
 
 class JobOfferPolicy
 {
+    public function view(?User $user, JobOffer $jobOffer)
+    {
+        // Permet à tout le monde de voir les offres validées
+        if ($jobOffer->is_validated == 1) {
+            return true;
+        }
+
+        // Seuls les administrateurs peuvent voir les offres non validées
+        return $user && $user->role_id === 3;
+    }
+
     /**
      * Détermine si l'utilisateur peut créer une offre d'emploi.
      */

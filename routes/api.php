@@ -23,10 +23,10 @@ use App\Http\Controllers\Api\ApplicationController;
 
 //Développeurs
 //ajouter le auth a cette route /profile. cette rtoute la rename peut etre la mettre dans auth elle fait dev + company
-Route::get('/developers/profile', [DeveloperController::class, 'profile']); // FRONT
+Route::get('/developers/profile', [DeveloperController::class, 'profile']);
 Route::middleware('auth:sanctum')->group(function () {
-    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); // OK //Excel //FRONT
-    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); // OK //Excel //FRONT
+    Route::put('/developers/{developer}', [DeveloperController::class, 'update']); 
+    Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']);
 });
 
 //Entreprises

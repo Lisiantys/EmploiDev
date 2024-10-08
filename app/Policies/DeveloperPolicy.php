@@ -11,9 +11,15 @@ class DeveloperPolicy
     /**
      * Détermine qui à accès au profil personnel de la personne
      */
-    public function view(Developer $developer): bool
+    public function view(?User $user, Developer $developer): bool
     {
-        return $developer->is_validated === 1;
+        // Permet à tout le monde de voir les développeurs validées
+        if ($developer->is_validated == 1) {
+            return true;
+        }
+
+        // Seuls les administrateurs peuvent voir les offres non validées
+        return $user && $user->role_id === 3;
     }
 
     public function viewProfil(User $user, Developer $developer)
