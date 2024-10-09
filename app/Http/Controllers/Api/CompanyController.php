@@ -27,8 +27,8 @@ class CompanyController extends Controller
 
         // Gestion de l'image de profil
         $imagePath = $request->hasFile('profil_image')
-            ? $request->file('profil_image')->store('public/images')
-            : 'public/images/company.jpg'; // Image par défaut si non fournie
+            ? $request->file('profil_image')->store('images', 'public')
+            : 'images/company.jpg'; // Image par défaut si non fournie
 
         // Création de l'entreprise
         $company = $user->company()->create(array_merge(
