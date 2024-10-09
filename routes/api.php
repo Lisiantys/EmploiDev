@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK
    
         //Offres d'emplois
-        Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']); //OK mais on accède aux candidatures des autres entreprises  en changeant lid
+        Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']); //OK
         Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']); //OK
         Route::post('/job-offers', [JobOfferController::class, 'store']); //OK
     });
@@ -58,7 +58,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK
     });
 
-   
     //Autorisation => Administrateurs uniquement
     Route::middleware('isAdmin')->group(function () {
         Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); //OK
