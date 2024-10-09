@@ -29,11 +29,6 @@
         </span>
       </div>
     </div>
-    <div :class="statusClasses">
-      <p class="py-2 rounded-b-full text-sm font-semibold text-white">
-        {{ statusText }}
-      </p>
-    </div>
     <!-- Boutons pour Admin -->
     <div v-if="isAdmin" class="flex justify-between px-4 py-2">
       <button @click.stop="validateDeveloper" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
@@ -42,6 +37,11 @@
       <button @click.stop="deleteDeveloper" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">
         Supprimer
       </button>
+    </div>
+    <div :class="statusClasses">
+      <p class="py-2 rounded-b-full text-sm font-semibold text-white">
+        {{ statusText }}
+      </p>
     </div>
   </div>
 </template>

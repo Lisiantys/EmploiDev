@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,8 +23,15 @@ class CompanyUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('company')->user_id; // Assurez-vous que cela récupère bien l'utilisateur
+
         return [
-            'email' => 'required|email|unique:users,email|max:255,' . $this->company->user_id,
+            'email' => [
+            'required',
+            'email',
+            'max:255',
+            Rule::unique('users')->ignore($userId), // Ignorer l'e-mail de l'utilisateur actuel
+            ],
             'password' => [
                 'nullable',
                 Password::min(8)

@@ -12,11 +12,9 @@ use App\Http\Requests\ApplicationStoreRequest;
 
 class ApplicationController extends Controller
 {
-    //Récupère les candiatures du développeur pour le développeur
+    //Récupère les candidatures du développeur pour le développeur
     public function index(Request $request)
     {
-        $this->authorize('view', $request);
-
         $user = Auth::user();
 
         // Récupérer toutes les applications du développeur

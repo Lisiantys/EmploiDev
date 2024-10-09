@@ -4,6 +4,8 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsCompany;
 use App\Http\Middleware\IsDeveloper;
 use Illuminate\Foundation\Application;
+use App\Http\Middleware\IsCompanyOrAdmin;
+use App\Http\Middleware\IsCompanyOrDeveloper;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -18,8 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->statefulApi();
         $middleware->alias([
             'isAdmin' => IsAdmin::class,
-            'IsCompany' => IsCompany::class,
-            'IsDeveloper' => IsDeveloper::class,
+            'isCompany' => IsCompany::class,
+            'isDeveloper' => IsDeveloper::class,
+            'isCompanyOrDeveloper' => IsCompanyOrDeveloper::class,
+            'isCompanyOrAdmin' => IsCompanyOrAdmin::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

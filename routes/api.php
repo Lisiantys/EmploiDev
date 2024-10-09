@@ -23,52 +23,52 @@ use App\Http\Controllers\Api\ApplicationController;
 Route::middleware('auth:sanctum')->group(function () {
 
     //Autorisation => Entreprises et Développeurs
-    Route::middleware(['isCompany', 'isDeveloper'])->group(function () {
-        Route::get('/developers/profile', [DeveloperController::class, 'profile']);
+    Route::middleware('isCompanyOrDeveloper')->group(function () {
+        Route::get('/developers/profile', [DeveloperController::class, 'profile']); //OK
     });
 
     //Autorisation => Développeurs
     Route::middleware('isDeveloper')->group(function () {
-        Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']);
+        Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']); //OK
 
         //Développeurs
-        Route::put('/developers/{developer}', [DeveloperController::class, 'update']);
-        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']);
+        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); //OK mais vour pour limage
+        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); //OK
         
         //Candidatures
-        Route::apiResource('applications', ApplicationController::class)->except(['update']);
+        Route::apiResource('applications', ApplicationController::class)->except(['update']); //OK, mais supprimer l'image du user , le cv et la lettre de motivation
     });
 
     //Autorisation => Entreprises
     Route::middleware('isCompany')->group(function () {
         //Entreprises
-        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']); //UPDATE ET DELETE
-        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
-        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);     
+        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']); //UPDATE ET DELETE //OK gerer l'update de l'image
+        Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']); //OK
+        Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']); //OK
    
         //Offres d'emplois
-        Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']);
-        Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']);
-        Route::post('/job-offers', [JobOfferController::class, 'store']);
+        Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']); //OK mais on accède aux candidatures des autres entreprises  en changeant lid
+        Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']); //OK
+        Route::post('/job-offers', [JobOfferController::class, 'store']); //OK
     });
 
     //Autorisation => Entreprises et Administrateurs
-    Route::middleware(['isCompany', 'isAdmin'])->group(function () {
+    Route::middleware('isCompanyOrAdmin')->group(function () {
         //Offres d'emplois
-        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']);
+        Route::delete('/job-offers/{jobOffer}', [JobOfferController::class, 'destroy']); //OK
     });
 
    
     //Autorisation => Administrateurs uniquement
     Route::middleware('isAdmin')->group(function () {
-        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']);
-        Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']);
+        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); //OK
+        Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']); //OK
 
         // Routes pour valider les offres d'emploi et les développeurs
-        Route::post('/admin/job-offers/{jobOffer}/validate', [AdminController::class, 'validateJobOffer']);
-        Route::post('/admin/developers/{developer}/validate', [AdminController::class, 'validateDeveloper']);
+        Route::post('/admin/job-offers/{jobOffer}/validate', [AdminController::class, 'validateJobOffer']); //OK
+        Route::post('/admin/developers/{developer}/validate', [AdminController::class, 'validateDeveloper']); //OK
 
-        Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']);
+        Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']); //OK
     });
 });
 
@@ -87,19 +87,19 @@ Route::middleware('web')->group(function () {
 // Routes publiques 
 
 //Route pour peupler le resourcesStore
-Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']); 
-Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']);
-Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']);
-Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']);
-Route::get('/locations', [DeveloperController::class, 'getLocations']);
+Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']); //OK
+Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']); //OK
+Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK
+Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']); //OK
+Route::get('/locations', [DeveloperController::class, 'getLocations']); //OK
 
 //Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']);
-Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK
+Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK
 Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']); //A modifier le code
 Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code 
 
 //Offres d'emplois
-Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']);
-Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']);
+Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK
+Route::apiResource('job-offers', JobOfferController::class)->only(['index', 'show']); //OK
 
