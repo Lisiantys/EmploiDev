@@ -27,7 +27,7 @@ const routes = [
   { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer, meta: { requiresAuth: true, role: 2 } }, // Company uniquement
   { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications, meta: { requiresAuth: true } }, 
   { path: '/dashboard', name: 'adminDashboard', component: adminDashboard, meta: { requiresAuth: true, role: 3 } }, // Admin uniquement
-{ path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
+  { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
   { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite },
   { 
     path: '/logout', 

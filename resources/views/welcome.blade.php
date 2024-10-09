@@ -13,6 +13,5 @@
     <body>
         <div id="app" class="bg-gray-100"></div>
         @vite('resources/js/app.js')
-        <script src="https://kit.fontawesome.com/5344b5e2b1.js" crossorigin="anonymous"></script>
     </body>
 </html>

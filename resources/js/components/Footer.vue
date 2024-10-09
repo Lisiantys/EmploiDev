@@ -5,28 +5,39 @@
             <div class="text-white max-w-md space-y-4 md:space-y-2">
                 <h3 class="font-extrabold text-xl tracking-wider">EmploiDev</h3>
                 <p class="text-sm sm:text-base leading-7">
-                    Développez votre carrière avec EmploiDev, la plateforme de recrutement dédiée aux développeurs informatiques. Trouvez des opportunités d'alternance et des offres d'emploi en développement logiciel. Rejoignez des entreprises technologiques de pointe et explorez des carrières enrichissantes dans le secteur numérique.
+                    Développez votre carrière avec EmploiDev, la plateforme de recrutement dédiée aux développeurs
+                    informatiques. Trouvez des opportunités d'alternance et des offres d'emploi en développement
+                    logiciel. Rejoignez des entreprises technologiques de pointe et explorez des carrières
+                    enrichissantes dans le secteur numérique.
                 </p>
             </div>
 
-            <ul class="text-base font-medium text-white space-y-4  md:space-y-5 ">
-                <li class="space-x-3">
-                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
-                    <a href="#" class="hover:underline">Accueil </a>
+            <ul class="text-base font-medium text-white">
+                <li>
+                    <div class="link-list">
+                        <img :src="imageUrl" class="svg-icon" alt="#" />
+                        <a href="#" class="hover:underline">Accueil </a>
+                    </div>
                 </li>
-                <li class="space-x-3">
-                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
-                    <a href="#" class="hover:underline">Contactez-nous</a>
+                <li>
+                    <div class="link-list">
+                        <img :src="imageUrl" class="svg-icon" alt="#" />
+                        <a href="#" class="hover:underline">Contactez-nous</a>
+                    </div>
                 </li>
-                <router-link :to="{ name: 'mentionsLegales' }" class="space-x-3">
-                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
-                    <a href="#" class="hover:underline">Mentions Légales</a>
+                <router-link :to="{ name: 'mentionsLegales' }">
+                    <div class="link-list">
+                        <img :src="imageUrl" class="svg-icon" alt="#" />
+                        <a href="#" class="hover:underline">Mentions Légales</a>
+                    </div>
                 </router-link>
-                <router-link :to="{ name: 'politiqueConfidentialite' }"  class="space-x-3">
-                    <i class="fa-solid fa-chevron-right" style="color: #ffffff;"></i>
-                    <a href="#" class="hover:underline">Politique de Confidentialité</a>
+                <router-link :to="{ name: 'politiqueConfidentialite' }">
+                    <div class="link-list">
+                        <img :src="imageUrl" class="svg-icon" alt="#" />
+                        <a href="#" class="hover:underline">Politique de Confidentialité</a>
+                    </div>
                 </router-link>
-    
+
             </ul>
         </div>
         <hr class="my-6 w-full sm:w-1/2 border-white mx-auto lg:my-8" />
@@ -35,4 +46,22 @@
     </footer>
 </template>
 
-<script setup> </script>
+<script setup>
+import { ref } from "vue";
+const imageUrl = ref("/storage/images/chevron-right-solid.svg");
+
+</script>
+
+<style scoped>
+.link-list {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-top: 16px;
+}
+
+.svg-icon {
+    width: 16px;
+    height: 16px;
+}
+</style>
