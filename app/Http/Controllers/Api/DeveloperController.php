@@ -54,11 +54,11 @@ class DeveloperController extends Controller
 
         // Gestion des fichiers
         $imagePath = $request->hasFile('profil_image')
-            ? $request->file('profil_image')->store('images')
+            ? $request->file('profil_image')->store('/public/storage/images')
             : 'images/user.jpg';
 
-        $cvPath = $request->file('cv')->store('cv');
-        $coverLetterPath = $request->file('cover_letter')->store('cover_letters');
+        $cvPath = $request->file('cv')->store('/public/storage/cv');
+        $coverLetterPath = $request->file('cover_letter')->store('/public/storage/cover_letters');
 
         // Création du développeur
         $developer = $user->developer()->create(array_merge(

@@ -1,6 +1,6 @@
 <template>
-    <div class="p-6 sm:p-20 font-bold md:pl-32">
-      <h2 class="text-2xl font-bold mb-4">Tableau de Bord Administrateur</h2>
+    <div>
+      <h2 class="text-2xl font-bold mt-14 mb-8">Tableau de Bord Administrateur</h2>
   
       <!-- Onglets -->
       <div class="mb-4 border-b border-gray-200">

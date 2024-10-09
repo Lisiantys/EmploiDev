@@ -1,7 +1,9 @@
 <template>
     <Top />
     <Header />
-    <router-view />
+    <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
+        <router-view />
+    </div>
     <Footer />
 </template>
 
