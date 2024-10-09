@@ -6,6 +6,7 @@ use App\Models\JobOffer;
 use App\Models\Developer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -28,6 +29,11 @@ class AdminController extends Controller
         $developers = Developer::where('is_validated', 0)
             ->with(['user', 'location', 'typesDeveloper', 'programmingLanguages', 'typesContract'])
             ->paginate(15);
+
+        $developers->getCollection()->transform(function ($developer) {
+            $developer->profil_image = Storage::url($developer->profil_image);
+            return $developer;
+        });
 
         return response()->json([
             'message' => 'Développeurs en attente récupérés avec succès.',

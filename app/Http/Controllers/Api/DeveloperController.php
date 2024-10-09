@@ -27,18 +27,18 @@ class DeveloperController extends Controller
      * Affiche les développeurs validés,  libres en premier puis les non libres.
      */
     public function index()
-    {
-        $developers = Developer::where('is_validated', 1)
-            ->orderBy('is_free', 'desc')
-            ->paginate(8);
+{
+    $developers = Developer::where('is_validated', 1)
+        ->orderBy('is_free', 'desc')
+        ->paginate(8);
 
-        $developers->getCollection()->transform(function ($developer) {
-            $developer->profil_image = asset('storage/' . $developer->profil_image);
-            return $developer;
-        });
+    $developers->getCollection()->transform(function ($developer) {
+        $developer->profil_image = Storage::url($developer->profil_image);
+        return $developer;
+    });
 
-        return response()->json($developers, 200);
-    }
+    return response()->json($developers, 200);
+}
 
     /**
      * Création d'un utilisateur pour ensuite créer le développeur.
@@ -53,12 +53,13 @@ class DeveloperController extends Controller
         ]);
 
         // Gestion des fichiers
-        $imagePath = $request->hasFile('profil_image')
-            ? $request->file('profil_image')->store('/public/storage/images')
-            : 'images/user.jpg';
+        // Gestion des fichiers
+$imagePath = $request->hasFile('profil_image')
+? $request->file('profil_image')->store('images', 'public')
+: 'images/user.jpg';
 
-        $cvPath = $request->file('cv')->store('/public/storage/cv');
-        $coverLetterPath = $request->file('cover_letter')->store('/public/storage/cover_letters');
+$cvPath = $request->file('cv')->store('cv', 'public');
+$coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'public');
 
         // Création du développeur
         $developer = $user->developer()->create(array_merge(
@@ -142,6 +143,8 @@ class DeveloperController extends Controller
     public function show(Developer $developer)
     {
         $this->authorize('view', $developer);
+
+        $developer->profil_image = Storage::url($developer->profil_image);
 
         return response()->json([
             'message' => 'Développeur récupéré avec succès.',

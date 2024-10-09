@@ -31,9 +31,9 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import DeveloperModal from './DeveloperModal.vue';
-import DeveloperCard from './DeveloperCard.vue'; // Importer le composant
+import DeveloperCard from './DeveloperCard.vue';
 
-const developers = ref([]);
+const developers = ref([])
 const developersPagination = ref({});
 const errorMessage = ref('');
 const showModal = ref(false);
@@ -43,6 +43,7 @@ const fetchPendingDevelopers = async (page = 1) => {
   try {
     const response = await axios.get(`/api/admin/pending-developers?page=${page}`);
     developers.value = response.data.developers.data;
+    console.log(response.data.developers.data);
     developersPagination.value = response.data.developers;
   } catch (error) {
     console.error('Erreur lors de la récupération des développeurs en attente :', error);
