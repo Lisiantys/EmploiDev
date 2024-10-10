@@ -205,6 +205,19 @@ class DeveloperController extends Controller
     {
         $this->authorize('delete', $developer);
 
+        if ($developer->cv && Storage::disk('public')->exists($developer->cv)) {
+            Storage::disk('public')->delete($developer->cv);
+        }
+
+        if ($developer->cover_letter && Storage::disk('public')->exists($developer->cover_letter)) {
+            Storage::disk('public')->delete($developer->cover_letter);
+        }
+
+        if ($developer->profil_image && $developer->profil_image !== 'images/user.jpg') {
+            // Supprimer l'image de profil du stockage public
+            Storage::disk('public')->delete($developer->profil_image);
+        }
+
         $user = $request->user();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -82,7 +82,7 @@ class CompanyController extends Controller
             // Si aucune nouvelle image n'est fournie, conserver l'image actuelle
             $companyData['profil_image'] = $company->profil_image;
         }
-        
+
         // Effectuer la mise à jour sur le modèle de l'entreprise
         $company->update($companyData);
 
@@ -111,6 +111,12 @@ class CompanyController extends Controller
     public function destroy(Company $company, Request $request)
     {
         $this->authorize('delete', $company);
+
+        // Vérifier si l'image de profil n'est pas l'image par défaut
+        if ($company->profil_image && $company->profil_image !== 'images/company.jpg') {
+            // Supprimer l'image de profil du stockage public
+            Storage::disk('public')->delete($company->profil_image);
+        }
 
         $user = $request->user();
         $request->session()->invalidate();
