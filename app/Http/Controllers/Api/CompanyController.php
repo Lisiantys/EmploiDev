@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 
@@ -65,8 +66,23 @@ class CompanyController extends Controller
         ];
 
         // Gestion de l'image de profil
-        $companyData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $company->profil_image;
+        if ($request->hasFile('profil_image')) {
+            // Stocker la nouvelle image dans 'images' sur le disque 'public'
+            $newImagePath = $request->file('profil_image')->store('images', 'public');
 
+            // Vérifier si l'image actuelle n'est pas l'image par défaut
+            if ($company->profil_image && $company->profil_image !== 'images/company.jpg') {
+                // Supprimer l'ancienne image
+                Storage::disk('public')->delete($company->profil_image);
+            }
+
+            // Mettre à jour le chemin de l'image de profil dans les données de l'entreprise
+            $companyData['profil_image'] = $newImagePath;
+        } else {
+            // Si aucune nouvelle image n'est fournie, conserver l'image actuelle
+            $companyData['profil_image'] = $company->profil_image;
+        }
+        
         // Effectuer la mise à jour sur le modèle de l'entreprise
         $company->update($companyData);
 
