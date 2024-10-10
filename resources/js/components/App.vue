@@ -23,6 +23,5 @@
     resourcesStore.fetchAllResources();
   });
   </script>
-  
-  <!-- Pas de styles nécessaires si vous utilisez Tailwind CSS -->
+
   
