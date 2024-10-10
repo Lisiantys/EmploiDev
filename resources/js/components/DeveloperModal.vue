@@ -47,7 +47,7 @@
           <div v-if="developer.cv && isAuthenticated" class="mt-6">
             <p><strong>Documents:</strong></p>
             <ul class="list-disc list-inside">
-              <li >
+              <li>
                 <a :href="developerCvDownloadUrl" target="_blank" class="text-blue-600 hover:underline">
                   Télécharger le CV
                 </a>
@@ -60,7 +60,7 @@
             </ul>
           </div>
           <p v-if="!isAuthenticated" class="text-red-500 mt-4">
-                Connectez-vous pour accéder au CV et à la lettre de motivation.
+            Connectez-vous pour accéder au CV et à la lettre de motivation.
           </p>
         </div>
         <!-- Modal Footer -->

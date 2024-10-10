@@ -14,10 +14,10 @@
             <div class="flex items-center gap-3">
                 <span class="bg-blue-500 text-white rounded-full px-3 py-1 text-sm">{{
                     job.types_contract?.name || job.typesContract?.name
-                    }}</span>
+                }}</span>
                 <span class="text-blue-500 text-sm">Développeur {{
                     job.types_developer?.name || job.typesDeveloper?.name
-                    }}</span>
+                }}</span>
             </div>
             <hr class="mt-2" />
             <div class="pt-2 flex flex-row flex-wrap">
@@ -68,17 +68,17 @@ const props = defineProps({
 const emits = defineEmits(["click", "validate", "delete"]);
 
 const handleClick = () => {
-  emits("click", props.job.id);
+    emits("click", props.job.id);
 };
 
 const handleValidate = (event) => {
-  event.stopPropagation();
-  emits("validate", props.job.id);
+    event.stopPropagation();
+    emits("validate", props.job.id);
 };
 
 const handleDelete = (event) => {
-  event.stopPropagation();
-  emits("delete", props.job.id);
+    event.stopPropagation();
+    emits("delete", props.job.id);
 };
 
 const timeAgo = (date) => {

@@ -69,5 +69,6 @@ export const useResourcesStore = defineStore('resources', {
                 this.fetchYearsExperiences()
             ]);
         }
-    }
+    },
+    persist: true,
 });

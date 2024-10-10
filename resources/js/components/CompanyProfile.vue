@@ -7,12 +7,8 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                         Nom de l'entreprise:
                     </label>
-                    <input
-                        v-model="company.name"
-                        placeholder="Nom de l'entreprise..."
-                        required
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
+                    <input v-model="company.name" placeholder="Nom de l'entreprise..." required
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                 </div>
 
                 <!-- Email -->
@@ -20,47 +16,28 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                         E-mail:
                     </label>
-                    <input
-                        v-model="company.email"
-                        type="email"
-                        placeholder="E-mail..."
-                        required
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
+                    <input v-model="company.email" type="email" placeholder="E-mail..." required
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                 </div>
 
                 <!-- Description -->
                 <div class="mb-5">
-                    <label
-                        for="description"
-                        class="block mb-2 text-sm font-medium text-gray-900"
-                    >
+                    <label for="description" class="block mb-2 text-sm font-medium text-gray-900">
                         Description (optionnel)
                     </label>
-                    <textarea
-                        v-model="company.description"
-                        id="description"
+                    <textarea v-model="company.description" id="description"
                         class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Une brève description de votre entreprise..."
-                        minlength="8"
-                        maxlength="255"
-                    ></textarea>
+                        placeholder="Une brève description de votre entreprise..." minlength="8"
+                        maxlength="255"></textarea>
                 </div>
 
                 <!-- Profile Image -->
                 <div class="mb-5">
-                    <label
-                        for="profil_image"
-                        class="block mb-2 text-sm font-medium text-gray-900"
-                    >
+                    <label for="profil_image" class="block mb-2 text-sm font-medium text-gray-900">
                         Logo de l'entreprise (optionnel)
                     </label>
-                    <input
-                        type="file"
-                        accept=".jpg,.png"
-                        @change="handleFileUpload('profil_image', $event)"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
-                    />
+                    <input type="file" accept=".jpg,.png" @change="handleFileUpload('profil_image', $event)"
+                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
                     <span v-if="company.profil_image" class="text-sm">
                         {{ getFileName(company.profil_image) }}
                     </span>
@@ -71,12 +48,8 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                         Nouveau mot de passe:
                     </label>
-                    <input
-                        v-model="company.password"
-                        type="password"
-                        placeholder="Mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
+                    <input v-model="company.password" type="password" placeholder="Mot de passe"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                 </div>
 
                 <!-- Confirm Password -->
@@ -84,28 +57,18 @@
                     <label class="block mb-2 text-sm font-medium text-gray-900">
                         Confirmer le mot de passe:
                     </label>
-                    <input
-                        v-model="company.confirmPassword"
-                        type="password"
-                        placeholder="Confirmer le mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
+                    <input v-model="company.confirmPassword" type="password" placeholder="Confirmer le mot de passe"
+                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                     <div v-if="passwordsDoNotMatch" class="text-red-500 mb-2">
                         Les mots de passe ne correspondent pas.
                     </div>
                 </div>
 
                 <!-- Display Errors -->
-                <div
-                    v-if="company.errors && Object.keys(company.errors).length > 0"
-                    class="mb-5 p-4 border border-red-500 rounded bg-red-100"
-                >
+                <div v-if="company.errors && Object.keys(company.errors).length > 0"
+                    class="mb-5 p-4 border border-red-500 rounded bg-red-100">
                     <ul class="list-disc list-inside">
-                        <li
-                            v-for="(errorMessages, field) in company.errors"
-                            :key="field"
-                            class="text-red-500"
-                        >
+                        <li v-for="(errorMessages, field) in company.errors" :key="field" class="text-red-500">
                             {{ errorMessages.join(", ") }}
                         </li>
                     </ul>
@@ -117,10 +80,7 @@
                 </button>
 
                 <!-- Delete Account Button -->
-                <button
-                    @click.prevent="deleteAccount"
-                    class="bg-red-500 text-white p-2 rounded mt-4"
-                >
+                <button @click.prevent="deleteAccount" class="bg-red-500 text-white p-2 rounded mt-4">
                     Supprimer mon compte
                 </button>
             </div>

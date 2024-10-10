@@ -267,37 +267,6 @@ class DeveloperController extends Controller
         return response()->json($developers, 200);
     }
 
-    //** Récupération des données pour le formulaire **/
-    public function getProgrammingLanguages()
-    {
-        $languages = ProgrammingLanguage::all();
-        return response()->json($languages, 200);
-    }
-
-    public function getTypesContracts()
-    {
-        $contracts = TypesContract::all();
-        return response()->json($contracts, 200);
-    }
-
-    public function getTypesDevelopers()
-    {
-        $types = TypesDeveloper::all();
-        return response()->json($types, 200);
-    }
-
-    public function getYearsExperiences()
-    {
-        $years = YearsExperience::all();
-        return response()->json($years, 200);
-    }
-
-    public function getLocations()
-    {
-        $locations = Location::all();
-        return response()->json($locations, 200);
-    }
-
     /**
      * Télécharger le CV du développeur.
      */

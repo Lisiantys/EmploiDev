@@ -11,4 +11,14 @@
 import Top from './Top.vue';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
+
+import { onMounted } from 'vue';
+import { useResourcesStore } from '../stores/resourcesStore';
+
+
+const resourcesStore = useResourcesStore();
+
+onMounted(() => {
+    resourcesStore.fetchAllResources();
+});
 </script>

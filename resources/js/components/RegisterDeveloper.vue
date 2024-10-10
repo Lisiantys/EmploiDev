@@ -7,7 +7,7 @@
                 <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900">Prénom...</label>
                 <input v-model="developer.first_name" id="first_name"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    placeholder="Prénom..." required minlength="2" maxlength="30"/>
+                    placeholder="Prénom..." required minlength="2" maxlength="30" />
             </div>
             <div class="mb-5">
                 <label for="surname" class="block mb-2 text-sm font-medium text-gray-900">Nom...</label>
@@ -29,20 +29,20 @@
                     (optionnel)</label>
                 <input type="file" accept=".jpg,.png" @change="handleFileUpload('profil_image', $event)"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.profil_image" class="text-sm">{{ developer.profil_image.name }}</span>
+                <span v-if="developer.profil_image" class="text-sm">{{ developer.profil_image.name }}</span>
             </div>
             <div class="mb-5">
                 <label for="cv" class="block mb-2 text-sm font-medium text-gray-900">Importer votre CV</label>
                 <input type="file" accept=".pdf" @change="handleFileUpload('cv', $event)"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.cv" class="text-sm">{{ developer.cv.name }}</span>
+                <span v-if="developer.cv" class="text-sm">{{ developer.cv.name }}</span>
             </div>
             <div class="mb-5">
                 <label for="cover_letter" class="block mb-2 text-sm font-medium text-gray-900">Importer votre lettre de
                     motivation</label>
                 <input type="file" accept=".pdf" @change="handleFileUpload('cover_letter', $event)"
                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.cover_letter" class="text-sm">{{ developer.cover_letter.name }}</span>
+                <span v-if="developer.cover_letter" class="text-sm">{{ developer.cover_letter.name }}</span>
             </div>
         </div>
 
@@ -102,14 +102,14 @@
                 <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Mot de passe...</label>
                 <input v-model="developer.password" id="password" type="password"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    required minlength="8"/>
+                    required minlength="8" />
             </div>
             <div class="mb-5">
                 <label for="confirmPassword" class="block mb-2 text-sm font-medium text-gray-900">Confirmer le mot de
                     passe...</label>
                 <input v-model="developer.confirmPassword" id="confirmPassword" type="password"
                     class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    required minlength="8"/>
+                    required minlength="8" />
             </div>
 
             <div v-if="passwordsDoNotMatch" class="text-red-500 mb-5">
@@ -127,10 +127,10 @@
                 <div class="flex items-center h-5">
                     <input id="terms" type="checkbox" value=""
                         class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
-                        required/>
+                        required />
                 </div>
                 <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <a href="#"
-                        class="text-blue-600 hover:underline" >termes et conditions</a></label>
+                        class="text-blue-600 hover:underline">termes et conditions</a></label>
             </div>
 
             <div v-if="Object.keys(developer.errors).length > 0"

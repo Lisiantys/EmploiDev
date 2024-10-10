@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\JobOfferController;
 use App\Http\Controllers\Api\DeveloperController;
 use App\Http\Controllers\Api\ApplicationController;
+use App\Http\Controllers\Api\ResourceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,12 +91,13 @@ Route::middleware('web')->group(function () {
 
 // Routes publiques 
 
-//Route pour peupler le resourcesStore
-Route::get('/programming-languages', [DeveloperController::class, 'getProgrammingLanguages']); //OK
-Route::get('/types-contracts', [DeveloperController::class, 'getTypesContracts']); //OK
-Route::get('/types-developers', [DeveloperController::class, 'getTypesDevelopers']); //OK
-Route::get('/years-experiences', [DeveloperController::class, 'getYearsExperiences']); //OK
-Route::get('/locations', [DeveloperController::class, 'getLocations']); //OK
+// Routes pour les ressources
+Route::get('/programming-languages', [ResourceController::class, 'getProgrammingLanguages']);
+Route::get('/types-contracts', [ResourceController::class, 'getTypesContracts']);
+Route::get('/types-developers', [ResourceController::class, 'getTypesDevelopers']);
+Route::get('/years-experiences', [ResourceController::class, 'getYearsExperiences']);
+Route::get('/locations', [ResourceController::class, 'getLocations']);
+
 
 //Développeurs
 Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK
