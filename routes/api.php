@@ -69,6 +69,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::delete('/admin/developers/{developer}', [AdminController::class, 'deleteDeveloper']); //OK
     });
+
+    //Etre authentifié pour télécharger les cv et lettres
+    Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']); //A modifier le code
+    Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code 
+
 });
 
 Route::middleware('web')->group(function () {
@@ -95,8 +100,6 @@ Route::get('/locations', [DeveloperController::class, 'getLocations']); //OK
 //Développeurs
 Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); //OK
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']); //OK
-Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']); //A modifier le code
-Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);//A modifier le code 
 
 //Offres d'emplois
 Route::get('/job-offers/filter', [JobOfferController::class, 'filterForm']); //OK

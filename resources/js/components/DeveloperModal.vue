@@ -44,21 +44,24 @@
             </div>
           </div>
           <!-- CV and Cover Letter Links -->
-          <div class="mt-6">
+          <div v-if="developer.cv && isAuthenticated" class="mt-6">
             <p><strong>Documents:</strong></p>
             <ul class="list-disc list-inside">
-              <li v-if="developer.cv">
-                <a :href="developerCvUrl" target="_blank" class="text-blue-600 hover:underline">
+              <li >
+                <a :href="developerCvDownloadUrl" target="_blank" class="text-blue-600 hover:underline">
                   Télécharger le CV
                 </a>
               </li>
-              <li v-if="developer.cover_letter">
-                <a :href="developerCoverLetterUrl" target="_blank" class="text-blue-600 hover:underline">
+              <li>
+                <a :href="developerCoverLetterDownloadUrl" target="_blank" class="text-blue-600 hover:underline">
                   Télécharger la Lettre de Motivation
                 </a>
               </li>
             </ul>
           </div>
+          <p v-if="!isAuthenticated" class="text-red-500 mt-4">
+                Connectez-vous pour accéder au CV et à la lettre de motivation.
+          </p>
         </div>
         <!-- Modal Footer -->
         <div class="flex justify-end px-6 py-4 border-t">
@@ -79,6 +82,10 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import Axios from 'axios';
+import { useAuthStore } from '../stores/authStore';
+
+const authStore = useAuthStore();
+const isAuthenticated = computed(() => !!authStore.user);
 
 const props = defineProps({
   isOpen: {
@@ -96,6 +103,7 @@ const emits = defineEmits(['close']);
 const developer = ref({});
 const isLoading = ref(false);
 const errorMessage = ref('');
+
 
 const fetchDeveloperDetails = async () => {
   if (!props.developerId) {
@@ -120,11 +128,11 @@ const profileImage = computed(() => {
   return developer.value.profil_image || '/images/default_profile_image.jpg';
 });
 
-const developerCvUrl = computed(() => {
+const developerCvDownloadUrl = computed(() => {
   return developer.value.cv ? `/api/developers/${developer.value.id}/cv` : null;
 });
 
-const developerCoverLetterUrl = computed(() => {
+const developerCoverLetterDownloadUrl = computed(() => {
   return developer.value.cover_letter ? `/api/developers/${developer.value.id}/cover-letter` : null;
 });
 

@@ -239,23 +239,31 @@ $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'publi
         return response()->json($locations, 200);
     }
 
+    /**
+     * Télécharger le CV du développeur.
+     */
     public function downloadCv(Developer $developer)
     {
-        // Vérifier si le fichier existe
-        if (!$developer->cv || !Storage::exists($developer->cv)) {
+        // Vérifier si le développeur a un CV et si le fichier existe
+        if (!$developer->cv || !Storage::disk('public')->exists($developer->cv)) {
             return response()->json(['message' => 'CV non disponible.'], 404);
         }
 
-        return Storage::download($developer->cv);
+        // Télécharger le fichier
+        return Storage::disk('public')->download($developer->cv, $developer->first_name . '_' . $developer->surname . '_CV.pdf');
     }
 
+    /**
+     * Télécharger la lettre de motivation du développeur.
+     */
     public function downloadCoverLetter(Developer $developer)
     {
-        // Vérifier si le fichier existe
-        if (!$developer->cover_letter || !Storage::exists($developer->cover_letter)) {
+        // Vérifier si le développeur a une lettre de motivation et si le fichier existe
+        if (!$developer->cover_letter || !Storage::disk('public')->exists($developer->cover_letter)) {
             return response()->json(['message' => 'Lettre de motivation non disponible.'], 404);
         }
 
-        return Storage::download($developer->cover_letter);
+        // Télécharger le fichier
+        return Storage::disk('public')->download($developer->cover_letter, $developer->first_name . '_' . $developer->surname . '_Lettre_Motivation.pdf');
     }
 }
