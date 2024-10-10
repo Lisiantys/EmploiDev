@@ -9,56 +9,54 @@
     <!-- Candidatures acceptées -->
     <div v-if="acceptedApplications.length > 0" class="mb-8">
       <h3 class="text-xl font-semibold mb-4">Candidatures acceptées</h3>
-      <div v-for="application in acceptedApplications" :key="application.id" @click="openModal(application.id)"
-        class="border-2 border-green-500 shadow-lg rounded-lg p-4 mb-4 cursor-pointer">
-        <p><strong>Offre d'emploi :</strong> {{ application.job_offer.name }}</p>
-        <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
-        <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{
-          application.job_offer.location.postal_code }}</p>
-        <p><strong>Description :</strong> {{ application.description }}</p>
-        <button @click.stop="deleteApplication(application.id)"
-          class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
+      <div v-for="application in acceptedApplications" :key="application.id">
+        <ApplicationCard
+          :application="application"
+          :isDeveloper="true"
+          @delete="deleteApplication"
+          @click="openModal"
+        />
       </div>
     </div>
 
     <!-- Candidatures en attente -->
     <div v-if="pendingApplications.length > 0" class="mb-8">
       <h3 class="text-xl font-semibold mb-4">Candidatures en attente</h3>
-      <div v-for="application in pendingApplications" :key="application.id" @click="openModal(application.id)"
-        class="border-2 border-blue-400 shadow-lg rounded-lg p-4 mb-4 cursor-pointer">
-        <p><strong>Offre d'emploi :</strong> {{ application.job_offer.name }}</p>
-        <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
-        <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{
-          application.job_offer.location.postal_code }}</p>
-        <p><strong>Description :</strong> {{ application.description }}</p>
-        <button @click.stop="deleteApplication(application.id)"
-          class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
+      <div v-for="application in pendingApplications" :key="application.id">
+        <ApplicationCard
+          :application="application"
+          :isDeveloper="true"
+          @delete="deleteApplication"
+          @click="openModal"
+        />
       </div>
     </div>
 
     <!-- Candidatures refusées -->
     <div v-if="rejectedApplications.length > 0" class="mb-8">
       <h3 class="text-xl font-semibold mb-4">Candidatures refusées</h3>
-      <div v-for="application in rejectedApplications" :key="application.id" @click="openModal(application.id)"
-        class="border-2 border-red-500 shadow-lg rounded-lg p-4 mb-4 cursor-pointer">
-        <p><strong>Offre d'emploi :</strong> {{ application.job_offer.name }}</p>
-        <p><strong>Entreprise :</strong> {{ application.job_offer.company.name }}</p>
-        <p><strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{
-          application.job_offer.location.postal_code }}</p>
-        <p><strong>Description :</strong> {{ application.description }}</p>
-        <button @click.stop="deleteApplication(application.id)"
-          class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">Supprimer</button>
+      <div v-for="application in rejectedApplications" :key="application.id">
+        <ApplicationCard
+          :application="application"
+          :isDeveloper="true"
+          @delete="deleteApplication"
+          @click="openModal"
+        />
       </div>
     </div>
 
-    <ApplicationDetailsModal :isOpen="isModalOpen" :applicationId="selectedApplicationId" @close="closeModal" />
-
+    <ApplicationDetailsModal
+      :isOpen="isModalOpen"
+      :applicationId="selectedApplicationId"
+      @close="closeModal"
+    />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import Axios from 'axios';
+import ApplicationCard from './ApplicationCard.vue';
 import ApplicationDetailsModal from './ApplicationDetailsModal.vue';
 
 const applications = ref([]);
@@ -76,7 +74,7 @@ const fetchApplications = async () => {
 
     applications.value = allApplications;
 
-    // Filtrer les candidatures par status
+    // Filtrer les candidatures par statut
     acceptedApplications.value = allApplications.filter(app => app.status === 'accepted');
     pendingApplications.value = allApplications.filter(app => app.status === 'pending');
     rejectedApplications.value = allApplications.filter(app => app.status === 'rejected');
@@ -94,7 +92,6 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 
-// Méthode pour supprimer une candidature
 const deleteApplication = async (applicationId) => {
   if (confirm('Voulez-vous vraiment supprimer cette candidature ?')) {
     try {
@@ -112,5 +109,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Ajoutez des styles supplémentaires si nécessaire */
+/* Ajoutez des styles spécifiques si nécessaire */
 </style>
