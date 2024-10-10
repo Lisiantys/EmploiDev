@@ -27,18 +27,18 @@ class DeveloperController extends Controller
      * Affiche les développeurs validés,  libres en premier puis les non libres.
      */
     public function index()
-{
-    $developers = Developer::where('is_validated', 1)
-        ->orderBy('is_free', 'desc')
-        ->paginate(8);
+    {
+        $developers = Developer::where('is_validated', 1)
+            ->orderBy('is_free', 'desc')
+            ->paginate(8);
 
-    $developers->getCollection()->transform(function ($developer) {
-        $developer->profil_image = Storage::url($developer->profil_image);
-        return $developer;
-    });
+        $developers->getCollection()->transform(function ($developer) {
+            $developer->profil_image = Storage::url($developer->profil_image);
+            return $developer;
+        });
 
-    return response()->json($developers, 200);
-}
+        return response()->json($developers, 200);
+    }
 
     /**
      * Création d'un utilisateur pour ensuite créer le développeur.
@@ -54,12 +54,12 @@ class DeveloperController extends Controller
 
         // Gestion des fichiers
         // Gestion des fichiers
-$imagePath = $request->hasFile('profil_image')
-? $request->file('profil_image')->store('images', 'public')
-: 'images/user.jpg';
+        $imagePath = $request->hasFile('profil_image')
+            ? $request->file('profil_image')->store('images', 'public')
+            : 'images/user.jpg';
 
-$cvPath = $request->file('cv')->store('cv', 'public');
-$coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'public');
+        $cvPath = $request->file('cv')->store('cv', 'public');
+        $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'public');
 
         // Création du développeur
         $developer = $user->developer()->create(array_merge(
@@ -98,7 +98,7 @@ $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'publi
         $developerData = [
             'first_name' => $request->input('first_name'),
             'surname' => $request->input('surname'),
-            'description' => $request->input('description'), // Keep current description if not provided
+            'description' => $request->input('description'),
             'is_free' => $request->input('is_free'),
             'contract_id' => $request->input('contract_id'),
             'year_id' => $request->input('year_id'),
@@ -106,15 +106,61 @@ $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'publi
             'type_id' => $request->input('type_id'),
         ];
 
-        // Keep current CV, cover letter, and image if not updated
-        $developerData['cv'] = $request->hasFile('cv') ? $request->file('cv')->store('cv') : $developer->cv;
-        $developerData['cover_letter'] = $request->hasFile('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
-        $developerData['profil_image'] = $request->hasFile('profil_image') ? $request->file('profil_image')->store('images') : $developer->profil_image;
+        // Gestion du CV
+        if ($request->hasFile('cv')) {
+            // Stocker le nouveau CV
+            $newCvPath = $request->file('cv')->store('cv', 'public');
 
-        // Perform the update on the developer model
+            // Supprimer l'ancien CV s'il existe
+            if ($developer->cv && Storage::disk('public')->exists($developer->cv)) {
+                Storage::disk('public')->delete($developer->cv);
+            }
+
+            // Mettre à jour le chemin du CV
+            $developerData['cv'] = $newCvPath;
+        } else {
+            // Conserver l'ancien CV
+            $developerData['cv'] = $developer->cv;
+        }
+
+        // Gestion de la lettre de motivation
+        if ($request->hasFile('cover_letter')) {
+            // Stocker la nouvelle lettre de motivation
+            $newCoverLetterPath = $request->file('cover_letter')->store('cover_letters', 'public');
+
+            // Supprimer l'ancienne lettre de motivation s'il existe
+            if ($developer->cover_letter && Storage::disk('public')->exists($developer->cover_letter)) {
+                Storage::disk('public')->delete($developer->cover_letter);
+            }
+
+            // Mettre à jour le chemin de la lettre de motivation
+            $developerData['cover_letter'] = $newCoverLetterPath;
+        } else {
+            // Conserver l'ancienne lettre de motivation
+            $developerData['cover_letter'] = $developer->cover_letter;
+        }
+
+        // Gestion de l'image de profil
+        if ($request->hasFile('profil_image')) {
+            // Stocker la nouvelle image de profil
+            $newProfileImagePath = $request->file('profil_image')->store('images', 'public');
+
+            // Supprimer l'ancienne image de profil s'il existe et qu'elle n'est pas l'image par défaut
+            if ($developer->profil_image && $developer->profil_image !== 'images/user.jpg' && Storage::disk('public')->exists($developer->profil_image)) {
+                Storage::disk('public')->delete($developer->profil_image);
+            }
+
+            // Mettre à jour le chemin de l'image de profil
+            $developerData['profil_image'] = $newProfileImagePath;
+        } else {
+            // Conserver l'ancienne image de profil
+            $developerData['profil_image'] = $developer->profil_image;
+        }
+
+        // Mettre à jour le modèle Developer
         $developer->update($developerData);
 
-        // Update user if necessary
+        // Mettre à jour l'utilisateur si nécessaire
         if ($request->has('email') || $request->has('password')) {
             $userData = $request->only('email', 'password');
 
@@ -132,7 +178,7 @@ $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'publi
         }
 
         return response()->json([
-            'message' => 'Développeur / user mis à jour',
+            'message' => 'Développeur / utilisateur mis à jour avec succès.',
             'developer' => $developer
         ], 200);
     }
