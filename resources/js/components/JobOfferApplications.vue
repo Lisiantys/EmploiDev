@@ -1,8 +1,8 @@
 <template>
-  <div class="p-6 sm:p-20 font-bold md:pl-32">
-    <h2 class="text-2xl font-bold mb-4">
+  <div>
+    <h1 class="text-2xl font-bold mt-10 mb-4">
       Candidatures pour l'offre : {{ jobOffer.name }}
-    </h2>
+    </h1>
 
     <!-- Affichage du message d'erreur -->
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
@@ -17,7 +17,7 @@
 
     <!-- Candidatures acceptées -->
     <div v-if="acceptedApplications.length > 0" class="mb-8">
-      <h3 class="text-xl font-semibold mb-4">Candidatures acceptées</h3>
+      <h2 class="text-xl font-semibold mb-4">Candidatures acceptées</h2>
       <div v-for="application in acceptedApplications" :key="application.id"
         class="border-2 border-green-500 shadow-lg rounded-lg p-4 mb-4">
         <p>
@@ -44,7 +44,7 @@
 
     <!-- Candidatures en attente -->
     <div v-if="pendingApplications.length > 0" class="mb-8">
-      <h3 class="text-xl font-semibold mb-4">Candidatures en attente</h3>
+      <h2 class="text-xl font-semibold mb-4">Candidatures en attente</h2>
       <div v-for="application in pendingApplications" :key="application.id"
         class="border-2 border-blue-400 shadow-lg rounded-lg p-4 mb-4">
         <p>

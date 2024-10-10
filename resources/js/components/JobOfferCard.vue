@@ -39,9 +39,9 @@
                 <p class="text-slate-600 text-sm">{{ timeAgo(job.created_at) }}</p>
             </div>
         </div>
-        <!-- Boutons pour Admin -->
-        <div v-if="isAdmin" class="flex justify-between px-4 py-2">
-            <button @click.stop="handleValidate" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
+        <!-- Boutons pour Admin ou Entreprise -->
+        <div v-if="isAdmin || isCompanyView" class="flex justify-between px-4 py-2">
+            <button v-if="isAdmin" @click.stop="handleValidate" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
                 Valider
             </button>
             <button @click.stop="handleDelete" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">
@@ -60,6 +60,10 @@ const props = defineProps({
         required: true,
     },
     isAdmin: {
+        type: Boolean,
+        default: false,
+    },
+    isCompanyView: {
         type: Boolean,
         default: false,
     },
@@ -84,15 +88,15 @@ const handleDelete = (event) => {
 const timeAgo = (date) => {
     const seconds = Math.floor((new Date() - new Date(date)) / 1000);
     let interval = Math.floor(seconds / 31536000);
-    if (interval > 1) return `il y a ${interval} ans`;
+    if (interval >= 1) return `il y a ${interval} an${interval > 1 ? 's' : ''}`;
     interval = Math.floor(seconds / 2592000);
-    if (interval > 1) return `il y a ${interval} mois`;
+    if (interval >= 1) return `il y a ${interval} mois`;
     interval = Math.floor(seconds / 86400);
-    if (interval > 1) return `il y a ${interval} jours`;
+    if (interval >= 1) return `il y a ${interval} jour${interval > 1 ? 's' : ''}`;
     interval = Math.floor(seconds / 3600);
-    if (interval > 1) return `il y a ${interval} heures`;
+    if (interval >= 1) return `il y a ${interval} heure${interval > 1 ? 's' : ''}`;
     interval = Math.floor(seconds / 60);
-    if (interval > 1) return `il y a ${interval} minutes`;
+    if (interval >= 1) return `il y a ${interval} minute${interval > 1 ? 's' : ''}`;
     return `il y a quelques secondes`;
 };
 </script>
