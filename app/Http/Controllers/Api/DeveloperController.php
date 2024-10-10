@@ -53,7 +53,6 @@ class DeveloperController extends Controller
         ]);
 
         // Gestion des fichiers
-        // Gestion des fichiers
         $imagePath = $request->hasFile('profil_image')
             ? $request->file('profil_image')->store('images', 'public')
             : 'images/user.jpg';

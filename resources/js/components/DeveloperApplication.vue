@@ -1,6 +1,6 @@
 <template>
-  <div class="p-6 sm:p-20 font-bold md:pl-32">
-    <h2 class="text-2xl font-bold mb-4">Mes Candidatures</h2>
+  <div>
+    <h1 class="text-2xl font-bold mt-10 mb-4">Mes Candidatures</h1>
 
     <div v-if="applications.length === 0">
       <p>Aucune candidature envoyée pour le moment.</p>
@@ -8,7 +8,7 @@
 
     <!-- Candidatures acceptées -->
     <div v-if="acceptedApplications.length > 0" class="mb-8">
-      <h3 class="text-xl font-semibold mb-4">Candidatures acceptées</h3>
+      <h2 class="text-xl font-semibold mb-4">Candidatures acceptées</h2>
       <div v-for="application in acceptedApplications" :key="application.id">
         <ApplicationCard
           :application="application"
@@ -21,7 +21,7 @@
 
     <!-- Candidatures en attente -->
     <div v-if="pendingApplications.length > 0" class="mb-8">
-      <h3 class="text-xl font-semibold mb-4">Candidatures en attente</h3>
+      <h2 class="text-xl font-semibold mb-4">Candidatures en attente</h2>
       <div v-for="application in pendingApplications" :key="application.id">
         <ApplicationCard
           :application="application"

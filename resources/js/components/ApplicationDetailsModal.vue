@@ -1,6 +1,6 @@
+<!-- ApplicationDetailsModal.vue -->
 <template>
-    <div v-if="isOpen"
-        class="fixed text-sm inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
+    <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
         <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 md:mx-0">
             <!-- Vérifier si les données de l'offre d'emploi sont disponibles -->
             <div v-if="application && application.job_offer && application.job_offer.name">
@@ -8,6 +8,7 @@
                 <div class="flex justify-between items-center px-6 py-4 border-b">
                     <h2 class="text-xl font-semibold">{{ application.job_offer.name }}</h2>
                     <button @click="closeModal" class="text-gray-700 hover:text-gray-900">
+                        <!-- Icône de fermeture -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -26,18 +27,17 @@
                         </div>
                         <!-- Job Information -->
                         <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-                            <p><strong>Poste:</strong> {{ application.job_offer.name }}</p>
-                            <p v-if="application.job_offer.company"><strong>Entreprise:</strong> {{
+                            <p><strong>Poste :</strong> {{ application.job_offer.name }}</p>
+                            <p v-if="application.job_offer.company"><strong>Entreprise :</strong> {{
                                 application.job_offer.company.name }}</p>
-                            <p v-if="application.job_offer.types_contract"><strong>Type de Contrat:</strong> {{
+                            <p v-if="application.job_offer.types_contract"><strong>Type de Contrat :</strong> {{
                                 application.job_offer.types_contract.name }}</p>
-                            <p v-if="application.job_offer.types_developer"><strong>Type de Développeur
-                                    Recherché:</strong> {{ application.job_offer.types_developer.name }}</p>
-                            <p v-if="application.job_offer.years_experience"><strong>Années d'Expérience
-                                    Requises:</strong> {{ application.job_offer.years_experience.name }}</p>
-                            <p v-if="application.job_offer.location"><strong>Lieu:</strong> {{
-                                application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}
-                            </p>
+                            <p v-if="application.job_offer.types_developer"><strong>Type de Développeur Recherché :</strong>
+                                {{ application.job_offer.types_developer.name }}</p>
+                            <p v-if="application.job_offer.years_experience"><strong>Années d'Expérience Requises :</strong>
+                                {{ application.job_offer.years_experience.name }}</p>
+                            <p v-if="application.job_offer.location"><strong>Lieu :</strong> {{
+                                application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}</p>
                             <p><strong>Description de l'offre :</strong> {{ application.job_offer.description }}</p>
                         </div>
                     </div>
@@ -45,10 +45,24 @@
                     <!-- Section CV et Lettre de motivation récupérés de la candidature -->
                     <div class="mt-4">
                         <p><strong>Description fournie :</strong> {{ application.description }}</p>
-                        <p><strong>CV :</strong> <a :href="`/storage/${application.cv}`" target="_blank"
-                                class="text-blue-500 underline">Voir CV</a></p>
-                        <p><strong>Lettre de motivation :</strong> <a :href="`/storage/${application.cover_letter}`"
-                                target="_blank" class="text-blue-500 underline">Voir Lettre de motivation</a></p>
+                        <div class="mt-2 flex space-x-4">
+                            <a :href="cvUrl" target="_blank" class="text-blue-500 underline flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                                Voir CV
+                            </a>
+                            <a :href="coverLetterUrl" target="_blank" class="text-blue-500 underline flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                                Voir Lettre de motivation
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -90,9 +104,17 @@ const fetchApplicationDetails = async () => {
 };
 
 const companyLogoUrl = computed(() => {
-    return application.value.job_offer.company?.logo
-        ? `/storage/${application.value.job_offer.company.logo}`
+    return application.value.job_offer.company?.profil_image
+        ? `/storage/${application.value.job_offer.company.profil_image}`
         : '/images/default-company-logo.png';
+});
+
+const cvUrl = computed(() => {
+    return application.value.cv ? `/storage/${application.value.cv}` : '#';
+});
+
+const coverLetterUrl = computed(() => {
+    return application.value.cover_letter ? `/storage/${application.value.cover_letter}` : '#';
 });
 
 watch(

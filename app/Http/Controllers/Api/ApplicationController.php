@@ -43,21 +43,32 @@ class ApplicationController extends Controller
 
         // Récupérer le développeur connecté
         $developer = Developer::where('user_id', Auth::id())->first();
-        // Récupérer le CV et la lettre de motivation du développeur, si non fournis
-        $cv = $request->file('cv') ? $request->file('cv')->store('cv') : $developer->cv;
-        $coverLetter = $request->file('cover_letter') ? $request->file('cover_letter')->store('cover_letters') : $developer->cover_letter;
 
+        // Gestion des fichiers
+        if ($request->hasFile('cv')) {
+            $cvPath = $request->file('cv')->store('cv', 'public');
+        } else {
+            $cvPath = $developer->cv; // Utiliser le CV du profil si aucun CV n'est fourni
+        }
+
+        if ($request->hasFile('cover_letter')) {
+            $coverLetterPath = $request->file('cover_letter')->store('cover_letters', 'public');
+        } else {
+            $coverLetterPath = $developer->cover_letter; // Utiliser la lettre de motivation du profil si non fournie
+        }
+
+        // Créer la candidature
         $application = Application::create([
-            'description' => $request->description,
-            'job_id' => $request->job_id,
-            'developer_id' => $developer->id,
-            'cv' => $cv,
-            'cover_letter' => $coverLetter,
-            'status' => 'pending',
+            'description'     => $request->description,
+            'job_id'          => $request->job_id,
+            'developer_id'    => $developer->id,
+            'cv'              => $cvPath,
+            'cover_letter'    => $coverLetterPath,
+            'status'          => 'pending',
         ]);
 
         return response()->json([
-            'message' => 'Candidature posté avec succès.',
+            'message'     => 'Candidature postée avec succès.',
             'application' => $application,
         ], 201);
     }

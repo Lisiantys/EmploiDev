@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 sm:p-20 font-bold md:pl-32">
+  <div>
     <h1 class="text-2xl font-bold mt-10 mb-4">
       Candidatures pour l'offre : {{ jobOffer.name }}
     </h1>
