@@ -1,19 +1,47 @@
 <template>
-    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 m-auto pt-48">
-        <div v-if="!currentComponent">
-            <div class="flex flex-col sm:flex-row mb-4">
-                <button @click="selectRole('developer')"
-                    class="bg-blue-500 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-blue-600 transition duration-200 mb-4 sm:mb-0 sm:mr-4">
-                    S'inscrire en tant que Développeur
-                </button>
-                <button @click="selectRole('company')"
-                    class="bg-green-500 text-white font-semibold py-2 px-6 rounded-md shadow hover:bg-green-600 transition duration-200">
-                    S'inscrire en tant qu'Entreprise
-                </button>
+    <div class="mt-20 mb-5 flex items-center justify-center bg-gray-100">
+        <div class="flex flex-col lg:flex-row w-full max-w-6xl bg-white shadow-lg rounded-lg overflow-hidden">
+            <!-- Colonne de gauche : Sélection du rôle -->
+            <div class="w-full lg:w-1/2 p-8">
+                <!-- Sélection du rôle -->
+                <div v-if="!currentComponent">
+                    <div class="flex flex-col space-y-4">
+                        <button @click="selectRole('developer')"
+                            class="w-full flex items-center justify-between bg-blue-500 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
+                            <span>S'inscrire en tant que Développeur</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                        <button @click="selectRole('company')"
+                            class="w-full flex items-center justify-between bg-blue-600 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
+                            <span>S'inscrire en tant qu'Entreprise</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <!-- Formulaire d'inscription dynamique -->
+                <component :is="currentComponent" v-if="currentComponent" @back="resetForm" />
+            </div>
+            <!-- Colonne de droite : Texte explicatif -->
+            <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 p-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-white mb-6">Bienvenue sur EmploiDev !</h2>
+                    <p class="text-white text-lg">
+                        Nous sommes ravis de vous voir ici ! Créez un compte pour profiter de toutes les fonctionnalités
+                        que nous offrons. Que vous soyez un développeur à la recherche de nouvelles opportunités ou une
+                        entreprise à la recherche de talents, notre plateforme est là pour vous aider. Vos données sont
+                        en sécurité avec nous.
+                    </p>
+                </div>
             </div>
         </div>
-
-        <component :is="currentComponent" v-if="currentComponent" @back="resetForm" />
     </div>
 </template>
 
@@ -37,7 +65,3 @@ const resetForm = () => {
     currentComponent.value = null;
 };
 </script>
-
-<style scoped>
-/* Add styles for your buttons and the form container here */
-</style>
