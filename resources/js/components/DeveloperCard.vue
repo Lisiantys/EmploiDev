@@ -22,7 +22,7 @@
           Développeur {{ developer.types_developer.name }}
         </p>
       </div>
-      <div class="px-6 py-2">
+      <div class="px-6 py-2 max-h-20 overflow-y-auto">
         <span v-for="language in developer.programming_languages" :key="language.id"
           class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
           #{{ language.name }}
@@ -135,5 +135,10 @@ const locationImage = ref('/storage/images/location-solid.svg');
   100% {
     left: 125%;
   }
+}
+
+.max-h-20 {
+  max-height: 100px; /* Vous pouvez ajuster cette valeur selon votre mise en page */
+  overflow-y: auto; /* Activer le défilement si nécessaire */
 }
 </style>
