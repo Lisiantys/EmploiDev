@@ -18,7 +18,7 @@
             {{ developer.location.city }}, {{ developer.location.postal_code }}
           </p>
         </div>
-        <p class="text-black text-base">
+        <p class="text-black text-sm">
           Développeur {{ developer.types_developer.name }}
         </p>
       </div>
