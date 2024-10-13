@@ -17,15 +17,15 @@
                 <div class="flex-col flex">
                     <div class="flex flex-col justify-between">
                         <!-- Type de Contrat -->
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold text-black mb-1">Type de Contrat</label>
+                        <div>
+                            <label class="block text-sm font-bold text-black">Type de Contrat</label>
                             <div class="flex flex-wrap justify-between py-2 text-base rounded-md">
                                 <div v-for="contract in contracts" :key="contract.id" class="flex items-center mb-2">
                                     <input :id="`contract-${contract.id}`" type="checkbox"
                                         class="form-checkbox h-4 w-4 text-blue-600" v-model="selectedContracts"
                                         :value="contract.id" />
                                     <label :for="`contract-${contract.id}`"
-                                        class="px-4 block text-sm font-semibold text-gray-800">
+                                        class="px-4 block text-xs font-semibold text-gray-800">
                                         {{ contract.name }}
                                     </label>
                                 </div>
@@ -33,15 +33,15 @@
                         </div>
 
                         <!-- Années d'expériences -->
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold text-black mb-1">Années d'expériences</label>
+                        <div>
+                            <label class="block text-sm font-bold text-black">Années d'expériences</label>
                             <div class="flex flex-wrap justify-between py-2 text-base rounded-md">
                                 <div v-for="year in yearsExperiences" :key="year.id" class="flex items-center mb-2">
                                     <input :id="`year-${year.id}`" type="checkbox"
                                         class="form-checkbox h-4 w-4 text-blue-600" v-model="selectedYearsExperiences"
                                         :value="year.id" />
                                     <label :for="`year-${year.id}`"
-                                        class="px-4 block text-sm font-semibold text-gray-800">
+                                        class="px-4 block text-xs font-semibold text-gray-800">
                                         {{ year.name }}
                                     </label>
                                 </div>
@@ -50,17 +50,27 @@
 
                         <!-- Localisation -->
                         <div class="flex flex-col">
-                            <div>
-                                <label for="localisation" class="block text-sm font-bold text-black mb-1">Ville</label>
-                                <select v-model="selectedLocalisation" id="localisation" name="localisation"
-                                    class="mt-1 block w-full pl-3 pr-10 py-2 text-sm rounded-md border ring-blue-500 border-blue-500">
-                                    <option value="" disabled selected>Sélectionnez une localisation</option>
-                                    <option v-for="localisation in localisations" :key="localisation.id"
-                                        :value="localisation.id">
-                                        {{ localisation.city }}, {{ localisation.postal_code }}
-                                    </option>
-                                </select>
-                            </div>
+                            <label for="localisation" class="block text-sm font-bold text-black mb-1">Villes</label>
+                            <select v-model="selectedLocalisation" id="localisation" name="localisation"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-xs rounded-md border ring-blue-500 border-blue-500">
+                                <option value="" disabled selected>Sélectionnez une localisation</option>
+                                <option v-for="localisation in localisations" :key="localisation.id"
+                                    :value="localisation.id">
+                                    {{ localisation.city }}, {{ localisation.postal_code }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Type de développeur -->
+                        <div class="flex flex-col mt-4">
+                            <label for="localisation" class="block text-sm font-bold text-black mb-1">Domaines</label>
+                            <select v-model="selectedDeveloperType" id="type-developpeur" name="type-developpeur"
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-xs rounded-md border ring-blue-500 border-blue-500">
+                                <option value="" disabled selected>Sélectionnez un type de développeur</option>
+                                <option v-for="type in developerTypes" :key="type.id" :value="type.id">
+                                    {{ type.name }}
+                                </option>
+                            </select>
                         </div>
                     </div>
 
@@ -69,38 +79,28 @@
                         <label class="block text-sm font-bold text-black mb-4 pt-4">Langages de Programmations :</label>
 
                         <div class="overflow-y-scroll h-40">
-                            <div class="grid grid-cols-3 gap-4">
+                            <div class="grid grid-cols-2 gap-4">
                                 <div v-for="language in programmingLanguages" :key="language.id"
                                     class="inline-flex items-center">
                                     <input :id="`language-${language.id}`" type="checkbox"
                                         class="form-checkbox text-blue-600" v-model="selectedProgrammingLanguages"
                                         :value="language.id" />
-                                    <label :for="`language-${language.id}`" class="ml-2 text-base font-semibold">
+                                    <label :for="`language-${language.id}`" class="ml-2 text-xs font-semibold">
                                         {{ language.name }}
                                     </label>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Type de développeur -->
-                        <div class="flex w-full mt-4">
-                            <select v-model="selectedDeveloperType" class="block w-full pl-3 py-2 text-sm rounded-md">
-                                <option value="" disabled selected>Sélectionnez un type de développeur</option>
-                                <option v-for="type in developerTypes" :key="type.id" :value="type.id">
-                                    {{ type.name }}
-                                </option>
-                            </select>
-                        </div>
-
                         <!-- Boutons -->
                         <div class="flex justify-center mt-2">
                             <div class="flex justify-end">
                                 <button type="button" @click="resetFilters"
-                                    class="bg-gray-200 hover:bg-gray-300 text-black text-base font-bold py-2 px-4 rounded mr-2">
+                                    class="bg-gray-200 hover:bg-gray-300 text-black text-sm font-bold py-1 px-2 rounded mr-2">
                                     Réinitialiser
                                 </button>
                                 <button type="submit"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white text-base font-bold py-2 px-4 rounded">
+                                    class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold py-1 px-2 rounded">
                                     Rechercher
                                 </button>
                             </div>
