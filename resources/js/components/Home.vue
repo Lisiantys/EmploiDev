@@ -33,10 +33,12 @@
 
     <!-- Modal de création d'offre d'emploi -->
     <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />
+
+    <FilterModal :isOpen="showFilterModal" @close="closeFilterModal" @filter="fetchResources" />
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useDeveloperAndJobStore } from '../stores/developerAndJobStore';
 import { useAuthStore } from '../stores/authStore';
 import Form from './FilterForm.vue';
@@ -44,6 +46,7 @@ import DeveloperModal from './DeveloperModal.vue';
 import FloatingButton from './FloatingButton.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue';
 import DeveloperCard from './DeveloperCard.vue';
+import FilterModal from './FilterModal.vue';
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
@@ -98,6 +101,28 @@ const nextPage = () => {
         resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
     }
 };
+
+//POUR LE FILTER MODAL SUR MOBILE
+
+const showFilterModal = ref(false);
+
+const openFilterModalListener = () => {
+    showFilterModal.value = true;
+};
+
+const closeFilterModal = () => {
+    showFilterModal.value = false;
+};
+onMounted(() => {
+    // Écouter l'événement globalement
+    window.addEventListener('openFilterModal', openFilterModalListener);
+});
+
+onUnmounted(() => {
+    // Nettoyer l'écouteur lorsque le composant est détruit
+    window.removeEventListener('openFilterModal', openFilterModalListener);
+});
+
 </script>
 
 <style scoped>

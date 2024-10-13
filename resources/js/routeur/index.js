@@ -16,26 +16,24 @@ import politiqueConfidentialite from '../components/Politique.vue';
 import { useAuthStore } from '../stores/authStore';
 
 const routes = [
-  { path: '/', name: 'home', component: home },
-  { path: '/:pathMatch(.*)*', component: notFound },
-  { path: '/connexion', name: 'login', component: login },
-  { path: '/inscription', name: 'register', component: register },
-  { path: '/offres-emploi', name: 'job', component: job },
-  { path: '/profil-dev', name: 'developerProfile', component: developerProfile, meta: { requiresAuth: true, role: 1 } }, // Dev uniquement
-  { path: '/profil-comp', name: 'companyProfile', component: companyProfile, meta: { requiresAuth: true, role: 2 } }, // Company uniquement
-  { path: '/candidatures', name: 'developerApplication', component: developerApplication, meta: { requiresAuth: true, role: 1 } }, // Dev uniquement
-  { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer, meta: { requiresAuth: true, role: 2 } }, // Company uniquement
-  { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications, meta: { requiresAuth: true } },
-  { path: '/dashboard', name: 'adminDashboard', component: adminDashboard, meta: { requiresAuth: true, role: 3 } }, // Admin uniquement
-  { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales },
-  { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite },
-  {
-    path: '/logout',
-    name: 'logout',
+  { path: '/', name: 'home', component: home, meta: {title: 'Les développeurs' } },
+  { path: '/:pathMatch(.*)*', component: notFound, meta: {title: 'Accueil' } },
+  { path: '/connexion', name: 'login', component: login, meta: {title: 'Connexion' } },
+  { path: '/inscription', name: 'register', component: register, meta: { title: 'Inscription' } },
+  { path: '/offres-emploi', name: 'job', component: job, meta: { title: 'Les offres d\'emplois' } },
+  { path: '/profil-dev', name: 'developerProfile', component: developerProfile, meta: { requiresAuth: true, role: 1, title: 'Votre profil', } }, // Dev uniquement
+  { path: '/profil-comp', name: 'companyProfile', component: companyProfile, meta: { requiresAuth: true, role: 2, title: 'Votre profil', } }, // Company uniquement
+  { path: '/candidatures', name: 'developerApplication', component: developerApplication, meta: { requiresAuth: true, role: 1, title: 'Vos candidatures', } }, // Dev uniquement
+  { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer, meta: { requiresAuth: true, role: 2, title: 'Vos offres d\'emplois', } }, // Company uniquement
+  { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications, meta: { requiresAuth: true, title: 'Candidatures reçues', } },
+  { path: '/dashboard', name: 'adminDashboard', component: adminDashboard, meta: { requiresAuth: true, role: 3, title: 'Pannel d\'administration', } }, // Admin uniquement
+  { path: '/mentions-legales', name: 'mentionsLegales', component: mentionsLegales, meta: { title: 'Mentions légales' } },
+  { path: '/politique-de-confidentialité', name: 'politiqueConfidentialite', component: politiqueConfidentialite, meta: { title: 'Politique de confidentialité' } },
+  { path: '/logout', name: 'logout',
     beforeEnter: (to, from, next) => {
       const authStore = useAuthStore();
       authStore.logout();
-      next({ name: 'home' }); // Redirige vers la page d'accueil après déconnexion
+      next({ name: 'home' });
     },
   }
 ];
