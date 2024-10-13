@@ -1,7 +1,11 @@
 <template>
     <Form @filter="fetchJobOffers" />
     <div v-if="resourcesFilteredStore.jobOffers.length">
-        <h1>Les offres d'emploi</h1>
+        
+        <div class="hidden md:block">
+            <PageTitle title="// Les offres d'emploi" />
+        </div>
+
         <div class="grid lg:grid-cols-2 gap-4 mt-20 md:mt-10">
             <JobOfferCard v-for="job in resourcesFilteredStore.jobOffers" :key="job.id" :job="job" @click="openModal" />
         </div>
@@ -47,6 +51,7 @@ import FloatingButton from './FloatingButton.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue';
 import JobOfferCard from './JobOfferCard.vue';
 import FilterModal from './FilterModal.vue';
+import PageTitle from './PageTitle.vue'; 
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();

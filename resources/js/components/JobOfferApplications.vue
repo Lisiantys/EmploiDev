@@ -1,8 +1,9 @@
 <template>
   <div>
-    <h1 class="text-2xl font-bold mt-10 mb-4">
-      Candidatures pour l'offre : {{ jobOffer.name }}
-    </h1>
+
+    <div class="hidden md:block">
+      <PageTitle :title="'// Candidatures pour l\'offre - ' + jobOffer.name" class="mt-10 mb-6"/>
+    </div>
 
     <!-- Messages d'erreur et de succès -->
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
@@ -44,6 +45,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import ApplicationCard from './ApplicationCard.vue';
+import PageTitle from './PageTitle.vue';
 
 const route = useRoute();
 const jobOfferId = route.params.id;

@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="handleStepSubmission">
-        <h2>Inscription Entreprise</h2>
+        <div class="hidden md:block">
+            <PageTitle title="// Inscription entreprise" />
+        </div>
 
         <div v-if="step === 1" class="tab">
             <div class="mb-5">
@@ -85,6 +87,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
+import PageTitle from './PageTitle.vue'; 
 
 const router = useRouter();
 const authStore = useAuthStore();

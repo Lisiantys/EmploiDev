@@ -1,19 +1,21 @@
 <template>
   <div>
-    <h2 class="text-2xl font-bold mt-14 mb-8">Tableau de Bord Administrateur</h2>
+    <div class="hidden md:block">
+      <PageTitle title="// Tableau de Bord Administrateur" class="mt-10 mb-6" />
+    </div>
 
     <!-- Onglets -->
     <div class="mb-4 border-b border-gray-200">
       <nav class="-mb-px flex space-x-8">
         <button :class="{
-          'border-indigo-500 text-indigo-600': activeTab === 'jobOffers',
+          'border-blue-500 text-blue-600': activeTab === 'jobOffers',
           'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300':
             activeTab !== 'jobOffers',
         }" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" @click="activeTab = 'jobOffers'">
           Offres d'emploi en attente
         </button>
         <button :class="{
-          'border-indigo-500 text-indigo-600': activeTab === 'developers',
+          'border-blue-500 text-blue-600': activeTab === 'developers',
           'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300':
             activeTab !== 'developers',
         }" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" @click="activeTab = 'developers'">
@@ -40,6 +42,7 @@
 import { ref } from 'vue';
 import AdminPendingJobOffers from './AdminPendingJobOffers.vue';
 import AdminPendingDevelopers from './AdminPendingDevelopers.vue';
+import PageTitle from './PageTitle.vue';
 
 const activeTab = ref('jobOffers');
 </script>

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="text-2xl font-bold mt-10 mb-4">Offres d'Emploi de l'Entreprise</h1>
+    <div class="hidden md:block">
+      <PageTitle title="// Offres d'Emploi de l'Entreprise" class="mt-10 mb-6" />
+    </div>
 
     <!-- Affichage du message d'erreur -->
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
@@ -9,12 +11,7 @@
     <div v-if="validatedJobOffers.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Offres d'emploi validées</h2>
       <div v-for="offer in validatedJobOffers" :key="offer.id">
-        <JobOfferCard
-          :job="offer"
-          :isCompanyView="true"
-          @click="viewApplications"
-          @delete="deleteJobOffer"
-        />
+        <JobOfferCard :job="offer" :isCompanyView="true" @click="viewApplications" @delete="deleteJobOffer" />
 
         <!-- Afficher le nombre de candidatures en attente -->
         <div class="mt-2">
@@ -29,11 +26,7 @@
     <div v-if="nonValidatedJobOffers.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Offres d'emploi non validées</h2>
       <div v-for="offer in nonValidatedJobOffers" :key="offer.id">
-        <JobOfferCard
-          :job="offer"
-          :isCompanyView="true"
-          @delete="deleteJobOffer"
-        />
+        <JobOfferCard :job="offer" :isCompanyView="true" @delete="deleteJobOffer" />
       </div>
     </div>
 
@@ -52,10 +45,10 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import JobOfferCard from './JobOfferCard.vue'; // Ajustez le chemin si nécessaire
+import JobOfferCard from './JobOfferCard.vue';
+import PageTitle from './PageTitle.vue';
 
 const router = useRouter();
-
 const jobOffers = ref([]);
 const validatedJobOffers = ref([]);
 const nonValidatedJobOffers = ref([]);

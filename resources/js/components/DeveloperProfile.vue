@@ -1,5 +1,10 @@
 <template>
     <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
+
+        <div class="hidden md:block">
+            <PageTitle title="// Votre profil développeur" />
+        </div> 
+
         <form @submit.prevent="submitProfile" class="p-6 sm:p-10">
             <div class="flex flex-col gap-4">
                 <div class="flex w-full gap-4">
@@ -183,6 +188,7 @@ import { useResourcesStore } from "../stores/resourcesStore";
 import Axios from "axios";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
+import PageTitle from './PageTitle.vue'; 
 
 const router = useRouter();
 const authStore = useAuthStore();

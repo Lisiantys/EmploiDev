@@ -2,7 +2,9 @@
     <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6 m-auto pt-48">
 
         <form @submit.prevent="login">
-            <h2>Connexion</h2>
+            <div class="hidden md:block">
+                <PageTitle title="// Connexion" />
+            </div>
 
             <div class="mb-5">
                 <label for="email" class="block mb-2 text-sm font-medium text-gray-900">E-mail...</label>
@@ -38,6 +40,7 @@ import { ref } from 'vue';
 import Axios from "axios";
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/authStore';
+import PageTitle from './PageTitle.vue'; 
 
 const router = useRouter();
 const authStore = useAuthStore();

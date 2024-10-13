@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="handleStepSubmission">
-        <h2>Inscription Développeur</h2>
+        <div class="hidden md:block">
+            <PageTitle title="// Inscription développeur" />
+        </div>
 
         <div v-if="step === 1" class="tab">
             <div class="mb-5">
@@ -159,6 +161,7 @@ import { useRouter } from 'vue-router';
 import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
 import { useResourcesStore } from '../stores/resourcesStore';
+import PageTitle from './PageTitle.vue'; 
 
 const router = useRouter();
 

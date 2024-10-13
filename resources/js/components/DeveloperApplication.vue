@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h1 class="text-2xl font-bold mt-10 mb-4">Mes Candidatures</h1>
+    <div class="hidden md:block">
+      <PageTitle title="// Mes candidatures" class="mt-10 mb-6"/>
+    </div>
 
     <div v-if="applications.length === 0">
       <p>Aucune candidature envoyée pour le moment.</p>
@@ -10,12 +12,8 @@
     <div v-if="acceptedApplications.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Candidatures acceptées</h2>
       <div v-for="application in acceptedApplications" :key="application.id">
-        <ApplicationCard
-          :application="application"
-          :isDeveloper="true"
-          @delete="deleteApplication"
-          @click="openModal"
-        />
+        <ApplicationCard :application="application" :isDeveloper="true" @delete="deleteApplication"
+          @click="openModal" />
       </div>
     </div>
 
@@ -23,12 +21,8 @@
     <div v-if="pendingApplications.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Candidatures en attente</h2>
       <div v-for="application in pendingApplications" :key="application.id">
-        <ApplicationCard
-          :application="application"
-          :isDeveloper="true"
-          @delete="deleteApplication"
-          @click="openModal"
-        />
+        <ApplicationCard :application="application" :isDeveloper="true" @delete="deleteApplication"
+          @click="openModal" />
       </div>
     </div>
 
@@ -36,20 +30,12 @@
     <div v-if="rejectedApplications.length > 0" class="mb-8">
       <h3 class="text-xl font-semibold mb-4">Candidatures refusées</h3>
       <div v-for="application in rejectedApplications" :key="application.id">
-        <ApplicationCard
-          :application="application"
-          :isDeveloper="true"
-          @delete="deleteApplication"
-          @click="openModal"
-        />
+        <ApplicationCard :application="application" :isDeveloper="true" @delete="deleteApplication"
+          @click="openModal" />
       </div>
     </div>
 
-    <ApplicationDetailsModal
-      :isOpen="isModalOpen"
-      :applicationId="selectedApplicationId"
-      @close="closeModal"
-    />
+    <ApplicationDetailsModal :isOpen="isModalOpen" :applicationId="selectedApplicationId" @close="closeModal" />
   </div>
 </template>
 
@@ -58,6 +44,7 @@ import { ref, onMounted } from 'vue';
 import Axios from 'axios';
 import ApplicationCard from './ApplicationCard.vue';
 import ApplicationDetailsModal from './ApplicationDetailsModal.vue';
+import PageTitle from './PageTitle.vue';
 
 const applications = ref([]);
 const acceptedApplications = ref([]);

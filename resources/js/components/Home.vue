@@ -1,7 +1,11 @@
 <template>
     <Form @filter="fetchResources" />
     <div v-if="resourcesFilteredStore.developers.length">
-        <h1 class="text-2xl font-bold mb-4">Développeurs</h1>
+
+        <div class="hidden md:block">
+            <PageTitle title="// Les Développeurs" />
+        </div>
+
         <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-20 md:mt-10">
             <DeveloperCard v-for="developer in resourcesFilteredStore.developers" :key="developer.id"
                 :developer="developer" @click="openModal(developer.id)" />
@@ -47,6 +51,7 @@ import FloatingButton from './FloatingButton.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue';
 import DeveloperCard from './DeveloperCard.vue';
 import FilterModal from './FilterModal.vue';
+import PageTitle from './PageTitle.vue'; 
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();

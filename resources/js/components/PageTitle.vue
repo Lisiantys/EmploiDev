@@ -1,5 +1,5 @@
 <template>
-    <h1 class="page-title">{{ title }}</h1>
+    <h1 class="text-3xl lg:text-4xl font-bold">{{ title }}</h1>
   </template>
   
   <script setup>
@@ -13,11 +13,4 @@
   });
   </script>
   
-  <style scoped>
-  .page-title {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  </style>
   
