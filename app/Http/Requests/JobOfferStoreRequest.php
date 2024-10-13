@@ -22,7 +22,7 @@ class JobOfferStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:10|max:255',
+            'name' => 'required|string|min:10|max:40',
             'description' => 'required|string|min:20|max:1024',
             'contract_id' => 'required|exists:types_contracts,id',
             'year_id' => 'required|exists:years_experiences,id',

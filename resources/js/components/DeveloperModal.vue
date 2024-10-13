@@ -11,7 +11,7 @@
               <img :src="profileImage" alt="Profile Image" class="w-full h-64 rounded-lg object-cover">
             </div>
             <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-              <h2 class="text-xl font-semibold mt-2">// {{ developer.first_name }} {{ developer.surname }}</h2>
+              <h2 class="text-xl font-semibold mt-2 break-words">// {{ developer.first_name }} {{ developer.surname }}</h2>
               <p class="text-wrap break-words text-xs md:text-base font-light"> {{ developer.description }}</p>
               <div class="md:flex lg:flex-col justify-between mt-2 md:mt-0">
                 <div>

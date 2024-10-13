@@ -1,7 +1,6 @@
-<!-- CreateJobOfferModal.vue -->
 <template>
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 text-sm">
-    <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4 md:mx-0">
+    <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full mx-4 md:mx-0 max-h-[90vh] flex flex-col">
       <!-- Modal Header -->
       <div class="flex justify-between items-center px-6 py-4 border-b">
         <h2 class="text-xl font-semibold">Créer une nouvelle offre d'emploi</h2>
@@ -13,25 +12,25 @@
         </button>
       </div>
       <!-- Modal Body -->
-      <div class="p-6">
+      <div class="p-6 overflow-y-auto flex-grow">
         <!-- Formulaire de création d'offre d'emploi -->
         <form @submit.prevent="submitForm">
           <!-- Champs du formulaire -->
           <!-- Nom de l'offre -->
           <div class="mb-4">
-            <label class="block text-gray-700">Nom de l'offre</label>
-            <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" required>
+            <label class="block text-gray-700">Nom de l'offre : </label>
+            <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" minlength="10" maxlength="40" required>
             <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</p>
           </div>
           <!-- Description -->
           <div class="mb-4">
-            <label class="block text-gray-700">Description</label>
-            <textarea v-model="form.description" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
+            <label class="block text-gray-700">Description :</label>
+            <textarea v-model="form.description" class="w-full border rounded px-3 py-2" rows="4" minlength="20" maxlength="1024" required></textarea>
             <p v-if="errors.description" class="text-red-500 text-sm mt-1">{{ errors.description[0] }}</p>
           </div>
           <!-- Type de contrat -->
           <div class="mb-4">
-            <label class="block text-gray-700">Type de contrat</label>
+            <label class="block text-gray-700">Type de contrat :</label>
             <select v-model="form.contract_id" class="w-full border rounded px-3 py-2" required>
               <option value="" disabled>Choisir un type de contrat</option>
               <option v-for="contract in contracts" :key="contract.id" :value="contract.id">
@@ -42,7 +41,7 @@
           </div>
           <!-- Années d'expérience -->
           <div class="mb-4">
-            <label class="block text-gray-700">Années d'expérience requises</label>
+            <label class="block text-gray-700">Années d'expérience requises :</label>
             <select v-model="form.year_id" class="w-full border rounded px-3 py-2" required>
               <option value="" disabled>Choisir une expérience</option>
               <option v-for="year in yearsExperiences" :key="year.id" :value="year.id">
@@ -53,7 +52,7 @@
           </div>
           <!-- Localisation -->
           <div class="mb-4">
-            <label class="block text-gray-700">Localisation</label>
+            <label class="block text-gray-700">Localisation :</label>
             <select v-model="form.location_id" class="w-full border rounded px-3 py-2" required>
               <option value="" disabled>Choisir une localisation</option>
               <option v-for="location in localisations" :key="location.id" :value="location.id">
@@ -64,7 +63,7 @@
           </div>
           <!-- Type de développeur -->
           <div class="mb-4">
-            <label class="block text-gray-700">Type de développeur recherché</label>
+            <label class="block text-gray-700">Type de développeur recherché : </label>
             <select v-model="form.type_id" class="w-full border rounded px-3 py-2" required>
               <option value="" disabled>Choisir un type de développeur</option>
               <option v-for="type in developerTypes" :key="type.id" :value="type.id">
@@ -75,17 +74,14 @@
           </div>
           <!-- Langages de programmation avec cases à cocher -->
           <div class="mb-4">
-            <label class="block text-gray-700">Langages de programmation requis</label>
+            <label class="block text-gray-700">Langages de programmation requis : </label>
             <div class="flex flex-col justify-between w-full">
-              <label for="languages" class="block text-sm font-bold text-black lg:ml-4 mb-4 pt-4 lg:pt-0">
-                Langages de Programmations :
-              </label>
               <div class="overflow-y-scroll h-40">
-                <div class="grid grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 lg:ml-4 gap-4">
+                <div class="grid grid-cols md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:ml-4 gap-4">
                   <div v-for="language in programmingLanguages" :key="language.id" class="inline-flex items-center">
                     <input :id="`language-${language.id}`" type="checkbox" class="form-checkbox text-blue-600"
                       v-model="form.programming_languages" :value="language.id" />
-                    <label :for="`language-${language.id}`" class="ml-2 text-base font-semibold">
+                    <label :for="`language-${language.id}`" class="ml-2 text-sm font-semibold">
                       {{ language.name }}
                     </label>
                   </div>

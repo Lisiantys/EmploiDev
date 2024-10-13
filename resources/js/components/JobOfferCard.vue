@@ -1,9 +1,9 @@
 <template>
     <div @click="handleClick"
-        class="bg-white mt-10 shadow-lg w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md cursor-pointer">
+        class="bg-white shadow-lg w-full max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center justify-between px-5 py-4 rounded-md cursor-pointer">
         <div class="w-full">
             <div class="flex justify-between">
-                <h2 class="font-bold mt-px text-blue-800">{{ job.name }}</h2>
+                <h2 class="font-bold mt-px text-blue-800 text-base xl:text-xl 2xl:text-2xl">{{ job.name }}</h2>
                 <button class="bg-blue-500 text-white font-medium p-2 rounded-3xl flex gap-1 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
@@ -19,13 +19,16 @@
                     job.types_developer?.name || job.typesDeveloper?.name
                 }}</span>
             </div>
-            <hr class="mt-2" />
-            <div class="pt-2 flex flex-row flex-wrap">
+            <hr class="my-2" />
+
+            <!-- Section des langages avec hauteur limitée et scroll -->
+            <div class="flex flex-row flex-wrap gap-2 overflow-y-auto max-h-14">
                 <span v-for="language in job.programming_languages || []" :key="language.id"
                     class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
                     #{{ language.name }}
                 </span>
             </div>
+
             <div class="py-2 flex flex-row flex-wrap justify-between">
                 <span class="text-slate-600 text-sm flex gap-1 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"

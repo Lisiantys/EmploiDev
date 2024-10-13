@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('job_offers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name', 40);
             $table->text('description');
             $table->boolean('is_validated')->default(0);
             $table->foreignId('contract_id')->constrained('types_contracts');

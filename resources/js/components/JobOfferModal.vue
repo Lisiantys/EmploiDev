@@ -13,9 +13,11 @@
                         </div>
                         <!-- Informations de l'offre -->
                         <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-                            <h2 class="text-xl font-semibold mt-2">// {{ jobOffer.name }}</h2>
-                            <p class="text-wrap break-words text-xs md:text-sm lg:text-base font-light">{{
-                                jobOffer.description }}</p>
+                            <h2 class="text-xl font-semibold mt-2 break-words">// {{ jobOffer.name }}</h2>
+                            <div
+                                class="text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-40">
+                                <p>{{ jobOffer.description }}</p>
+                            </div>
                             <div class="flex flex-col mt-2 md:mt-0">
                                 <div>
                                     <p v-if="jobOffer.company" class="text-xs md:text-sm mt-2">
@@ -34,7 +36,7 @@
                                     </p>
                                     <p v-if="jobOffer.location" class="text-xs md:text-sm mt-2">
                                         <strong>Lieu :</strong> {{ jobOffer.location.city }}, {{
-                                        jobOffer.location.postal_code }}
+                                            jobOffer.location.postal_code }}
                                     </p>
                                 </div>
                             </div>
