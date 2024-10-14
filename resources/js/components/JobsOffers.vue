@@ -30,10 +30,7 @@
     <!-- Inclure le composant JobOfferModal -->
     <JobOfferModal :isOpen="showModal" :jobOfferId="selectedJobOfferId" @close="showModal = false" />
 
-    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal"
-        class="floating-button ">
-        + Ajouter une offre d'emploi
-    </FloatingButton>
+    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal"/>
 
     <!-- Modal de création d'offre d'emploi -->
     <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />

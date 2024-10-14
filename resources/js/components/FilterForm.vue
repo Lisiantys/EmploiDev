@@ -55,7 +55,7 @@
                             class="inline-flex items-center">
                             <input :id="`language-${language.id}`" type="checkbox" class="form-checkbox text-blue-600"
                                 v-model="selectedProgrammingLanguages" :value="language.id" />
-                            <label :for="`language-${language.id}`" class="ml-2 text-base font-semibold">{{
+                            <label :for="`language-${language.id}`" class="ml-2 text-sm font-semibold">{{
                                 language.name }}</label>
                         </div>
                     </div>

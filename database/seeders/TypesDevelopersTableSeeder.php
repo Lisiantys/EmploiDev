@@ -12,7 +12,17 @@ class TypesDevelopersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $types = ['Frontend', 'Backend', 'Full Stack', 'Mobile', 'Data Scientist'];
+        $types = [
+            'Frontend',
+            'Backend',
+            'Full Stack',
+            'Mobile',
+            'Data Scientist',
+            'DevOps',
+            'AI Engineer',
+            'Web Developer',
+            'Game Developer',
+        ];
 
         foreach ($types as $type) {
             TypesDeveloper::create(['name' => $type]);

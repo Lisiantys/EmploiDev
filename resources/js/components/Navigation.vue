@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row md:flex-col text-base bg-blue-500 md:h-full text-white md:py-7 fixed custom-sidebar z-10">
+    <div class="flex flex-row md:flex-col text-base bg-blue-500 md:h-full text-white md:py-7 fixed custom-sidebar z-50">
         <router-link :to="{ name: 'home' }" href="#" id="logo-link"
             class="w-full h-16 flex items-center justify-center">
             <img class="w-14" :src="`${baseImageUrl}logo.webp`" alt="logo" />

@@ -1,36 +1,16 @@
-<!-- FloatingButton.vue -->
 <template>
-  <button @click="$emit('click')" class="floating-button">
-    <slot>+ Ajouter</slot>
+  <button @click="$emit('click')" class="fixed bottom-20 right-5 bg-blue-600 text-white py-3 px-3 rounded-full shadow-lg text-base hover:bg-blue-700 transition duration-300 ease-in-out flex items-center z-50">
+    <img class="h-8 w-8" :src=baseImageUrl alt="Logo" />
   </button>
 </template>
 
 <script setup>
-// Aucun script nécessaire
+import { ref } from 'vue'; 
+const baseImageUrl = ref('/storage/images/plus-solid.svg');
 </script>
 
 <style scoped>
-.floating-button {
-  position: fixed;
-  bottom: 20px;
-  /* Ajustez selon vos besoins */
-  right: 20px;
-  /* Ajustez selon vos besoins */
-  background-color: #3b82f6;
-  /* Bleu Tailwind (bg-blue-500) */
-  color: white;
-  padding: 12px 20px;
-  border-radius: 50px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  z-index: 1000;
-  /* Assurez-vous que le bouton est au-dessus des autres éléments */
-}
-
-.floating-button:hover {
-  background-color: #2563eb;
-  /* Bleu foncé Tailwind (bg-blue-600) */
+img{
+  filter: invert(100%) sepia(100%) saturate(0%);
 }
 </style>

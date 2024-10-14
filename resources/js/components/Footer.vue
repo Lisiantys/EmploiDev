@@ -1,5 +1,5 @@
 <template>
-    <footer class="w-full bg-blue-500 p-4 md:pl-16 lg:pl-10 md:py-8 pb-24 md:mb-0">
+    <footer class="w-full bg-blue-500 p-4 md:pl-16 lg:pl-10 md:py-8 pb-24 md:mb-0 z-20">
       <div
         class="grid grid-flow-row gap-4 space-y-5 md:space-y-0 items-center justify-items-center text-center md:grid-flow-col md:text-left">
         <div class="text-white max-w-md space-y-4 md:space-y-2 pl-8 lg:pl-0">

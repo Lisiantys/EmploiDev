@@ -4,6 +4,15 @@
       <PageTitle title="// Offres d'Emploi de l'Entreprise" class="mt-10 mb-6" />
     </div>
 
+    <!-- Bouton pour ouvrir le modal de création d'offre d'emploi -->
+    <button @click="openCreateModal"
+      class="bg-blue-600 mx-auto md:mx-0 text-white mt-20 md:mt-0 mb-0 md:mb-6 py-3 px-3 rounded-full shadow-lg text-base hover:bg-blue-700 transition duration-300 ease-in-out flex items-center">
+      <span class="font-normal">+ Ajouter une offre d'emploi</span>
+    </button>
+
+    <!-- Modal de création d'offre d'emploi -->
+    <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated"/>
+
     <!-- Affichage du message d'erreur -->
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
 
@@ -31,12 +40,8 @@
     </div>
 
     <!-- Aucune offre disponible -->
-    <div v-if="
-      validatedJobOffers.length === 0 &&
-      nonValidatedJobOffers.length === 0 &&
-      !errorMessage
-    ">
-      <p>Aucune offre d'emploi créée pour le moment.</p>
+    <div v-if="validatedJobOffers.length === 0 && nonValidatedJobOffers.length === 0 && !errorMessage">
+      <p class="mt-8 mb-6 md:mt-0 md:mb-0 text-center md:text-left text-base md:text-xl font-normal">Aucune offre d'emploi créée pour le moment.</p>
     </div>
   </div>
 </template>
@@ -47,12 +52,33 @@ import { useRouter } from 'vue-router';
 import axios from 'axios';
 import JobOfferCard from './JobOfferCard.vue';
 import PageTitle from './PageTitle.vue';
+import CreateJobOfferModal from './CreateJobOfferModal.vue';
 
 const router = useRouter();
 const jobOffers = ref([]);
 const validatedJobOffers = ref([]);
 const nonValidatedJobOffers = ref([]);
 const errorMessage = ref('');
+
+// État pour afficher ou cacher le modal de création d'offre
+const showCreateModal = ref(false);
+
+// Fonction pour ouvrir le modal de création
+const openCreateModal = () => {
+  showCreateModal.value = true;
+};
+
+// Fonction pour fermer le modal de création
+const closeCreateModal = () => {
+  showCreateModal.value = false;
+};
+
+// Après la création d'une offre
+const jobCreated = (newJobOffer) => {
+  console.log('Nouvelle offre créée:', newJobOffer);
+  closeCreateModal();
+  fetchJobOffers();
+};
 
 // Fonction pour récupérer les offres d'emploi de l'entreprise
 const fetchJobOffers = async () => {
@@ -78,8 +104,7 @@ const fetchJobOffers = async () => {
       "Erreur lors de la récupération des offres d'emploi :",
       error
     );
-    errorMessage.value =
-      "Erreur lors de la récupération des offres d'emploi.";
+    errorMessage.value = "Erreur lors de la récupération des offres d'emploi.";
   }
 };
 
@@ -99,8 +124,7 @@ const deleteJobOffer = async (jobOfferId) => {
         "Erreur lors de la suppression de l'offre d'emploi :",
         error
       );
-      errorMessage.value =
-        "Erreur lors de la suppression de l'offre d'emploi.";
+      errorMessage.value = "Erreur lors de la suppression de l'offre d'emploi.";
     }
   }
 };
@@ -115,7 +139,3 @@ onMounted(() => {
   fetchJobOffers();
 });
 </script>
-
-<style scoped>
-/* Vous pouvez ajouter des styles personnalisés ici si nécessaire */
-</style>

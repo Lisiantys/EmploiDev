@@ -31,12 +31,10 @@
     <DeveloperModal :isOpen="showModal" :developerId="selectedDeveloperId" @close="showModal = false" />
 
     <!-- Bouton flottant pour ajouter une offre d'emploi -->
-    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal">
-        + Ajouter une offre d'emploi
-    </FloatingButton>
-
+    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal"/>
+    
     <!-- Modal de création d'offre d'emploi -->
-    <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />
+    <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated"/>
 
     <FilterModal :isOpen="showFilterModal" @close="closeFilterModal" @filter="fetchResources" />
 </template>
