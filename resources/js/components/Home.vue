@@ -19,18 +19,11 @@
                 :developer="developer" @click="openModal(developer.id)" />
         </div>
         <!-- Pagination -->
-        <div v-if="resourcesFilteredStore.totalPages > 1" class="mt-4 flex justify-between">
-            <button @click="previousPage" :disabled="resourcesFilteredStore.currentPage === 1"
-                class="bg-gray-200 px-4 py-2 rounded disabled:opacity-50">
-                Précédent
-            </button>
-            <span>Page {{ resourcesFilteredStore.currentPage }} de {{ resourcesFilteredStore.totalPages }}</span>
-            <button @click="nextPage"
-                :disabled="resourcesFilteredStore.currentPage === resourcesFilteredStore.totalPages"
-                class="bg-gray-200 px-4 py-2 rounded disabled:opacity-50">
-                Suivant
-            </button>
-        </div>
+        <Pagination 
+    :currentPage="resourcesFilteredStore.currentPage" 
+    :totalPages="resourcesFilteredStore.totalPages" 
+    @updatePage="handlePageChange" 
+  />
     </div>
     <div v-else>
         <p class="text-center text-gray-600">Aucun développeur trouvé.</p>
@@ -58,6 +51,7 @@ import CreateJobOfferModal from './CreateJobOfferModal.vue';
 import DeveloperCard from './DeveloperCard.vue';
 import FilterModal from './FilterModal.vue';
 import PageTitle from './PageTitle.vue';
+import Pagination from './Pagination.vue';
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
@@ -67,6 +61,11 @@ const selectedDeveloperId = ref(null);
 const showCreateModal = ref(false);
 
 const baseImageUrl = ref("/storage/images/");
+
+// Fonction pour changer la page
+const handlePageChange = (newPage) => {
+  resourcesFilteredStore.fetchResources({}, newPage);
+};
 
 const openModal = (id) => {
     selectedDeveloperId.value = id;
@@ -225,7 +224,7 @@ onUnmounted(() => {
     }
 }
 
-.searchIcon{
+.searchIcon {
     filter: invert(100%) sepia(100%) saturate(0%);
 }
 </style>

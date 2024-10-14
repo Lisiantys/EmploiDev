@@ -1,7 +1,7 @@
 <template>
     <Form @filter="fetchJobOffers" />
     <div v-if="resourcesFilteredStore.jobOffers.length">
-        
+
         <div class="hidden md:block mt-10 lg:mt-0 mb-6 lg:mb-0">
             <PageTitle title="// Les offres d'emploi" />
         </div>
@@ -18,18 +18,8 @@
             <JobOfferCard v-for="job in resourcesFilteredStore.jobOffers" :key="job.id" :job="job" @click="openModal" />
         </div>
         <!-- Pagination -->
-        <div v-if="resourcesFilteredStore.totalPages > 1" class="mt-4 flex justify-between">
-            <button @click="previousPage" :disabled="resourcesFilteredStore.currentPage === 1"
-                class="bg-gray-200 px-4 py-2 rounded">
-                Previous
-            </button>
-            <span>Page {{ resourcesFilteredStore.currentPage }} of {{ resourcesFilteredStore.totalPages }}</span>
-            <button @click="nextPage"
-                :disabled="resourcesFilteredStore.currentPage === resourcesFilteredStore.totalPages"
-                class="bg-gray-200 px-4 py-2 rounded">
-                Next
-            </button>
-        </div>
+        <Pagination :currentPage="resourcesFilteredStore.currentPage" :totalPages="resourcesFilteredStore.totalPages"
+            @updatePage="handlePageChange" />
     </div>
     <div v-else>
         <p>Aucune offre d'emploi trouvée.</p>
@@ -38,7 +28,7 @@
     <!-- Inclure le composant JobOfferModal -->
     <JobOfferModal :isOpen="showModal" :jobOfferId="selectedJobOfferId" @close="showModal = false" />
 
-    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal"/>
+    <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal" />
 
     <!-- Modal de création d'offre d'emploi -->
     <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />
@@ -56,7 +46,8 @@ import FloatingButton from './FloatingButton.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue';
 import JobOfferCard from './JobOfferCard.vue';
 import FilterModal from './FilterModal.vue';
-import PageTitle from './PageTitle.vue'; 
+import PageTitle from './PageTitle.vue';
+import Pagination from './Pagination.vue';
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
@@ -69,6 +60,10 @@ const baseImageUrl = ref("/storage/images/");
 //Pour la création d'une offre d'emploi uniquement les entreprises
 const showCreateModal = ref(false);
 
+// Fonction pour changer la page
+const handlePageChange = (newPage) => {
+  resourcesFilteredStore.fetchResources({}, newPage);
+};
 const openModal = (id) => {
     selectedJobOfferId.value = id;
     showModal.value = true;
@@ -156,7 +151,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.searchIcon{
+.searchIcon {
     filter: invert(100%) sepia(100%) saturate(0%);
 }
 </style>
