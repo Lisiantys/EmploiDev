@@ -1,52 +1,63 @@
-<!-- ApplicationDetailsModal.vue -->
 <template>
     <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg shadow-lg max-w-4xl w-full mx-4 md:mx-0">
+        <div
+            class="bg-white rounded-lg shadow-lg w-11/12 md:max-w-3xl lg:max-w-4xl xl:max-w-6xl md:w-full mx-4 md:mx-0">
             <!-- Vérifier si les données de l'offre d'emploi sont disponibles -->
             <div v-if="application && application.job_offer && application.job_offer.name">
-                <!-- Modal Header -->
-                <div class="flex justify-between items-center px-6 py-4 border-b">
-                    <h2 class="text-xl font-semibold">{{ application.job_offer.name }}</h2>
-                    <button @click="closeModal" class="text-gray-700 hover:text-gray-900">
-                        <!-- Icône de fermeture -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
                 <!-- Modal Body -->
                 <div class="p-6">
-                    <!-- Job Offer Details -->
                     <div class="flex flex-col md:flex-row">
-                        <!-- Company Logo -->
-                        <div class="md:w-1/3">
-                            <img :src="companyLogoUrl" alt="Company Logo"
-                                class="w-full h-auto rounded-lg object-cover" />
+                        <!-- Logo de l'entreprise -->
+                        <div class="hidden md:block md:w-1/3">
+                            <img :src="companyLogoUrl" alt="Company Logo" class="w-full h-64 rounded-lg object-cover">
                         </div>
-                        <!-- Job Information -->
+                        <!-- Informations de l'offre -->
                         <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-                            <p><strong>Poste :</strong> {{ application.job_offer.name }}</p>
-                            <p v-if="application.job_offer.company"><strong>Entreprise :</strong> {{
-                                application.job_offer.company.name }}</p>
-                            <p v-if="application.job_offer.types_contract"><strong>Type de Contrat :</strong> {{
-                                application.job_offer.types_contract.name }}</p>
-                            <p v-if="application.job_offer.types_developer"><strong>Type de Développeur Recherché :</strong>
-                                {{ application.job_offer.types_developer.name }}</p>
-                            <p v-if="application.job_offer.years_experience"><strong>Années d'Expérience Requises :</strong>
-                                {{ application.job_offer.years_experience.name }}</p>
-                            <p v-if="application.job_offer.location"><strong>Lieu :</strong> {{
-                                application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}</p>
-                            <p><strong>Description de l'offre :</strong> {{ application.job_offer.description }}</p>
+                            <h2 class="text-xl font-semibold mt-2 break-words">// {{ application.job_offer.name }}</h2>
+                            <div
+                                class="text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-40">
+                                <p>{{ application.job_offer.description }}</p>
+                            </div>
+                            <div class="flex flex-col mt-2 md:mt-0">
+                                <div>
+                                    <p v-if="application.job_offer.company" class="text-xs md:text-sm mt-2">
+                                        <strong>Entreprise :</strong> {{ application.job_offer.company.name }}
+                                    </p>
+                                    <p v-if="application.job_offer.types_contract" class="text-xs md:text-sm mt-2">
+                                        <strong>Contrat :</strong> {{ application.job_offer.types_contract.name }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p v-if="application.job_offer.types_developer" class="text-xs md:text-sm mt-2">
+                                        <strong>Développeur Recherché :</strong> {{ application.job_offer.types_developer.name }}
+                                    </p>
+                                    <p v-if="application.job_offer.years_experience" class="text-xs md:text-sm mt-2">
+                                        <strong>Expérience Requises :</strong> {{ application.job_offer.years_experience.name }}
+                                    </p>
+                                    <p v-if="application.job_offer.location" class="text-xs md:text-sm mt-2">
+                                        <strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
+                    <!-- Langages de Programmation -->
+                    <div class="my-4" v-if="application.job_offer.programming_languages && application.job_offer.programming_languages.length">
+                        <div class="flex flex-wrap mt-2 md:max-h-none max-h-24 overflow-y-auto">
+                            <span v-for="language in application.job_offer.programming_languages" :key="language.id"
+                                class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs md:text-sm font-normal text-gray-700 mr-2 mb-2">
+                                #{{ language.name }}
+                            </span>
+                        </div>
+                    </div>
                     <!-- Section CV et Lettre de motivation récupérés de la candidature -->
                     <div class="mt-4">
-                        <p><strong>Description fournie :</strong> {{ application.description }}</p>
+                        <p class="text-gray-700 mt-4 text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-20 md:max-h-40">
+                            {{ application.description }}
+                        </p>
                         <div class="mt-2 flex space-x-4">
-                            <a :href="cvUrl" target="_blank" class="text-blue-500 underline flex items-center">
+                            <a :href="cvUrl" target="_blank"
+                                class="bg-blue-500 text-white px-4 py-2 font-light rounded-lg text-xs md:text-base hover:bg-blue-600 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -54,7 +65,8 @@
                                 </svg>
                                 Voir CV
                             </a>
-                            <a :href="coverLetterUrl" target="_blank" class="text-blue-500 underline flex items-center">
+                            <a :href="coverLetterUrl" target="_blank"
+                                class="bg-blue-500 text-white px-4 py-2 font-light rounded-lg text-xs md:text-base hover:bg-blue-600 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,6 +76,13 @@
                             </a>
                         </div>
                     </div>
+                </div>
+                <!-- Modal Footer -->
+                <div class="flex justify-end px-6 py-4 border-t">
+                    <button @click="closeModal"
+                        class="bg-blue-500 text-white px-4 py-2 font-light rounded-lg text-sm md:text-base hover:bg-blue-600">
+                        Fermer
+                    </button>
                 </div>
             </div>
             <!-- Afficher un message de chargement ou d'erreur -->

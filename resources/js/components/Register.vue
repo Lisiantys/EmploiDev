@@ -8,7 +8,7 @@
                     <div class="flex flex-col space-y-4">
                         <button @click="selectRole('developer')"
                             class="w-full flex items-center justify-between bg-blue-500 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
-                            <span>S'inscrire en tant que Développeur</span>
+                            <p class="text-sm md:text-lg lg:text-xl">S'inscrire en tant que Développeur</p>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -17,7 +17,7 @@
                         </button>
                         <button @click="selectRole('company')"
                             class="w-full flex items-center justify-between bg-blue-600 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
-                            <span>S'inscrire en tant qu'Entreprise</span>
+                            <p class="text-sm md:text-lg lg:text-xl">S'inscrire en tant qu'Entreprise</p>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -30,14 +30,13 @@
                 <component :is="currentComponent" v-if="currentComponent" @back="resetForm" />
             </div>
             <!-- Colonne de droite : Texte explicatif -->
-            <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 p-8 items-center">
+            <div class="flex w-full lg:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 p-8 items-center">
                 <div>
-                    <h2 class="text-3xl font-bold text-white mb-6">Bienvenue sur EmploiDev !</h2>
-                    <p class="text-white text-lg">
+                    <h2 class="text-2xl lg:text-3xl font-bold text-white mb-6">Bienvenue sur EmploiDev !</h2>
+                    <p class="text-white text-sm lg:text-base">
                         Nous sommes ravis de vous voir ici ! Créez un compte pour profiter de toutes les fonctionnalités
                         que nous offrons. Que vous soyez un développeur à la recherche de nouvelles opportunités ou une
-                        entreprise à la recherche de talents, notre plateforme est là pour vous aider. Vos données sont
-                        en sécurité avec nous.
+                        entreprise à la recherche de talents, notre plateforme est là pour vous aider.
                     </p>
                 </div>
             </div>

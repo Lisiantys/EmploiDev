@@ -63,7 +63,7 @@
 
                 <!-- Section Type et Btn -->
                 <div class="flex justify-between lg:justify-end xl:justify-between mt-2 items-center">
-                    <div class="flex lg:hidden xl:block w-full mx-4">
+                    <div class="flex w-full mx-4">
                         <select v-model="selectedDeveloperType"
                             class="lg:mt-1 block w-full pl-3 py-3 lg:py-2 border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
                             <option value="" disabled selected>

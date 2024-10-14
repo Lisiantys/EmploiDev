@@ -17,9 +17,9 @@
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
 
     <!-- Offres validées -->
-    <div v-if="validatedJobOffers.length > 0" class="mb-8">
+    <div v-if="validatedJobOffers.length > 0" class="mt-6 mb-8">
       <h2 class="text-xl font-semibold mb-4">Offres d'emploi validées</h2>
-      <div v-for="offer in validatedJobOffers" :key="offer.id">
+      <div v-for="offer in validatedJobOffers" :key="offer.id" class="mb-8">
         <JobOfferCard :job="offer" :isCompanyView="true" @click="viewApplications" @delete="deleteJobOffer" />
 
         <!-- Afficher le nombre de candidatures en attente -->
@@ -33,7 +33,7 @@
 
     <!-- Offres non validées -->
     <div v-if="nonValidatedJobOffers.length > 0" class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Offres d'emploi non validées</h2>
+      <h2 class="text-xl font-semibold mb-4">Offres d'emploi en attente de validation</h2>
       <div v-for="offer in nonValidatedJobOffers" :key="offer.id">
         <JobOfferCard :job="offer" :isCompanyView="true" @delete="deleteJobOffer" />
       </div>

@@ -66,7 +66,7 @@
             <div v-if="Object.keys(company.errors).length > 0"
                 class="mb-5 p-4 border border-red-500 rounded bg-red-100">
                 <ul class="list-disc list-inside">
-                    <li v-for="(errorMessages, field) in company.errors" :key="field" class="text-red-500">
+                    <li v-for="(errorMessages, field) in company.errors" :key="field" class="text-red-500 text-sm">
                         {{ errorMessages.join(', ') }}
                     </li>
                 </ul>
