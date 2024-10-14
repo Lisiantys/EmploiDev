@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-16">
+    <div class="text-wrap break-words text-xs md:text-sm xl:text-base font-light overflow-y-auto max-h-16">
       <p>{{ description }}</p>
     </div>
 
