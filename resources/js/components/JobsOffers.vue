@@ -2,9 +2,17 @@
     <Form @filter="fetchJobOffers" />
     <div v-if="resourcesFilteredStore.jobOffers.length">
         
-        <div class="hidden md:block">
+        <div class="hidden md:block mt-10 lg:mt-0 mb-6 lg:mb-0">
             <PageTitle title="// Les offres d'emploi" />
         </div>
+
+        <button @click="openFilterModal"
+            class="bg-blue-500 hidden md:block lg:hidden w-full mx-auto text-white py-3 px-3 rounded-lg shadow-lg text-base hover:bg-blue-600 transition duration-300 ease-in-out">
+            <span class="font-normal flex items-center justify-center gap-3">
+                <img :src="`${baseImageUrl}magnifying-glass-solid.svg`" class="searchIcon h-5">
+                Filtres de recherches
+            </span>
+        </button>
 
         <div class="grid lg:grid-cols-2 gap-4 mt-20 md:mt-10">
             <JobOfferCard v-for="job in resourcesFilteredStore.jobOffers" :key="job.id" :job="job" @click="openModal" />
@@ -56,12 +64,19 @@ const resourcesFilteredStore = useDeveloperAndJobStore();
 const showModal = ref(false);
 const selectedJobOfferId = ref(null);
 
+const baseImageUrl = ref("/storage/images/");
+
 //Pour la création d'une offre d'emploi uniquement les entreprises
 const showCreateModal = ref(false);
 
 const openModal = (id) => {
     selectedJobOfferId.value = id;
     showModal.value = true;
+};
+
+// Fonction pour ouvrir le modal de filtrage sur tablette
+const openFilterModal = () => {
+    window.dispatchEvent(new Event('openFilterModal'));
 };
 
 // Fonction pour ouvrir le modal
@@ -139,3 +154,9 @@ onUnmounted(() => {
     window.removeEventListener('openFilterModal', openFilterModalListener);
 });
 </script>
+
+<style scoped>
+.searchIcon{
+    filter: invert(100%) sepia(100%) saturate(0%);
+}
+</style>

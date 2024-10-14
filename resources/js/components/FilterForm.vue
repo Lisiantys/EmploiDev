@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="applyFilters">
-        <div class="hidden flex-col md:flex lg:flex-row mt-10 mb-8 p-6 border-4 border-blue-400 rounded-lg shadow-md">
+        <div class="hidden flex-col lg:flex lg:flex-row mt-10 mb-8 p-6 border-4 border-blue-400 rounded-lg shadow-md">
             <!-- Section contrat, année et département -->
             <div class="flex flex-col justify-between w-5/6">
                 <div class="mb-4">
