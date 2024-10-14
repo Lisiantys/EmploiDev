@@ -5,8 +5,8 @@
     </div>
 
     <!-- Onglets -->
-    <div class="mb-4 border-b border-gray-200">
-      <nav class="-mb-px flex space-x-8">
+    <div class="mt-20 md:mt-0 mb-4 border-b border-gray-200">
+      <nav class="-mb-px flex flex-col md:flex-row items-center gap-6 md:space-x-8">
         <button :class="{
           'border-blue-500 text-blue-600': activeTab === 'jobOffers',
           'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300':

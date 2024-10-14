@@ -20,7 +20,7 @@
     </div>
   </div>
   <div v-else>
-    <p>Aucun développeur en attente de validation.</p>
+    <p class="text-center md:text-start text-sm md:text-base">Aucun développeur en attente de validation.</p>
   </div>
 
   <!-- Modal du développeur -->

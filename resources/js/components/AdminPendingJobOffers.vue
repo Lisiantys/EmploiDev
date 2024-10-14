@@ -1,6 +1,6 @@
 <template>
   <div v-if="jobOffers.length">
-    <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-4 mt-10">
+    <div class="grid lg:grid-cols-2 gap-4 mt-10">
       <JobOfferCard v-for="job in jobOffers" :key="job.id" :job="job" :isAdmin="true" @click="openModal"
         @validate="validateJobOffer" @delete="deleteJobOffer" />
     </div>
@@ -20,7 +20,7 @@
     </div>
   </div>
   <div v-else>
-    <p>Aucune offre d'emploi en attente de validation.</p>
+    <p class="text-center md:text-start text-sm md:text-base">Aucune offre d'emploi en attente de validation.</p>
   </div>
 
   <!-- Modal de l'offre d'emploi -->

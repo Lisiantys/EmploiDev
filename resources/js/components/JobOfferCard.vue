@@ -14,10 +14,10 @@
             <div class="flex items-center gap-3">
                 <span class="bg-blue-500 text-white rounded-full px-3 py-1 text-xs">{{
                     job.types_contract?.name || job.typesContract?.name
-                }}</span>
+                    }}</span>
                 <span class="text-blue-500 text-sm">Développeur {{
                     job.types_developer?.name || job.typesDeveloper?.name
-                }}</span>
+                    }}</span>
             </div>
             <hr class="my-2" />
 
@@ -41,15 +41,16 @@
                 </span>
                 <p class="text-slate-600 text-xs md:text-sm">{{ timeAgo(job.created_at) }}</p>
             </div>
-        </div>
-        <!-- Boutons pour Admin ou Entreprise -->
-        <div v-if="isAdmin || isCompanyView" class="flex justify-between px-4 py-2">
-            <button v-if="isAdmin" @click.stop="handleValidate" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
-                Valider
-            </button>
-            <button @click.stop="handleDelete" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">
-                Supprimer
-            </button>
+            <!-- Boutons pour Admin ou Entreprise -->
+            <div v-if="isAdmin || isCompanyView" class="flex gap-3">
+                <button v-if="isAdmin" @click.stop="handleValidate"
+                    class="bg-blue-500 text-base text-white px-3 py-2 rounded hover:bg-blue-600">
+                    Valider
+                </button>
+                <button @click.stop="handleDelete" class="bg-blue-700 text-base text-white px-3 py-2 rounded hover:bg-blue-800">
+                    Supprimer
+                </button>
+            </div>
         </div>
     </div>
 </template>

@@ -30,11 +30,11 @@
       </div>
     </div>
     <!-- Boutons pour Admin -->
-    <div v-if="isAdmin" class="flex justify-between px-4 py-2">
-      <button @click.stop="validateDeveloper" class="bg-green-500 text-white px-3 py-2 rounded hover:bg-green-600">
+    <div v-if="isAdmin" class="flex w-full justify-center ">
+      <button @click.stop="validateDeveloper" class="bg-blue-500 w-full text-base text-white px-3 py-2  hover:bg-blue-600">
         Valider
       </button>
-      <button @click.stop="deleteDeveloper" class="bg-red-500 text-white px-3 py-2 rounded hover:bg-red-600">
+      <button @click.stop="deleteDeveloper" class="bg-blue-700 w-full text-base text-white px-3 py-2  hover:bg-blue-800">
         Supprimer
       </button>
     </div>
