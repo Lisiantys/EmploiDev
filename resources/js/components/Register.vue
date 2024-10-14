@@ -5,10 +5,10 @@
             <div class="w-full lg:w-1/2 p-8">
                 <!-- Sélection du rôle -->
                 <div v-if="!currentComponent">
-                    <div class="flex flex-col space-y-4">
+                    <div class="flex flex-col space-y-4 items-center">
                         <button @click="selectRole('developer')"
-                            class="w-full flex items-center justify-between bg-blue-500 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
-                            <p class="text-sm md:text-lg lg:text-xl">S'inscrire en tant que Développeur</p>
+                            class="w-full flex items-center justify-between bg-blue-500 text-white py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200 mt-0 md:mt-4 mx-auto">
+                            <p class="text-sm md:text-lg lg:text-xl font-normal">S'inscrire en tant que Développeur</p>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -16,8 +16,8 @@
                             </svg>
                         </button>
                         <button @click="selectRole('company')"
-                            class="w-full flex items-center justify-between bg-blue-600 text-white font-semibold py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200">
-                            <p class="text-sm md:text-lg lg:text-xl">S'inscrire en tant qu'Entreprise</p>
+                            class="w-full flex items-center justify-between bg-blue-600 text-white py-4 px-6 rounded-md shadow hover:bg-blue-700 transition duration-200 mx-auto">
+                            <p class="text-sm md:text-lg lg:text-xl font-normal">S'inscrire en tant qu'Entreprise</p>
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,7 +34,7 @@
                 <div>
                     <h2 class="text-2xl lg:text-3xl font-bold text-white mb-6">Bienvenue sur EmploiDev !</h2>
                     <p class="text-white text-sm lg:text-base">
-                        Nous sommes ravis de vous voir ici ! Créez un compte pour profiter de toutes les fonctionnalités
+                        Créez un compte pour profiter de toutes les fonctionnalités
                         que nous offrons. Que vous soyez un développeur à la recherche de nouvelles opportunités ou une
                         entreprise à la recherche de talents, notre plateforme est là pour vous aider.
                     </p>

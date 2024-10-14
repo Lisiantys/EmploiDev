@@ -1,5 +1,5 @@
 <template>
-  <div class="application-card bg-white shadow-lg rounded-lg p-6 mb-6 hover:shadow-xl transition-shadow cursor-pointer"
+  <div class="application-card bg-white shadow-lg rounded-lg p-6 mb-2 hover:shadow-xl transition-shadow cursor-pointer"
     @click="handleClick">
     <div class="flex items-center justify-between">
       <div>
@@ -42,7 +42,7 @@
     <div class="mt-2 flex items-center space-x-4">
       <!-- Bouton Supprimer pour le développeur -->
       <button v-if="isDeveloper" @click.stop="handleDelete"
-        class="flex items-center font-base px-2 py-1 text-red-500 hover:text-red-600 font-medium transition-colors">
+        class="flex items-center text-sm md:text-base font-normal px-2 py-1 text-red-500 hover:text-red-600 transition-colors border-2 rounded-lg border-red-500">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
           stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

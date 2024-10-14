@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="mt-20 md:mt-0">
     <div class="hidden md:block">
-      <PageTitle title="// Mes candidatures" class="mt-10 mb-6"/>
+      <PageTitle title="// Mes candidatures" class="mt-10 mb-6" />
     </div>
 
     <div v-if="applications.length === 0">
@@ -11,18 +11,18 @@
     <!-- Candidatures acceptées -->
     <div v-if="acceptedApplications.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Candidatures acceptées</h2>
-      <div v-for="application in acceptedApplications" :key="application.id">
-        <ApplicationCard :application="application" :isDeveloper="true" @delete="deleteApplication"
-          @click="openModal" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ApplicationCard v-for="application in acceptedApplications" :key="application.id" :application="application"
+          :isDeveloper="true" @delete="deleteApplication" @click="openModal" />
       </div>
     </div>
 
     <!-- Candidatures en attente -->
     <div v-if="pendingApplications.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Candidatures en attente</h2>
-      <div v-for="application in pendingApplications" :key="application.id">
-        <ApplicationCard :application="application" :isDeveloper="true" @delete="deleteApplication"
-          @click="openModal" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ApplicationCard v-for="application in pendingApplications" :key="application.id" :application="application"
+          :isDeveloper="true" @delete="deleteApplication" @click="openModal" />
       </div>
     </div>
 

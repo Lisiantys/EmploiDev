@@ -1,98 +1,136 @@
 <template>
-    <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
-
-        <div class="hidden md:block">
-            <PageTitle title="// Votre profil entreprise" />
-        </div> 
-
-        <form @submit.prevent="submitProfile" class="p-6 sm:p-10">
-            <div class="flex flex-col gap-4">
-                <!-- Company Name -->
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">
-                        Nom de l'entreprise:
-                    </label>
-                    <input v-model="company.name" placeholder="Nom de l'entreprise..." required
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-
-                <!-- Email -->
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">
-                        E-mail:
-                    </label>
-                    <input v-model="company.email" type="email" placeholder="E-mail..." required
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-
-                <!-- Description -->
-                <div class="mb-5">
-                    <label for="description" class="block mb-2 text-sm font-medium text-gray-900">
-                        Description (optionnel)
-                    </label>
-                    <textarea v-model="company.description" id="description"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Une brève description de votre entreprise..." minlength="8"
-                        maxlength="255"></textarea>
-                </div>
-
-                <!-- Profile Image -->
-                <div class="mb-5">
-                    <label for="profil_image" class="block mb-2 text-sm font-medium text-gray-900">
-                        Logo de l'entreprise (optionnel)
-                    </label>
-                    <input type="file" accept=".jpg,.png" @change="handleFileUpload('profil_image', $event)"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="company.profil_image" class="text-sm">
-                        {{ getFileName(company.profil_image) }}
-                    </span>
-                </div>
-
-                <!-- Password -->
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">
-                        Nouveau mot de passe:
-                    </label>
-                    <input v-model="company.password" type="password" placeholder="Mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-
-                <!-- Confirm Password -->
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">
-                        Confirmer le mot de passe:
-                    </label>
-                    <input v-model="company.confirmPassword" type="password" placeholder="Confirmer le mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                    <div v-if="passwordsDoNotMatch" class="text-red-500 mb-2">
-                        Les mots de passe ne correspondent pas.
-                    </div>
-                </div>
-
-                <!-- Display Errors -->
-                <div v-if="company.errors && Object.keys(company.errors).length > 0"
-                    class="mb-5 p-4 border border-red-500 rounded bg-red-100">
-                    <ul class="list-disc list-inside">
-                        <li v-for="(errorMessages, field) in company.errors" :key="field" class="text-red-500">
-                            {{ errorMessages.join(", ") }}
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="bg-blue-500 text-white p-2 rounded">
-                    Sauvegarder
-                </button>
-
-                <!-- Delete Account Button -->
-                <button @click.prevent="deleteAccount" class="bg-red-500 text-white p-2 rounded mt-4">
-                    Supprimer mon compte
-                </button>
+    <div class="container max-w-screen-xl mx-auto px-4 py-6">
+      <!-- Titre de la page -->
+      <div class="bg-white shadow-md rounded-lg overflow-hidden mt-10">
+        <form @submit.prevent="submitProfile" class="p-4 sm:p-6">
+          <!-- Informations de l'entreprise -->
+          <div class="mb-6">
+            <div class="mb-6 hidden md:block">
+              <PageTitle title="// Votre profil entreprise" />
             </div>
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Informations de l'entreprise</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Nom de l'entreprise -->
+              <div>
+                <label class="block mb-1 text-xs font-medium text-gray-700">Nom de l'entreprise</label>
+                <input
+                  v-model="company.name"
+                  placeholder="Nom de l'entreprise..."
+                  required
+                  class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <!-- E-mail -->
+              <div>
+                <label class="block mb-1 text-xs font-medium text-gray-700">E-mail</label>
+                <input
+                  v-model="company.email"
+                  type="email"
+                  placeholder="E-mail..."
+                  required
+                  class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          </div>
+  
+          <!-- Description -->
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Description</h2>
+            <div>
+              <label class="block mb-1 text-xs font-medium text-gray-700">Présentation</label>
+              <textarea
+                v-model="company.description"
+                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Une brève description de votre entreprise..."
+                minlength="8"
+                maxlength="255"
+              ></textarea>
+            </div>
+          </div>
+  
+          <!-- Documents et Médias -->
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Documents et Médias</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Logo de l'entreprise -->
+              <div>
+                <label class="block mb-1 text-xs font-medium text-gray-700">Logo de l'entreprise</label>
+                <input
+                  type="file"
+                  accept=".jpg,.png"
+                  @change="handleFileUpload('profil_image', $event)"
+                  class="block w-full text-xs text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+                />
+                <span v-if="company.profil_image" class="text-xs text-gray-500">
+                  {{ getFileName(company.profil_image) }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Sécurité -->
+          <div class="mb-6">
+            <h2 class="text-lg font-semibold mb-4 border-b pb-2">Sécurité</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Nouveau mot de passe -->
+              <div>
+                <label class="block mb-1 text-xs font-medium text-gray-700">Nouveau mot de passe</label>
+                <input
+                  v-model="company.password"
+                  type="password"
+                  placeholder="Nouveau mot de passe"
+                  class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              <!-- Confirmer le mot de passe -->
+              <div>
+                <label class="block mb-1 text-xs font-medium text-gray-700">Confirmer le mot de passe</label>
+                <input
+                  v-model="company.confirmPassword"
+                  type="password"
+                  placeholder="Confirmer le mot de passe"
+                  class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div v-if="passwordsDoNotMatch" class="text-red-500 mt-1 text-xs">
+                  Les mots de passe ne correspondent pas.
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Affichage des erreurs -->
+          <div
+            v-if="company.errors && Object.keys(company.errors).length > 0"
+            class="mb-6 p-3 border border-red-500 rounded bg-red-50"
+          >
+            <ul class="list-disc list-inside text-red-500 text-xs">
+              <li v-for="(errorMessages, field) in company.errors" :key="field">
+                {{ errorMessages.join(", ") }}
+              </li>
+            </ul>
+          </div>
+  
+          <!-- Boutons d'action -->
+          <div class="flex flex-col md:flex-row md:justify-between items-center">
+            <button
+              type="submit"
+              class="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Sauvegarder les modifications
+            </button>
+            <button
+              @click.prevent="deleteAccount"
+              class="w-full md:w-auto mt-3 md:mt-0 md:ml-4 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Supprimer mon compte
+            </button>
+          </div>
         </form>
+      </div>
     </div>
-</template>
-
+  </template>
+  
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import Axios from "axios";
@@ -133,17 +171,22 @@ watch(
     }
 );
 
-// Fonction pour obtenir le nom du fichier
+// Fonction pour obtenir le nom du fichier à partir d'un objet File ou d'une chaîne
 const getFileName = (file) => {
-    if (!file) return '';
-    if (typeof file === 'string') {
+    if (!file) return "";
+    let name;
+    if (typeof file === "string") {
         // Extraire le nom du fichier du chemin
-        return file.split('/').pop();
+        name = file.split("/").pop();
     } else if (file instanceof File) {
-        return file.name;
+        name = file.name;
+    } else {
+        return "";
     }
-    return '';
+    // Retourner les 10 derniers caractères si le nom est trop long
+    return name.length > 10 ? name.slice(-20) : name;
 };
+
 
 const fetchCompanyProfile = async () => {
     try {

@@ -1,186 +1,212 @@
 <template>
-    <div class="p-6 sm:p-10 text-2xl font-bold md:pl-32">
+    <div class="container max-w-screen-xl mx-auto px-4 py-6">
+        <!-- Titre de la page -->
 
-        <div class="hidden md:block">
-            <PageTitle title="// Votre profil développeur" />
-        </div> 
-
-        <form @submit.prevent="submitProfile" class="p-6 sm:p-10">
-            <div class="flex flex-col gap-4">
-                <div class="flex w-full gap-4">
-                    <div class="w-1/2">
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Prénom:</label>
-                        <input v-model="developer.first_name" placeholder="Prénom..." required
-                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+        <div class="bg-white shadow-md rounded-lg overflow-hidden mt-10">
+            <form @submit.prevent="submitProfile" class="p-4 sm:p-6">
+                <!-- Informations personnelles -->
+                <div class="mb-6">
+                    <div class="mb-6 hidden md:block">
+                        <PageTitle title="// Votre profil développeur" />
                     </div>
-                    <div class="w-1/2">
-                        <label class="block mb-2 text-sm font-medium text-gray-900">Nom:</label>
-                        <input v-model="developer.surname" placeholder="Nom..." required
-                            class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                    </div>
-                </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">E-mail:</label>
-                    <input v-model="developer.email" type="email" placeholder="E-mail..." required
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Type de Contrat:</label>
-                    <select v-model="developer.contract_id"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="" disabled>
-                            Sélectionnez un type de contrat
-                        </option>
-                        <option v-for="contract in contracts" :key="contract.id" :value="contract.id">
-                            {{ contract.name }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="overflow-y-scroll h-40">
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Langages de Programmation:</label>
-                    <div class="grid grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-5 lg:ml-4 gap-4">
-                        <div v-for="language in programmingLanguages" :key="language.id" class="flex items-center mb-2">
-                            <input type="checkbox" :id="`language-${language.id}`"
-                                v-model="developer.programming_languages" :value="language.id" />
-                            <label :for="`language-${language.id}`" class="ml-2 text-sm font-semibold">{{ language.name
-                                }}</label>
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Vos informations</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Prénom -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Prénom</label>
+                            <input v-model="developer.first_name" placeholder="Prénom..." required
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <!-- Nom -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Nom</label>
+                            <input v-model="developer.surname" placeholder="Nom..." required
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <!-- E-mail -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-1 text-xs font-medium text-gray-700">E-mail</label>
+                            <input v-model="developer.email" type="email" placeholder="E-mail..." required
+                                class="text-sm font-normal block w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Type de Développeur:</label>
-                    <select v-model="developer.type_id"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="" disabled>
-                            Sélectionnez un type de développeur
-                        </option>
-                        <option v-for="type in developerTypes" :key="type.id" :value="type.id">
-                            {{ type.name }}
-                        </option>
-                    </select>
+                <!-- Préférences professionnelles -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Préférences professionnelles</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Type de Contrat -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Type de Contrat</label>
+                            <select v-model="developer.contract_id"
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="" disabled>Sélectionnez un type de contrat</option>
+                                <option v-for="contract in contracts" :key="contract.id" :value="contract.id">
+                                    {{ contract.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- Type de Développeur -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Type de Développeur</label>
+                            <select v-model="developer.type_id"
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="" disabled>Sélectionnez un type de développeur</option>
+                                <option v-for="type in developerTypes" :key="type.id" :value="type.id">
+                                    {{ type.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- Année d'Expérience -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Année d'Expérience</label>
+                            <select v-model="developer.year_id"
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="" disabled>Sélectionnez une année d'expérience</option>
+                                <option v-for="year in yearsExperiences" :key="year.id" :value="year.id">
+                                    {{ year.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <!-- Ville -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Ville</label>
+                            <select v-model="developer.location_id"
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="" disabled>Sélectionnez une ville</option>
+                                <option v-for="location in localisations" :key="location.id" :value="location.id">
+                                    {{ location.city }}, {{ location.postal_code }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Ville:</label>
-                    <select v-model="developer.location_id"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="" disabled>
-                            Sélectionnez une ville
-                        </option>
-                        <option v-for="location in localisations" :key="location.id" :value="location.id">
-                            {{ location.city }}, {{ location.postal_code }}
-                        </option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Année d'Expérience:</label>
-                    <select v-model="developer.year_id"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                        <option value="" disabled>
-                            Sélectionnez une année d'expérience
-                        </option>
-                        <option v-for="year in yearsExperiences" :key="year.id" :value="year.id">
-                            {{ year.name }}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="mb-5">
-                    <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Description
-                        (optionnel)</label>
-                    <textarea v-model="developer.description" id="description"
-                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Une brève description de vous-même..." minlength="8" maxlength="255"></textarea>
-                </div>
-
-                <div class="mb-5">
-                    <label for="profil_image" class="block mb-2 text-sm font-medium text-gray-900">Image de profil
-                        (optionnel)</label>
-                    <input type="file" accept=".jpg,.png" @change="handleFileUpload('profil_image', $event)"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.profil_image" class="text-sm">
-                        {{ getFileName(developer.profil_image) }}
-                    </span>
-                </div>
-
-                <div class="mb-5">
-                    <label for="cv" class="block mb-2 text-sm font-medium text-gray-900">Importer votre CV</label>
-                    <input type="file" accept=".pdf" @change="handleFileUpload('cv', $event)"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.cv" class="text-sm">
-                        {{ getFileName(developer.cv) }}
-                    </span>
-                </div>
-
-                <div class="mb-5">
-                    <label for="cover_letter" class="block mb-2 text-sm font-medium text-gray-900">Importer votre lettre
-                        de motivation</label>
-                    <input type="file" accept=".pdf" @change="handleFileUpload('cover_letter', $event)"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" />
-                    <span v-if="developer.cover_letter" class="text-sm">
-                        {{ getFileName(developer.cover_letter) }}
-                    </span>
-                </div>
-
-                <div class="flex items-center">
-                    <label class="inline-flex items-center cursor-pointer">
-                        <input type="checkbox" v-model="developer.is_free" class="sr-only peer" />
-                        <div
-                            class="relative w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-blue-600 transition-colors">
-                            <div
-                                class="absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5">
+                <!-- Compétences et Langages -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Compétences et Langages</h2>
+                    <div>
+                        <label class="block mb-2 text-xs font-medium text-gray-700">Langages de Programmation</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 overflow-y-auto h-40">
+                            <div v-for="language in programmingLanguages" :key="language.id" class="flex items-center ">
+                                <input type="checkbox" :id="`language-${language.id}`"
+                                    v-model="developer.programming_languages" :value="language.id"
+                                    class="h-3.5 w-3.5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                                <label :for="`language-${language.id}`" class="ml-2 text-xs text-gray-700">
+                                    {{ language.name }}
+                                </label>
                             </div>
                         </div>
-                        <span class="ml-3 text-sm font-medium text-gray-900">
-                            Disponible pour de nouvelles opportunités
-                        </span>
-                    </label>
-                </div>
-                <div
-                    class="absolute top-0.5 left-0.5 bg-white w-5 h-5 rounded-full transition-transform duration-300 ease-in-out peer-checked:translate-x-5">
-                </div>
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Nouveau mot de passe:</label>
-                    <input v-model="developer.password" type="password" placeholder="Mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                </div>
-
-                <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900">Confirmer le mot de passe:</label>
-                    <input v-model="developer.confirmPassword" type="password" placeholder="Confirmer le mot de passe"
-                        class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
-                    <div v-if="passwordsDoNotMatch" class="text-red-500 mb-2">
-                        Les mots de passe ne correspondent pas.
                     </div>
                 </div>
 
-                <div v-if="
-                    developer.errors &&
-                    Object.keys(developer.errors).length > 0
-                " class="mb-5 p-4 border border-red-500 rounded bg-red-100">
-                    <ul class="list-disc list-inside">
-                        <li v-for="(errorMessages, field) in developer.errors" :key="field" class="text-red-500">
+                <!-- Documents et Médias -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Documents et Médias</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Image de Profil -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Image de Profil</label>
+                            <input type="file" accept=".jpg,.png" @change="handleFileUpload('profil_image', $event)"
+                                class="block w-full text-xs text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
+                            <span v-if="developer.profil_image" class="text-xs text-gray-500">
+                                {{ getFileName(developer.profil_image) }}
+                            </span>
+                        </div>
+                        <!-- CV -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">CV</label>
+                            <input type="file" accept=".pdf" @change="handleFileUpload('cv', $event)"
+                                class="block w-full text-xs text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
+                            <span v-if="developer.cv" class="text-xs text-gray-500">
+                                {{ getFileName(developer.cv) }}
+                            </span>
+                        </div>
+                        <!-- Lettre de Motivation -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Lettre de Motivation</label>
+                            <input type="file" accept=".pdf" @change="handleFileUpload('cover_letter', $event)"
+                                class="block w-full text-xs text-gray-700 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" />
+                            <span v-if="developer.cover_letter" class="text-xs text-gray-500">
+                                {{ getFileName(developer.cover_letter) }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Description</h2>
+                    <div>
+                        <textarea v-model="developer.description"
+                            class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Une brève description de vous-même..." minlength="8"
+                            maxlength="255"></textarea>
+                    </div>
+                </div>
+
+                <!-- Disponibilité -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Disponibilité</h2>
+                    <div class="flex items-center">
+                        <input type="checkbox" v-model="developer.is_free" id="is_free"
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                        <label for="is_free" class="ml-2 text-xs font-medium text-gray-700">
+                            Activer votre profil pour être visible par les entreprises
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sécurité -->
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-4 border-b pb-2">Sécurité</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Nouveau mot de passe -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Nouveau mot de passe</label>
+                            <input v-model="developer.password" type="password"
+                                class="block text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        </div>
+                        <!-- Confirmer le mot de passe -->
+                        <div>
+                            <label class="block mb-1 text-xs font-medium text-gray-700">Confirmer le mot de
+                                passe</label>
+                            <input v-model="developer.confirmPassword" type="password"
+                                class="block  text-sm font-normal w-full p-1.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <div v-if="passwordsDoNotMatch" class="text-red-500 mt-1 text-xs">
+                                Les mots de passe ne correspondent pas.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affichage des erreurs -->
+                <div v-if="developer.errors && Object.keys(developer.errors).length > 0"
+                    class="mb-6 p-3 border border-red-500 rounded bg-red-50">
+                    <ul class="list-disc list-inside text-red-500 text-xs">
+                        <li v-for="(errorMessages, field) in developer.errors" :key="field">
                             {{ errorMessages.join(", ") }}
                         </li>
                     </ul>
                 </div>
 
-                <button type="submit" class="bg-blue-500 text-white p-2 rounded">
-                    Sauvegarder
-                </button>
-
-                <!-- Bouton Supprimer mon compte -->
-                <button @click.prevent="deleteAccount" class="bg-red-500 text-white p-2 rounded mt-4">
-                    Supprimer mon compte
-                </button>
-            </div>
-        </form>
+                <!-- Boutons d'action -->
+                <div class="flex flex-col md:flex-row md:justify-between items-center">
+                    <button type="submit"
+                        class="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Sauvegarder les modifications
+                    </button>
+                    <button @click.prevent="deleteAccount"
+                        class="w-full md:w-auto mt-3 md:mt-0 md:ml-4 bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                        Supprimer mon compte
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
@@ -188,7 +214,7 @@ import { useResourcesStore } from "../stores/resourcesStore";
 import Axios from "axios";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
-import PageTitle from './PageTitle.vue'; 
+import PageTitle from './PageTitle.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -242,13 +268,17 @@ watch(
 // Fonction pour obtenir le nom du fichier à partir d'un objet File ou d'une chaîne
 const getFileName = (file) => {
     if (!file) return "";
+    let name;
     if (typeof file === "string") {
         // Extraire le nom du fichier du chemin
-        return file.split("/").pop();
+        name = file.split("/").pop();
     } else if (file instanceof File) {
-        return file.name;
+        name = file.name;
+    } else {
+        return "";
     }
-    return "";
+    // Retourner les 10 derniers caractères si le nom est trop long
+    return name.length > 10 ? name.slice(-20) : name;
 };
 
 const fetchUserProfile = async () => {

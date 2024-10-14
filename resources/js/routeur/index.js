@@ -23,7 +23,7 @@ const routes = [
   { path: '/offres-emploi', name: 'job', component: job, meta: { title: 'Les offres d\'emplois' } },
   { path: '/profil-dev', name: 'developerProfile', component: developerProfile, meta: { requiresAuth: true, role: 1, title: 'Votre profil', } }, // Dev uniquement
   { path: '/profil-comp', name: 'companyProfile', component: companyProfile, meta: { requiresAuth: true, role: 2, title: 'Votre profil', } }, // Company uniquement
-  { path: '/candidatures', name: 'developerApplication', component: developerApplication, meta: { requiresAuth: true, role: 1, title: 'Vos candidatures', } }, // Dev uniquement
+  { path: '/candidatures', name: 'developerApplication', component: developerApplication, meta: { requiresAuth: true, role: 1, title: 'Mes candidatures', } }, // Dev uniquement
   { path: '/vos-offres', name: 'companyJobOffer', component: companyJobOffer, meta: { requiresAuth: true, role: 2, title: 'Vos offres d\'emplois', } }, // Company uniquement
   { path: '/job-offers/:id/applications', name: 'jobOfferApplications', component: jobOfferApplications, meta: { requiresAuth: true, title: 'Candidatures reçues', } },
   { path: '/dashboard', name: 'adminDashboard', component: adminDashboard, meta: { requiresAuth: true, role: 3, title: 'Pannel d\'administration', } }, // Admin uniquement

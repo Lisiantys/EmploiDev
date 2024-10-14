@@ -1,7 +1,7 @@
 <template>
     <form @submit.prevent="handleStepSubmission">
         <div>
-            <PageTitle title="// Inscription entreprise" class="mb-6"/>
+            <PageTitle title="// Inscription entreprise" class="mb-6" />
         </div>
 
         <div v-if="step === 1" class="tab">
@@ -23,8 +23,8 @@
                     (optionnel)</label>
                 <textarea v-model="company.description" id="description"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-blue-500 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Une brève description de votre entreprise..." minlength="10"
-                    maxlength="255" rows="6"></textarea>
+                    placeholder="Une brève description de votre entreprise..." minlength="10" maxlength="255"
+                    rows="6"></textarea>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
                     required minlength="8" />
             </div>
 
-            <div v-if="passwordsDoNotMatch" class="text-red-500 mb-5">
+            <div v-if="passwordsDoNotMatch" class="text-red-500 mb-5 text-xs md:text-base font-normal">
                 Les mots de passe ne correspondent pas.
             </div>
 
@@ -59,8 +59,10 @@
                         class="w-4 h-4 border border-blue-500 backdrop:rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
                         required />
                 </div>
-                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <a href="#"
-                        class="text-blue-600 hover:underline">termes et conditions</a></label>
+                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <router-link :to="{ name: 'politiqueConfidentialite' }"
+                        class="text-blue-600 hover:underline">termes et conditions</router-link></label>
+                        
+
             </div>
 
             <div v-if="Object.keys(company.errors).length > 0"
@@ -95,13 +97,12 @@
     </form>
 </template>
 
-
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
-import PageTitle from './PageTitle.vue'; 
+import PageTitle from './PageTitle.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -117,22 +118,44 @@ const company = ref({
     errors: {}
 });
 
+// Watchers pour vérifier la correspondance des mots de passe
+watch(
+    () => company.value.password,
+    (newPassword) => {
+        passwordsDoNotMatch.value = newPassword !== company.value.confirmPassword;
+    }
+);
+
+watch(
+    () => company.value.confirmPassword,
+    (newConfirmPassword) => {
+        passwordsDoNotMatch.value = company.value.password !== newConfirmPassword;
+    }
+);
+
 const step = ref(1);
 const passwordsDoNotMatch = ref(false);
 
-const handleStepSubmission = async () => {
+const handleStepSubmission = () => {
     if (step.value === 2) {
-        passwordsDoNotMatch.value = company.value.password !== company.value.confirmPassword;
+        // Si les mots de passe ne correspondent pas, afficher une erreur et ne pas continuer
         if (passwordsDoNotMatch.value) {
-            return; // Ne pas continuer si les mots de passe ne correspondent pas
+            company.value.errors = {
+                password: ["Les mots de passe ne correspondent pas."],
+            };
+            return;
+        } else {
+            // Réinitialiser les erreurs si les mots de passe correspondent
+            company.value.errors = {};
         }
     }
     if (step.value < 2) {
         step.value++;
     } else {
-        await registerCompany();
+        registerCompany();
     }
 };
+
 
 const prevStep = () => {
     if (step.value > 1) {

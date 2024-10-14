@@ -114,7 +114,7 @@
                     required minlength="8" />
             </div>
 
-            <div v-if="passwordsDoNotMatch" class="text-red-500 mb-5">
+            <div v-if="passwordsDoNotMatch" class="text-red-500 mb-5 text-xs md:text-base font-normal">
                 Les mots de passe ne correspondent pas.
             </div>
 
@@ -132,8 +132,8 @@
                         class="w-4 h-4 border border-blue-500 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
                         required />
                 </div>
-                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <a href="#"
-                        class="text-blue-600 hover:underline">termes et conditions</a></label>
+                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <router-link :to="{ name: 'politiqueConfidentialite' }"
+                        class="text-blue-600 hover:underline">termes et conditions</router-link></label>
             </div>
 
             <div v-if="Object.keys(developer.errors).length > 0"
@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
@@ -222,22 +222,38 @@ const developer = ref({
     errors: {}
 });
 
-const handleStepSubmission = async () => {
-    if (step.value === 4) {
-        // Vérification des mots de passe
-        passwordsDoNotMatch.value = developer.value.password !== developer.value.confirmPassword;
+// Ajout des watchers pour vérifier la correspondance des mots de passe
+watch(
+    () => developer.value.password,
+    (newPassword) => {
+        passwordsDoNotMatch.value = newPassword !== developer.value.confirmPassword;
+    }
+);
 
+watch(
+    () => developer.value.confirmPassword,
+    (newConfirmPassword) => {
+        passwordsDoNotMatch.value = developer.value.password !== newConfirmPassword;
+    }
+);
+
+const handleStepSubmission = () => {
+    if (step.value === 4) {
+        // Si les mots de passe ne correspondent pas, ne pas continuer
         if (passwordsDoNotMatch.value) {
-            return; // Ne pas continuer si les mots de passe ne correspondent pas
+            developer.value.errors = {
+                password: ["Les mots de passe ne correspondent pas."],
+            };
+            return;
         }
     }
-
     if (step.value < 4) {
         step.value++;
     } else {
-        await registerDeveloper();
+        registerDeveloper();
     }
 };
+
 
 const prevStep = () => {
     if (step.value > 1) {
@@ -290,5 +306,4 @@ const registerDeveloper = async () => {
 textarea {
     resize: none;
 }
-
 </style>
