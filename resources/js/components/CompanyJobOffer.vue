@@ -11,7 +11,7 @@
     </button>
 
     <!-- Modal de création d'offre d'emploi -->
-    <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated"/>
+    <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />
 
     <!-- Affichage du message d'erreur -->
     <div v-if="errorMessage" class="text-red-500 mb-4">{{ errorMessage }}</div>
@@ -19,14 +19,16 @@
     <!-- Offres validées -->
     <div v-if="validatedJobOffers.length > 0" class="mt-6 mb-8">
       <h2 class="text-xl font-semibold mb-4">Offres d'emploi validées</h2>
-      <div v-for="offer in validatedJobOffers" :key="offer.id" class="mb-8">
-        <JobOfferCard :job="offer" :isCompanyView="true" @click="viewApplications" @delete="deleteJobOffer" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="offer in validatedJobOffers" :key="offer.id" class="bg-transparent p-4 rounded-lg ">
+          <JobOfferCard :job="offer" :isCompanyView="true" @click="viewApplications" @delete="deleteJobOffer" />
 
-        <!-- Afficher le nombre de candidatures en attente -->
-        <div class="mt-2">
-          <p class="text-gray-700 text-base">
-            Candidatures en attente : <strong>{{ offer.pending_applications_count }}</strong>
-          </p>
+          <!-- Afficher le nombre de candidatures en attente -->
+          <div class="mt-2">
+            <p class="text-gray-700 text-base">
+              Candidatures en attente : <strong>{{ offer.pending_applications_count }}</strong>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -34,14 +36,18 @@
     <!-- Offres non validées -->
     <div v-if="nonValidatedJobOffers.length > 0" class="mb-8">
       <h2 class="text-xl font-semibold mb-4">Offres d'emploi en attente de validation</h2>
-      <div v-for="offer in nonValidatedJobOffers" :key="offer.id">
-        <JobOfferCard :job="offer" :isCompanyView="true" @delete="deleteJobOffer" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div v-for="offer in nonValidatedJobOffers" :key="offer.id" class="bg-transparent p-4 rounded-lg">
+          <JobOfferCard :job="offer" :isCompanyView="true" @delete="deleteJobOffer" />
+        </div>
       </div>
     </div>
 
+
     <!-- Aucune offre disponible -->
     <div v-if="validatedJobOffers.length === 0 && nonValidatedJobOffers.length === 0 && !errorMessage">
-      <p class="mt-8 mb-6 md:mt-0 md:mb-0 text-center md:text-left text-base md:text-xl font-normal">Aucune offre d'emploi créée pour le moment.</p>
+      <p class="mt-8 mb-6 md:mt-0 md:mb-0 text-center md:text-left text-base md:text-xl font-normal">Aucune offre
+        d'emploi créée pour le moment.</p>
     </div>
   </div>
 </template>

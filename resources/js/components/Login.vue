@@ -28,7 +28,7 @@
 
             <div class="flex justify-end">
                 <button type="submit"
-                    class="border border-blue-500 bg-blue-500 text-white font-bold text-base rounded-lg px-2 py-1 hover:bg-blue-600 transition">
+                    class="border border-blue-500 bg-blue-500 text-white font-normal text-base rounded-lg px-2 py-1 hover:bg-blue-600 transition">
                     Se connecter
                 </button>
             </div>
