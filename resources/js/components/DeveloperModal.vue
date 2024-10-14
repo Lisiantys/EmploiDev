@@ -7,7 +7,7 @@
         <!-- Modal Body -->
         <div class="p-6">
           <div class="flex flex-col md:flex-row">
-            <div class="md:w-1/3">
+            <div class="hidden md:block md:w-1/3">
               <img :src="profileImage" alt="Profile Image" class="w-full h-64 rounded-lg object-cover">
             </div>
             <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">

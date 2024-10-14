@@ -12,7 +12,7 @@
                 </button>
             </div>
             <div class="flex items-center gap-3">
-                <span class="bg-blue-500 text-white rounded-full px-3 py-1 text-sm">{{
+                <span class="bg-blue-500 text-white rounded-full px-3 py-1 text-xs">{{
                     job.types_contract?.name || job.typesContract?.name
                 }}</span>
                 <span class="text-blue-500 text-sm">Développeur {{
@@ -24,13 +24,13 @@
             <!-- Section des langages avec hauteur limitée et scroll -->
             <div class="flex flex-row flex-wrap gap-2 overflow-y-auto max-h-14">
                 <span v-for="language in job.programming_languages || []" :key="language.id"
-                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">
+                    class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs font-semibold text-gray-700 mr-2">
                     #{{ language.name }}
                 </span>
             </div>
 
             <div class="py-2 flex flex-row flex-wrap justify-between">
-                <span class="text-slate-600 text-sm flex gap-1 items-center">
+                <span class="text-slate-600 text-xs md:text-sm flex gap-1 items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -39,7 +39,7 @@
                     </svg>
                     {{ job.location?.city }}, {{ job.location?.postal_code }}
                 </span>
-                <p class="text-slate-600 text-sm">{{ timeAgo(job.created_at) }}</p>
+                <p class="text-slate-600 text-xs md:text-sm">{{ timeAgo(job.created_at) }}</p>
             </div>
         </div>
         <!-- Boutons pour Admin ou Entreprise -->

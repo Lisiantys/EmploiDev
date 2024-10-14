@@ -14,17 +14,17 @@
         </h2>
         <div class="flex items-center space-x-2">
           <img :src="locationImage" class="svg-icon" alt="Location" />
-          <p class="text-black text-base">
+          <p class="text-black text-sm md:text-base">
             {{ developer.location.city }}, {{ developer.location.postal_code }}
           </p>
         </div>
-        <p class="text-black text-sm">
+        <p class="text-black text-xs md:text-sm">
           Développeur {{ developer.types_developer.name }}
         </p>
       </div>
       <div class="px-6 py-2 max-h-20 overflow-y-auto">
         <span v-for="language in developer.programming_languages" :key="language.id"
-          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+          class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs md:text-sm font-semibold text-gray-700 mr-2 mb-2">
           #{{ language.name }}
         </span>
       </div>
