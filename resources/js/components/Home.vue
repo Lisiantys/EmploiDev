@@ -19,11 +19,8 @@
                 :developer="developer" @click="openModal(developer.id)" />
         </div>
         <!-- Pagination -->
-        <Pagination 
-    :currentPage="resourcesFilteredStore.currentPage" 
-    :totalPages="resourcesFilteredStore.totalPages" 
-    @updatePage="handlePageChange" 
-  />
+        <Pagination :currentPage="resourcesFilteredStore.currentPage" :totalPages="resourcesFilteredStore.totalPages"
+            @updatePage="handlePageChange" />
     </div>
     <div v-else>
         <p class="text-center text-gray-600">Aucun développeur trouvé.</p>
@@ -64,7 +61,7 @@ const baseImageUrl = ref("/storage/images/");
 
 // Fonction pour changer la page
 const handlePageChange = (newPage) => {
-  resourcesFilteredStore.fetchResources({}, newPage);
+    resourcesFilteredStore.fetchResources({}, newPage);
 };
 
 const openModal = (id) => {
@@ -89,7 +86,6 @@ const closeCreateModal = () => {
 
 // Après la création d'une offre d'emploi
 const jobCreated = (newJobOffer) => {
-    console.log('Nouvelle offre créée:', newJobOffer);
     closeCreateModal();
 };
 

@@ -32,6 +32,8 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import DeveloperModal from './DeveloperModal.vue';
 import DeveloperCard from './DeveloperCard.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const developers = ref([])
 const developersPagination = ref({});
@@ -43,10 +45,8 @@ const fetchPendingDevelopers = async (page = 1) => {
   try {
     const response = await axios.get(`/api/admin/pending-developers?page=${page}`);
     developers.value = response.data.developers.data;
-    console.log(response.data.developers.data);
     developersPagination.value = response.data.developers;
   } catch (error) {
-    console.error('Erreur lors de la récupération des développeurs en attente :', error);
     errorMessage.value = 'Erreur lors de la récupération des développeurs en attente.';
   }
 };
@@ -55,10 +55,14 @@ const validateDeveloper = async (developerId) => {
   if (confirm('Voulez-vous vraiment valider ce développeur ?')) {
     try {
       const response = await axios.post(`/api/admin/developers/${developerId}/validate`);
-      alert(response.data.message);
       fetchPendingDevelopers(developersPagination.value.current_page);
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Développeur validé avec succès !'
+      });
     } catch (error) {
-      console.error('Erreur lors de la validation du développeur :', error);
       alert('Erreur lors de la validation du développeur.');
     }
   }
@@ -68,10 +72,14 @@ const deleteDeveloper = async (developerId) => {
   if (confirm('Voulez-vous vraiment supprimer ce développeur ?')) {
     try {
       await axios.delete(`/api/admin/developers/${developerId}`);
-      alert('Développeur supprimé avec succès.');
       fetchPendingDevelopers(developersPagination.value.current_page);
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Développeur supprimé avec succès !'
+      });
     } catch (error) {
-      console.error('Erreur lors de la suppression du développeur :', error);
       alert('Erreur lors de la suppression du développeur.');
     }
   }

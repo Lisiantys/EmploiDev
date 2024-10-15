@@ -62,7 +62,7 @@ const showCreateModal = ref(false);
 
 // Fonction pour changer la page
 const handlePageChange = (newPage) => {
-  resourcesFilteredStore.fetchResources({}, newPage);
+    resourcesFilteredStore.fetchResources({}, newPage);
 };
 const openModal = (id) => {
     selectedJobOfferId.value = id;
@@ -86,7 +86,6 @@ const closeCreateModal = () => {
 
 //Après la création d'une offre d'emploi
 const jobCreated = (newJobOffer) => {
-    console.log('Nouvelle offre créée:', newJobOffer);
     closeCreateModal();
 };
 
@@ -111,22 +110,21 @@ const timeAgo = (date) => {
 };
 
 onMounted(() => {
-    console.log('Component mounted, fetching job offers');
     resourcesFilteredStore.setIsDeveloper(false);
     resourcesFilteredStore.fetchResources();
 });
 
-const previousPage = () => {
-    if (resourcesFilteredStore.currentPage > 1) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
-    }
-};
+// const previousPage = () => {
+//     if (resourcesFilteredStore.currentPage > 1) {
+//         resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
+//     }
+// };
 
-const nextPage = () => {
-    if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
-    }
-};
+// const nextPage = () => {
+//     if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
+//         resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
+//     }
+// };
 
 //POUR LE FILTER MODAL SUR MOBILE
 

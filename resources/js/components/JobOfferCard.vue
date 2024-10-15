@@ -14,10 +14,10 @@
             <div class="flex items-center gap-3">
                 <span class="bg-blue-500 text-white rounded-full px-3 py-1 text-xs">{{
                     job.types_contract?.name || job.typesContract?.name
-                    }}</span>
+                }}</span>
                 <span class="text-blue-500 text-sm">Développeur {{
                     job.types_developer?.name || job.typesDeveloper?.name
-                    }}</span>
+                }}</span>
             </div>
             <hr class="my-2" />
 
@@ -47,7 +47,8 @@
                     class="bg-blue-500 text-base text-white px-3 py-2 rounded hover:bg-blue-600">
                     Valider
                 </button>
-                <button @click.stop="handleDelete" class="bg-blue-700 text-base text-white px-3 py-2 rounded hover:bg-blue-800">
+                <button @click.stop="handleDelete"
+                    class="bg-blue-700 text-base text-white px-3 py-2 rounded hover:bg-blue-800">
                     Supprimer
                 </button>
             </div>
@@ -104,7 +105,3 @@ const timeAgo = (date) => {
     return `il y a quelques secondes`;
 };
 </script>
-
-<style scoped>
-/* Vos styles ici */
-</style>

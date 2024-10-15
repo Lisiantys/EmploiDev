@@ -11,13 +11,14 @@
               <img :src="profileImage" alt="Profile Image" class="w-full h-64 rounded-lg object-cover">
             </div>
             <div class="md:w-2/3 md:pl-6 mt-4 md:mt-0">
-              <h2 class="text-xl font-semibold mt-2 break-words">// {{ developer.first_name }} {{ developer.surname }}</h2>
+              <h2 class="text-xl font-semibold mt-2 break-words">// {{ developer.first_name }} {{ developer.surname }}
+              </h2>
               <p class="text-wrap break-words text-xs md:text-base font-light"> {{ developer.description }}</p>
               <div class="md:flex lg:flex-col justify-between mt-2 md:mt-0">
                 <div>
                   <p v-if="developer.types_contract" class="text-xs md:text-sm mt-2">Contrat recherché : {{
                     developer.types_contract.name
-                    }}</p>
+                  }}</p>
                   <p v-if="developer.types_developer" class="text-xs md:text-sm mt-2">Développeur : {{
                     developer.types_developer.name }}</p>
                 </div>
@@ -122,10 +123,8 @@ const fetchDeveloperDetails = async () => {
   try {
     const response = await Axios.get(`/api/developers/${props.developerId}`);
     developer.value = response.data.developer;
-    console.log('Fetched developer data:', developer.value);
     errorMessage.value = '';
   } catch (error) {
-    console.error('Failed to fetch developer details:', error);
     errorMessage.value = error.response?.data?.message || 'Une erreur est survenue.';
   } finally {
     isLoading.value = false;

@@ -45,6 +45,8 @@ import Axios from 'axios';
 import ApplicationCard from './ApplicationCard.vue';
 import ApplicationDetailsModal from './ApplicationDetailsModal.vue';
 import PageTitle from './PageTitle.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const applications = ref([]);
 const acceptedApplications = ref([]);
@@ -83,7 +85,13 @@ const deleteApplication = async (applicationId) => {
   if (confirm('Voulez-vous vraiment supprimer cette candidature ?')) {
     try {
       await Axios.delete(`/api/applications/${applicationId}`);
-      fetchApplications(); // Recharger les candidatures après suppression
+      fetchApplications();
+      notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Candidature supprimée avec succès !'
+        });
     } catch (error) {
       console.error('Erreur lors de la suppression de la candidature :', error);
     }
@@ -94,7 +102,3 @@ onMounted(() => {
   fetchApplications();
 });
 </script>
-
-<style scoped>
-/* Ajoutez des styles spécifiques si nécessaire */
-</style>

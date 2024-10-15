@@ -31,10 +31,12 @@
     </div>
     <!-- Boutons pour Admin -->
     <div v-if="isAdmin" class="flex w-full justify-center ">
-      <button @click.stop="validateDeveloper" class="bg-blue-500 w-full text-base text-white px-3 py-2  hover:bg-blue-600">
+      <button @click.stop="validateDeveloper"
+        class="bg-blue-500 w-full text-base text-white px-3 py-2  hover:bg-blue-600">
         Valider
       </button>
-      <button @click.stop="deleteDeveloper" class="bg-blue-700 w-full text-base text-white px-3 py-2  hover:bg-blue-800">
+      <button @click.stop="deleteDeveloper"
+        class="bg-blue-700 w-full text-base text-white px-3 py-2  hover:bg-blue-800">
         Supprimer
       </button>
     </div>
@@ -138,7 +140,9 @@ const locationImage = ref('/storage/images/location-solid.svg');
 }
 
 .max-h-20 {
-  max-height: 100px; /* Vous pouvez ajuster cette valeur selon votre mise en page */
-  overflow-y: auto; /* Activer le défilement si nécessaire */
+  max-height: 100px;
+  /* Vous pouvez ajuster cette valeur selon votre mise en page */
+  overflow-y: auto;
+  /* Activer le défilement si nécessaire */
 }
 </style>

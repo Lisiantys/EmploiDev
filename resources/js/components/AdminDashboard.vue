@@ -46,7 +46,3 @@ import PageTitle from './PageTitle.vue';
 
 const activeTab = ref('jobOffers');
 </script>
-
-<style scoped>
-/* Vous pouvez ajouter des styles personnalisés ici */
-</style>

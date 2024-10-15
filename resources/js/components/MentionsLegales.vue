@@ -1,7 +1,7 @@
 <template title="Mentions Légales">
 
 
-  <div class="hidden md:block mt-20 mb-6">
+    <div class="hidden md:block mt-20 mb-6">
         <PageTitle title="// Mentions Légales" />
     </div>
 

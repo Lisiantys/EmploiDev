@@ -41,7 +41,9 @@ import { ref } from 'vue';
 import Axios from "axios";
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/authStore';
-import PageTitle from './PageTitle.vue'; 
+import PageTitle from './PageTitle.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -56,14 +58,18 @@ const login = async () => {
     try {
         await Axios.get('/csrf-cookie');
         const response = await Axios.post('/api/login', credentials.value);
-        console.log(response.data.user);
         authStore.setUser(response.data.user)
-        router.push('/'); // Redirection vers la page d'accueil après la connexion réussie
+        router.push('/');
+
+        notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Connexion réussie !'
+        });
     } catch (error) {
         if (error.response && error.response.status === 401) {
             loginError.value = error.response.data.message;
-        } else {
-            console.error('Erreur lors de la connexion:', error);
         }
     }
 };

@@ -19,13 +19,15 @@
           <!-- Nom de l'offre -->
           <div class="mb-4">
             <label class="block text-gray-700">Nom de l'offre : </label>
-            <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" minlength="10" maxlength="40" required>
+            <input v-model="form.name" type="text" class="w-full border rounded px-3 py-2" minlength="10" maxlength="40"
+              required>
             <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name[0] }}</p>
           </div>
           <!-- Description -->
           <div class="mb-4">
             <label class="block text-gray-700">Description :</label>
-            <textarea v-model="form.description" class="w-full border rounded px-3 py-2" rows="4" minlength="20" maxlength="1024" required></textarea>
+            <textarea v-model="form.description" class="w-full border rounded px-3 py-2" rows="4" minlength="20"
+              maxlength="1024" required></textarea>
             <p v-if="errors.description" class="text-red-500 text-sm mt-1">{{ errors.description[0] }}</p>
           </div>
           <!-- Type de contrat -->
@@ -107,6 +109,8 @@
 import { ref, onMounted, watch, computed } from 'vue';
 import Axios from 'axios';
 import { useResourcesStore } from '../stores/resourcesStore';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const props = defineProps({
   isOpen: {
@@ -163,17 +167,20 @@ const submitForm = async () => {
   try {
     // Envoyer les données au backend
     const response = await Axios.post('/api/job-offers', form.value);
-    console.log('Job offer created:', response.data);
     // Émettre un événement pour informer le parent
     emits('jobCreated', response.data.job_offer);
     // Fermer le modal
     closeModal();
+    notify({
+      group: 'success-action',
+      type: 'success',
+      title: 'Succès',
+      text: 'Offre d\'emploi créée avec succès !'
+    });
   } catch (error) {
     if (error.response && error.response.status === 422) {
       // Gestion des erreurs de validation
       errors.value = error.response.data.errors;
-    } else {
-      console.error('Failed to create job offer:', error);
     }
   }
 };

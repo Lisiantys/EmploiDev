@@ -12,7 +12,6 @@
 
     <!-- Messages d'erreur et de succès -->
     <div v-if="errorMessage" class="text-red-500 text-base mb-4">{{ errorMessage }}</div>
-    <div v-if="successMessage" class="text-green-500 text-base mb-4">{{ successMessage }}</div>
 
     <!-- Aucune candidature disponible -->
     <div v-if="applications.length === 0 && !errorMessage">
@@ -45,6 +44,8 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import ApplicationCard from './ApplicationCard.vue';
 import PageTitle from './PageTitle.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const route = useRoute();
 const router = useRouter();
@@ -55,10 +56,8 @@ const applications = ref([]);
 const acceptedApplications = ref([]);
 const pendingApplications = ref([]);
 const errorMessage = ref('');
-const successMessage = ref('');
 
 const fetchApplications = async () => {
-  successMessage.value = '';
   try {
     const response = await axios.get(`/api/job-offers/${jobOfferId}/applications`);
     jobOffer.value = response.data.jobOffer;
@@ -74,7 +73,6 @@ const fetchApplications = async () => {
 
     applications.value = allApplications;
   } catch (error) {
-    console.error('Erreur lors de la récupération des candidatures :', error);
     errorMessage.value = 'Erreur lors de la récupération des candidatures.';
   }
 };
@@ -85,9 +83,13 @@ const acceptApplication = async (applicationId) => {
     try {
       const response = await axios.post(`/api/applications/${applicationId}/accept`);
       fetchApplications();
-      successMessage.value = response.data.message || 'Candidature acceptée avec succès.';
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Candidature acceptée avec succès !'
+      });
     } catch (error) {
-      console.error("Erreur lors de l'acceptation de la candidature :", error);
       errorMessage.value = "Erreur lors de l'acceptation de la candidature.";
     }
   }
@@ -99,14 +101,17 @@ const rejectApplication = async (applicationId) => {
     try {
       const response = await axios.post(`/api/applications/${applicationId}/refuse`);
       fetchApplications();
-      successMessage.value = response.data.message || 'Candidature refusée avec succès.';
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Candidature refusée avec succès !'
+      });
     } catch (error) {
-      console.error('Erreur lors du refus de la candidature :', error);
       errorMessage.value = 'Erreur lors du refus de la candidature.';
     }
   }
 };
-
 
 const goBack = () => {
   router.push('/vos-offres');
@@ -116,7 +121,3 @@ onMounted(() => {
   fetchApplications();
 });
 </script>
-
-<style scoped>
-/* Ajoutez des styles spécifiques si nécessaire */
-</style>

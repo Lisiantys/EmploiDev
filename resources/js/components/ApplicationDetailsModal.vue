@@ -29,20 +29,24 @@
                                 </div>
                                 <div>
                                     <p v-if="application.job_offer.types_developer" class="text-xs md:text-sm mt-2">
-                                        <strong>Développeur Recherché :</strong> {{ application.job_offer.types_developer.name }}
+                                        <strong>Développeur Recherché :</strong> {{
+                                        application.job_offer.types_developer.name }}
                                     </p>
                                     <p v-if="application.job_offer.years_experience" class="text-xs md:text-sm mt-2">
-                                        <strong>Expérience Requises :</strong> {{ application.job_offer.years_experience.name }}
+                                        <strong>Expérience Requises :</strong> {{
+                                        application.job_offer.years_experience.name }}
                                     </p>
                                     <p v-if="application.job_offer.location" class="text-xs md:text-sm mt-2">
-                                        <strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{ application.job_offer.location.postal_code }}
+                                        <strong>Lieu :</strong> {{ application.job_offer.location.city }}, {{
+                                        application.job_offer.location.postal_code }}
                                     </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- Langages de Programmation -->
-                    <div class="my-4" v-if="application.job_offer.programming_languages && application.job_offer.programming_languages.length">
+                    <div class="my-4"
+                        v-if="application.job_offer.programming_languages && application.job_offer.programming_languages.length">
                         <div class="flex flex-wrap mt-2 md:max-h-none max-h-24 overflow-y-auto">
                             <span v-for="language in application.job_offer.programming_languages" :key="language.id"
                                 class="inline-block bg-gray-200 rounded-full px-3 py-1 text-xs md:text-sm font-normal text-gray-700 mr-2 mb-2">
@@ -52,7 +56,8 @@
                     </div>
                     <!-- Section CV et Lettre de motivation récupérés de la candidature -->
                     <div class="mt-4">
-                        <p class="text-gray-700 mt-4 text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-20 md:max-h-40">
+                        <p
+                            class="text-gray-700 mt-4 text-wrap break-words text-xs md:text-sm lg:text-base font-light overflow-y-auto max-h-20 md:max-h-40">
                             {{ application.description }}
                         </p>
                         <div class="mt-2 flex space-x-4">

@@ -134,6 +134,9 @@
 import { ref, watch, computed } from "vue";
 import Axios from "axios";
 import { useAuthStore } from "../stores/authStore";
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+
+const notify = useGlobalNotify();
 
 const props = defineProps({
     isOpen: {
@@ -176,7 +179,6 @@ const fetchJobOfferDetails = async () => {
     try {
         const response = await Axios.get(`/api/job-offers/${props.jobOfferId}`);
         jobOffer.value = response.data.job_offer;
-        console.log("Fetched job offer data:", jobOffer.value);
         errorMessage.value = "";
 
         // Only check existing application if user is authenticated and is a developer
@@ -184,7 +186,6 @@ const fetchJobOfferDetails = async () => {
             await checkExistingApplication();
         }
     } catch (error) {
-        console.error("Failed to fetch job offer details:", error);
         errorMessage.value =
             error.response?.data?.message || "Une erreur est survenue.";
     } finally {
@@ -227,13 +228,16 @@ const submitApplication = async () => {
 
     try {
         const response = await Axios.post("/api/applications", formData);
-        console.log("Application submitted successfully:", response.data);
         closeModal();
+        notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Candidature envoyée avec succès !'
+        });
     } catch (error) {
         if (error.response && error.response.status === 422) {
             errors.value = error.response.data.errors;
-        } else {
-            console.error("Failed to submit application:", error);
         }
     }
 };

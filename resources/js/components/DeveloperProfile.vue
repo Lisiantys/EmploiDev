@@ -88,7 +88,8 @@
                     <h2 class="text-lg font-semibold mb-4 border-b pb-2">Compétences et Langages</h2>
                     <div>
                         <label class="block mb-2 text-xs font-medium text-gray-700">Langages de Programmation</label>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 overflow-y-auto h-40">
+                        <div
+                            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 overflow-y-auto h-40">
                             <div v-for="language in programmingLanguages" :key="language.id" class="flex items-center ">
                                 <input type="checkbox" :id="`language-${language.id}`"
                                     v-model="developer.programming_languages" :value="language.id"
@@ -215,6 +216,8 @@ import Axios from "axios";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/authStore";
 import PageTitle from './PageTitle.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -284,7 +287,6 @@ const getFileName = (file) => {
 const fetchUserProfile = async () => {
     try {
         const response = await Axios.get("/api/developers/profile");
-        console.log("Fetched developer profile:", response.data);
 
         // Mettez à jour le profil du développeur
         developer.value = {
@@ -325,8 +327,6 @@ const submitProfile = async () => {
         }
     }
     try {
-        console.log("Submitting Profile:", developer.value);
-
         const formData = new FormData();
 
         // Ajout du 'method spoofing' pour la méthode PUT
@@ -366,8 +366,6 @@ const submitProfile = async () => {
             formData.append("password", developer.value.password);
         }
 
-        console.log("Form Data being sent:", formData);
-
         const response = await Axios.post(
             `/api/developers/${developer.value.id}`,
             formData,
@@ -378,19 +376,21 @@ const submitProfile = async () => {
             }
         );
 
-        console.log("Profile updated successfully", response.data);
-
         // Réinitialiser les erreurs
         developer.value.errors = {};
+
+        notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Compte mis à jour avec succès !'
+        });
 
         // Afficher un message de succès ou rediriger l'utilisateur si nécessaire
     } catch (error) {
         if (error.response) {
-            console.error("Failed to update profile:", error.response.data);
             // Mettre à jour les erreurs pour les afficher dans le formulaire
             developer.value.errors = error.response.data.errors || {};
-        } else {
-            console.error("Failed to update profile:", error);
         }
     }
 };
@@ -404,16 +404,17 @@ const deleteAccount = async () => {
             const response = await Axios.delete(
                 `/api/developers/${developer.value.id}`
             );
-            console.log("Account deleted:", response.data);
             // Déconnecter l'utilisateur
             authStore.logout();
             // Rediriger vers la page d'accueil
             router.push({ name: "home" });
+            notify({
+                group: 'success-action',
+                type: 'success',
+                title: 'Succès',
+                text: 'Compte supprimé avec succès !'
+            });
         } catch (error) {
-            console.error(
-                "Failed to delete account:",
-                error.response ? error.response.data : error
-            );
             // Afficher un message d'erreur à l'utilisateur
             alert(
                 "Une erreur s'est produite lors de la suppression de votre compte."

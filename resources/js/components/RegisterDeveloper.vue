@@ -132,8 +132,9 @@
                         class="w-4 h-4 border border-blue-500 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300"
                         required />
                 </div>
-                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <router-link :to="{ name: 'politiqueConfidentialite' }"
-                        class="text-blue-600 hover:underline">termes et conditions</router-link></label>
+                <label for="terms" class="ms-2 text-sm font-medium text-gray-900">J'accepte les <router-link
+                        :to="{ name: 'politiqueConfidentialite' }" class="text-blue-600 hover:underline">termes et
+                        conditions</router-link></label>
             </div>
 
             <div v-if="Object.keys(developer.errors).length > 0"
@@ -177,11 +178,13 @@ import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
 import { useResourcesStore } from '../stores/resourcesStore';
 import PageTitle from './PageTitle.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
 
 const router = useRouter();
 
 const authStore = useAuthStore();
 const resourcesStore = useResourcesStore();
+const notify = useGlobalNotify();
 
 const step = ref(1);
 const passwordsDoNotMatch = ref(false);
@@ -287,15 +290,17 @@ const registerDeveloper = async () => {
             }
         });
 
-        console.log('Inscription réussie:', response.data);
         authStore.setUser(response.data.user);
         router.push('/');
+        notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Inscription réussie ! Bienvenue sur EmploiDev.'
+        });
     } catch (error) {
         if (error.response && error.response.status === 422) {
             developer.value.errors = error.response.data.errors;
-            console.log(developer);
-        } else {
-            console.error('Erreur lors de l\'inscription:', error);
         }
     }
 };

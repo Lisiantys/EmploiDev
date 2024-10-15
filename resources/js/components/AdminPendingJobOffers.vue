@@ -33,6 +33,8 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import JobOfferModal from './JobOfferModal.vue';
 import JobOfferCard from './JobOfferCard.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const jobOffers = ref([]);
 const jobOffersPagination = ref({});
@@ -46,7 +48,6 @@ const fetchPendingJobOffers = async (page = 1) => {
     jobOffers.value = response.data.job_offers.data;
     jobOffersPagination.value = response.data.job_offers;
   } catch (error) {
-    console.error('Erreur lors de la récupération des offres d\'emploi en attente :', error);
     errorMessage.value = 'Erreur lors de la récupération des offres d\'emploi en attente.';
   }
 };
@@ -55,10 +56,14 @@ const validateJobOffer = async (jobOfferId) => {
   if (confirm('Voulez-vous vraiment valider cette offre d\'emploi ?')) {
     try {
       const response = await axios.post(`/api/admin/job-offers/${jobOfferId}/validate`);
-      alert(response.data.message);
       fetchPendingJobOffers(jobOffersPagination.value.current_page);
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Offre d\'emploi acceptée avec succès !'
+      });
     } catch (error) {
-      console.error('Erreur lors de la validation de l\'offre d\'emploi :', error);
       alert('Erreur lors de la validation de l\'offre d\'emploi.');
     }
   }
@@ -68,10 +73,14 @@ const deleteJobOffer = async (jobOfferId) => {
   if (confirm('Voulez-vous vraiment supprimer cette offre d\'emploi ?')) {
     try {
       await axios.delete(`/api/job-offers/${jobOfferId}`);
-      alert('Offre d\'emploi supprimée avec succès.');
       fetchPendingJobOffers(jobOffersPagination.value.current_page);
+      notify({
+        group: 'success-action',
+        type: 'success',
+        title: 'Succès',
+        text: 'Offre d\'emploi supprimée avec succès !'
+      });
     } catch (error) {
-      console.error('Erreur lors de la suppression de l\'offre d\'emploi :', error);
       alert('Erreur lors de la suppression de l\'offre d\'emploi.');
     }
   }

@@ -14,6 +14,7 @@
         "vite": "^5.0"
     },
     "dependencies": {
+        "@kyvg/vue3-notification": "^3.4.0",
         "@vitejs/plugin-vue": "^5.1.4",
         "bootstrap": "^5.3.3",
         "pinia": "^2.2.2",

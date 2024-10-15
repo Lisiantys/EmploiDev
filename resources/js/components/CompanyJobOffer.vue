@@ -59,6 +59,8 @@ import axios from 'axios';
 import JobOfferCard from './JobOfferCard.vue';
 import PageTitle from './PageTitle.vue';
 import CreateJobOfferModal from './CreateJobOfferModal.vue';
+import { useGlobalNotify } from '../notifications/useGlobalNotify';
+const notify = useGlobalNotify();
 
 const router = useRouter();
 const jobOffers = ref([]);
@@ -81,7 +83,6 @@ const closeCreateModal = () => {
 
 // Après la création d'une offre
 const jobCreated = (newJobOffer) => {
-  console.log('Nouvelle offre créée:', newJobOffer);
   closeCreateModal();
   fetchJobOffers();
 };
@@ -106,10 +107,6 @@ const fetchJobOffers = async () => {
       errorMessage.value = "Aucune offre d'emploi trouvée.";
     }
   } catch (error) {
-    console.error(
-      "Erreur lors de la récupération des offres d'emploi :",
-      error
-    );
     errorMessage.value = "Erreur lors de la récupération des offres d'emploi.";
   }
 };
@@ -125,11 +122,13 @@ const deleteJobOffer = async (jobOfferId) => {
       await axios.delete(`/api/job-offers/${jobOfferId}`);
       // Mettre à jour la liste des offres après suppression
       fetchJobOffers();
+      notify({
+            group: 'success-action',
+            type: 'success',
+            title: 'Succès',
+            text: 'Offre d\'emploi supprimée avec succès !'
+        });
     } catch (error) {
-      console.error(
-        "Erreur lors de la suppression de l'offre d'emploi :",
-        error
-      );
       errorMessage.value = "Erreur lors de la suppression de l'offre d'emploi.";
     }
   }
