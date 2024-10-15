@@ -28,7 +28,7 @@
             organisation. Vous pouvez choisir de ne pas nous fournir vos données
             personnelles, mais il se peut alors que vous ne puissiez pas profiter de certaines fonctionnalités du
             site web. Les utilisateurs qui ne savent pas quelles informations sont obligatoires sont invités à nous
-            contacter via contact@winterbike24.fr
+            contacter via contact@emploidev.fr
         </p>
     </div>
 
@@ -44,7 +44,7 @@
             Le droit à la portabilité des données.
             Si vous souhaitez exercer ce droit, veuillez nous contacter via les coordonnées ci-dessous.
             <br>
-            contact@winterbike24.fr
+            contact@emploidev.fr
         </p>
     </div>
 
@@ -87,7 +87,7 @@
         <p class="leading-9">
             Si vous souhaitez nous contacter pour comprendre davantage la présente politique ou si vous souhaitez
             nous contacter concernant toute question relative aux droits individuels et à vos informations
-            personnelles, vous pouvez envoyer un courriel à contact@winterbike24.fr
+            personnelles, vous pouvez envoyer un courriel à contact@emploidev.fr
         </p>
     </div>
 </template>

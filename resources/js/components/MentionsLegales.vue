@@ -12,7 +12,7 @@
 
         <p>Adresse : 237 Bis Avenue François Mitterand, 85340 Les Sables d'Olonne.</p>
 
-        <p>Contact : contact@winterbike24.fr</p>
+        <p>Contact : contact@emploidev.fr</p>
     </div>
 
     <div class="space-y-4 mt-5">

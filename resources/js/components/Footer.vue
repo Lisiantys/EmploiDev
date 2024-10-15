@@ -22,7 +22,7 @@
         <li>
           <div class="link-list">
             <img :src="imageUrl" class="svg-icon" alt="#" />
-            <a href="#" class="hover:underline text-sm lg:text-base">Contactez-nous</a>
+            <a href="mailto:contact@emploidev.fr" class="hover:underline text-sm lg:text-base">Contactez-nous</a>
           </div>
         </li>
         <router-link :to="{ name: 'mentionsLegales' }">
