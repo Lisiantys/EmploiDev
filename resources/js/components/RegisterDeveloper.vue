@@ -277,7 +277,7 @@ const registerDeveloper = async () => {
         // Ajoutez toutes les propriétés de developer à formData
         Object.entries(developer.value).forEach(([key, value]) => {
             if (Array.isArray(value)) {
-                value.forEach(item => formData.append(`${key}[]`, item)); // Pour les tableaux
+                value.forEach(item => formData.append(`${key}[]`, item)); // Pour les tableaux comme les langages de programmations
             } else {
                 formData.append(key, value); // Pour les autres types
             }

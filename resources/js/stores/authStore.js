@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 
+//Mise à jour de l'interface par rapport au status du user
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         user: null, // Stocke les informations de l'utilisateur

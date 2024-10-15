@@ -25,12 +25,10 @@
         <p>Aucune offre d'emploi trouvée.</p>
     </div>
 
-    <!-- Inclure le composant JobOfferModal -->
     <JobOfferModal :isOpen="showModal" :jobOfferId="selectedJobOfferId" @close="showModal = false" />
 
     <FloatingButton v-if="authStore.user && authStore.user.role_id === 2" @click="openCreateModal" />
 
-    <!-- Modal de création d'offre d'emploi -->
     <CreateJobOfferModal :isOpen="showCreateModal" @close="closeCreateModal" @jobCreated="jobCreated" />
 
     <FilterModal :isOpen="showFilterModal" @close="closeFilterModal" @filter="fetchJobOffers" />
@@ -51,30 +49,38 @@ import Pagination from './Pagination.vue';
 
 const authStore = useAuthStore();
 const resourcesFilteredStore = useDeveloperAndJobStore();
-
 const showModal = ref(false);
 const selectedJobOfferId = ref(null);
-
 const baseImageUrl = ref("/storage/images/");
 
-//Pour la création d'une offre d'emploi uniquement les entreprises
+//Pour la création d'une offre d'emploi uniquement les entreprises, par defaut non visible sur false
 const showCreateModal = ref(false);
 
 // Fonction pour changer la page
 const handlePageChange = (newPage) => {
     resourcesFilteredStore.fetchResources({}, newPage);
 };
+
 const openModal = (id) => {
     selectedJobOfferId.value = id;
     showModal.value = true;
 };
+
+const fetchJobOffers = (filters) => {
+    resourcesFilteredStore.setIsDeveloper(false);
+    resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
+};
+
+//Filtrage sur tablette
 
 // Fonction pour ouvrir le modal de filtrage sur tablette
 const openFilterModal = () => {
     window.dispatchEvent(new Event('openFilterModal'));
 };
 
-// Fonction pour ouvrir le modal
+//Création d'une offre d'emploi
+
+// Fonction pour ouvrir le modal de création d'une offre d'emploi
 const openCreateModal = () => {
     showCreateModal.value = true;
 };
@@ -89,15 +95,6 @@ const jobCreated = (newJobOffer) => {
     closeCreateModal();
 };
 
-const fetchJobOffers = (filters) => {
-    resourcesFilteredStore.setIsDeveloper(false);
-    resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
-};
-
-onMounted(() => {
-    resourcesFilteredStore.setIsDeveloper(false);
-    resourcesFilteredStore.fetchResources();
-});
 
 //POUR LE FILTER MODAL SUR MOBILE
 
@@ -110,7 +107,10 @@ const openFilterModalListener = () => {
 const closeFilterModal = () => {
     showFilterModal.value = false;
 };
+
 onMounted(() => {
+    resourcesFilteredStore.setIsDeveloper(false);
+    resourcesFilteredStore.fetchResources();
     // Écouter l'événement globalement
     window.addEventListener('openFilterModal', openFilterModalListener);
 });
@@ -119,6 +119,7 @@ onUnmounted(() => {
     // Nettoyer l'écouteur lorsque le composant est détruit
     window.removeEventListener('openFilterModal', openFilterModalListener);
 });
+
 </script>
 
 <style scoped>

@@ -23,7 +23,6 @@
     <p class="text-center md:text-start text-sm md:text-base">Aucune offre d'emploi en attente de validation.</p>
   </div>
 
-  <!-- Modal de l'offre d'emploi -->
   <JobOfferModal :isOpen="showModal" :jobOfferId="selectedJobOfferId" @close="showModal = false" />
 
 </template>

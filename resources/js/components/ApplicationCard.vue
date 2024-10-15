@@ -15,7 +15,6 @@
       <p>{{ description }}</p>
     </div>
 
-    <!-- Boutons de téléchargement (pour entreprise) -->
     <div v-if="showDownloadButtons" class="mt-4 flex space-x-4">
       <a :href="application.cv_url || `/storage/${application.cv}`" target="_blank" rel="noopener noreferrer"
         class="flex items-center text-base font-normal bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors"
@@ -38,9 +37,7 @@
       </a>
     </div>
 
-    <!-- Actions -->
     <div class="mt-2 flex items-center space-x-4">
-      <!-- Bouton Supprimer pour le développeur -->
       <button v-if="isDeveloper" @click.stop="handleDelete"
         class="flex items-center text-sm md:text-base font-normal px-2 py-1 text-red-500 hover:text-red-600 transition-colors border-2 rounded-lg border-red-500">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
@@ -50,7 +47,6 @@
         Supprimer
       </button>
 
-      <!-- Boutons Accepter/Refuser pour l'entreprise -->
       <div v-else-if="isCompany" class="flex space-x-4">
         <button v-if="showAcceptButton" @click.stop="handleAccept"
           class="flex items-center bg-green-500 text-base font-normal text-white px-2 py-1 rounded hover:bg-green-600 transition-colors">

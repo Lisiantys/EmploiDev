@@ -110,7 +110,6 @@ import { ref, onMounted, watch, computed } from 'vue';
 import Axios from 'axios';
 import { useResourcesStore } from '../stores/resourcesStore';
 import { useGlobalNotify } from '../notifications/useGlobalNotify';
-const notify = useGlobalNotify();
 
 const props = defineProps({
   isOpen: {
@@ -122,6 +121,7 @@ const props = defineProps({
 const emits = defineEmits(['close', 'jobCreated']);
 
 const resourcesStore = useResourcesStore();
+const notify = useGlobalNotify();
 
 const contracts = computed(() => resourcesStore.contracts);
 const developerTypes = computed(() => resourcesStore.developerTypes);

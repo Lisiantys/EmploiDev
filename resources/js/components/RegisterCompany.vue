@@ -105,11 +105,14 @@ import Axios from "axios";
 import { useAuthStore } from '../stores/authStore';
 import PageTitle from './PageTitle.vue';
 import { useGlobalNotify } from '../notifications/useGlobalNotify';
-const notify = useGlobalNotify();
+
 
 const router = useRouter();
 const authStore = useAuthStore();
 const emit = defineEmits(['back']);
+const step = ref(1);
+const passwordsDoNotMatch = ref(false);
+const notify = useGlobalNotify();
 
 const company = ref({
     name: '',
@@ -136,9 +139,6 @@ watch(
     }
 );
 
-const step = ref(1);
-const passwordsDoNotMatch = ref(false);
-
 const handleStepSubmission = () => {
     if (step.value === 2) {
         // Si les mots de passe ne correspondent pas, afficher une erreur et ne pas continuer
@@ -158,7 +158,6 @@ const handleStepSubmission = () => {
         registerCompany();
     }
 };
-
 
 const prevStep = () => {
     if (step.value > 1) {

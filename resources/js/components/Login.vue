@@ -43,16 +43,16 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/authStore';
 import PageTitle from './PageTitle.vue';
 import { useGlobalNotify } from '../notifications/useGlobalNotify';
-const notify = useGlobalNotify();
 
 const router = useRouter();
 const authStore = useAuthStore();
+const notify = useGlobalNotify();
+const loginError = ref('');
 
 const credentials = ref({
     email: '',
     password: ''
 });
-const loginError = ref('');
 
 const login = async () => {
     try {

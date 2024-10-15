@@ -1,7 +1,7 @@
 <template>
     <div class="mt-20 mb-5 flex items-center justify-center bg-gray-100">
         <div class="flex flex-col lg:flex-row w-full max-w-6xl bg-white shadow-lg rounded-lg overflow-hidden">
-            <!-- Colonne de gauche : Sélection du rôle -->
+            <!-- Colonne de gauche -->
             <div class="w-full lg:w-1/2 p-8">
                 <!-- Sélection du rôle -->
                 <div v-if="!currentComponent">
@@ -29,7 +29,7 @@
                 <!-- Formulaire d'inscription dynamique -->
                 <component :is="currentComponent" v-if="currentComponent" @back="resetForm" />
             </div>
-            <!-- Colonne de droite : Texte explicatif -->
+            <!-- Colonne de droite -->
             <div class="flex w-full lg:w-1/2 bg-gradient-to-r from-blue-500 to-blue-600 p-8 items-center">
                 <div>
                     <h2 class="text-2xl lg:text-3xl font-bold text-white mb-6">Bienvenue sur EmploiDev !</h2>

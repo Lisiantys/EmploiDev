@@ -24,7 +24,6 @@
       </nav>
     </div>
 
-    <!-- Contenu des onglets -->
     <div>
       <!-- Onglet des offres d'emploi -->
       <div v-if="activeTab === 'jobOffers'">
