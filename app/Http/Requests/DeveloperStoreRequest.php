@@ -27,10 +27,10 @@ class DeveloperStoreRequest extends FormRequest
             'password' => [
                 'required',
                 Password::min(8)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
             ],
             'first_name' => 'required|string|min:2|max:30',
             'surname' => 'required|string|min:2|max:30',

@@ -94,37 +94,10 @@ const fetchJobOffers = (filters) => {
     resourcesFilteredStore.fetchResources(filters, resourcesFilteredStore.currentPage);
 };
 
-const timeAgo = (date) => {
-    const seconds = Math.floor((new Date() - new Date(date)) / 1000);
-    let interval = Math.floor(seconds / 31536000);
-    if (interval > 1) return `il y a ${interval} ans`;
-    interval = Math.floor(seconds / 2592000);
-    if (interval > 1) return `il y a ${interval} mois`;
-    interval = Math.floor(seconds / 86400);
-    if (interval > 1) return `il y a ${interval} jours`;
-    interval = Math.floor(seconds / 3600);
-    if (interval > 1) return `il y a ${interval} heures`;
-    interval = Math.floor(seconds / 60);
-    if (interval > 1) return `il y a ${interval} minutes`;
-    return `il y a quelques secondes`;
-};
-
 onMounted(() => {
     resourcesFilteredStore.setIsDeveloper(false);
     resourcesFilteredStore.fetchResources();
 });
-
-// const previousPage = () => {
-//     if (resourcesFilteredStore.currentPage > 1) {
-//         resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
-//     }
-// };
-
-// const nextPage = () => {
-//     if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
-//         resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
-//     }
-// };
 
 //POUR LE FILTER MODAL SUR MOBILE
 

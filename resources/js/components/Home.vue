@@ -101,20 +101,6 @@ onMounted(() => {
     resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage);
 });
 
-// Pagination : Aller à la page précédente
-const previousPage = () => {
-    if (resourcesFilteredStore.currentPage > 1) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage - 1);
-    }
-};
-
-// Pagination : Aller à la page suivante
-const nextPage = () => {
-    if (resourcesFilteredStore.currentPage < resourcesFilteredStore.totalPages) {
-        resourcesFilteredStore.fetchResources({}, resourcesFilteredStore.currentPage + 1);
-    }
-};
-
 //POUR LE FILTER MODAL SUR MOBILE
 
 const showFilterModal = ref(false);

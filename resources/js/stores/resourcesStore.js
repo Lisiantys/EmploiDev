@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import Axios from 'axios';
 
+//Ressources nécessaire pour les filtrages des développeurs / offres d'emploi
 export const useResourcesStore = defineStore('resources', {
     state: () => ({
         contracts: [],

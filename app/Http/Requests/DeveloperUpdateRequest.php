@@ -23,22 +23,22 @@ class DeveloperUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $userId = $this->route('developer')->user_id; // Assurez-vous que cela récupère bien l'utilisateur
+        $userId = $this->route('developer')->user_id;
 
-    return [
-        'email' => [
-            'required',
-            'email',
-            'max:255',
-            Rule::unique('users')->ignore($userId), // Ignorer l'e-mail de l'utilisateur actuel
-        ], // Permet la mise à jour, mais garde la validation d'unicité sauf pour cet utilisateur
+        return [
+            'email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($userId), // Ignorer l'e-mail de l'utilisateur actuel
+            ],
             'password' => [
                 'nullable',
                 Password::min(8)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
+                    ->mixedCase()
+                    ->letters()
+                    ->numbers()
+                    ->symbols()
             ],
             'first_name' => 'required|string|min:2|max:30',
             'surname' => 'required|string|min:2|max:30',

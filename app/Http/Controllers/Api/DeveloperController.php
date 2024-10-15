@@ -6,10 +6,6 @@ use App\Models\User;
 use App\Models\Location;
 use App\Models\Developer;
 use Illuminate\Http\Request;
-use App\Models\TypesContract;
-use App\Models\TypesDeveloper;
-use App\Models\YearsExperience;
-use App\Models\ProgrammingLanguage;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\FilterableTrait;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +20,7 @@ class DeveloperController extends Controller
     use FilterableTrait;
 
     /**
-     * Affiche les développeurs validés,  libres en premier puis les non libres.
+     * Affiche les développeurs validés,  disponibles en premier puis les non disponibles.
      */
     public function index()
     {
@@ -217,10 +213,9 @@ class DeveloperController extends Controller
             Storage::disk('public')->delete($developer->profil_image);
         }
 
-        $user = $request->user();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $user->delete();
+        $developer->delete();
 
         return response()->json(['message' => 'Utilisateur supprimé avec succès']);
     }
@@ -228,7 +223,7 @@ class DeveloperController extends Controller
     /* ===== Customs methods  ===== */
 
     /**
-     * Pour l'affichage du profil personnel du développeur
+     * Pour l'affichage du profil personnel du développeur ou de l'entreprise
      */
     public function profile()
     {

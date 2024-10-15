@@ -118,10 +118,10 @@ class CompanyController extends Controller
             Storage::disk('public')->delete($company->profil_image);
         }
 
-        $user = $request->user();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        $user->delete();
+
+        $company->delete();
 
         return response()->json(['message' => 'Entreprise supprimée avec succès']);
     }

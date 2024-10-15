@@ -14,7 +14,7 @@ class JobOfferController extends Controller
     use FilterableTrait;
 
     /**
-     * Affiche toutes les offres d'emploi validées, en ordre randomisé.
+     * Affiche toutes les offres d'emploi validées.
      */
     public function index()
     {
@@ -34,9 +34,9 @@ class JobOfferController extends Controller
         // Récupérer l'entreprise associée à l'utilisateur connecté
         $companyId = Auth::user()->company->id;
 
-        // Création de l'offre d'emploi avec l'ID de l'entreprise connecté
+        // Création de l'offre d'emploi avec l'ID de l'entreprise 
         $jobOffer = JobOffer::create(array_merge($request->validated(), [
-            'company_id' => $companyId, // Assigne l'ID de l'entreprise
+            'company_id' => $companyId,
         ]));
 
         // Attachement des langages de programmation
@@ -100,7 +100,7 @@ class JobOfferController extends Controller
     {
         $user = Auth::user();
 
-        // Vérifier que l'utilisateur est bien le propriétaire de l'entreprise associée à l'offre
+        // Vérifier que l'entreprise est bien l'auteur associée à l'offre
         if ($user->company->id !== $jobOffer->company_id) {
             return response()->json(['error' => 'Action non autorisée.'], 403);
         }
@@ -119,7 +119,7 @@ class JobOfferController extends Controller
     }
 
     /**
-     * Filter Jobs offers based on the provided criteria.
+     * Filtrage des offres d'emploi validées
      */
     public function filterForm(JobOfferFilterRequest $request)
     {

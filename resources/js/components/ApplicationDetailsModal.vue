@@ -156,7 +156,3 @@ const closeModal = () => {
     emits('close');
 };
 </script>
-
-<style scoped>
-/* Ajoutez des styles supplémentaires si nécessaire */
-</style>

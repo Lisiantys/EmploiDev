@@ -17,7 +17,7 @@ class IsAdmin
     */
     public function handle(Request $request, Closure $next)
     {
-        // Vérifier si l'utilisateur est connecté et a le role_id = 3
+        // Vérifier si l'utilisateur est connecté et a le role_id = 3 (Administrateur)
         if (Auth::check() && Auth::user()->role_id === 3) {
             return $next($request);
         }

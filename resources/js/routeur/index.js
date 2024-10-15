@@ -43,7 +43,6 @@ const router = createRouter({
   routes,
 });
 
-// Garde de navigation pour protéger les routes selon le rôle
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);

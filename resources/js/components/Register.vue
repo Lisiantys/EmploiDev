@@ -46,7 +46,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { markRaw } from 'vue'; // Import markRaw
+import { markRaw } from 'vue'; 
 import RegisterDeveloper from './RegisterDeveloper.vue';
 import RegisterCompany from './RegisterCompany.vue';
 
@@ -54,9 +54,9 @@ const currentComponent = ref(null);
 
 const selectRole = (role) => {
     if (role === 'developer') {
-        currentComponent.value = markRaw(RegisterDeveloper); // Use markRaw to prevent reactivity
+        currentComponent.value = markRaw(RegisterDeveloper);
     } else if (role === 'company') {
-        currentComponent.value = markRaw(RegisterCompany); // Use markRaw to prevent reactivity
+        currentComponent.value = markRaw(RegisterCompany); 
     }
 };
 

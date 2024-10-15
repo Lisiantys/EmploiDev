@@ -94,7 +94,3 @@ onMounted(() => {
   fetchPendingDevelopers();
 });
 </script>
-
-<style scoped>
-/* Vos styles ici */
-</style>

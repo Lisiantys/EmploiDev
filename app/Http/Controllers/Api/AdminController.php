@@ -47,7 +47,7 @@ class AdminController extends Controller
         $user = Auth::user();
 
         // Vérifier que l'utilisateur est administrateur
-        if ($user->role_id !== 3) { // 3 est l'ID du rôle administrateur
+        if ($user->role_id !== 3) {
             return response()->json(['error' => 'Action non autorisée.'], 403);
         }
 
@@ -91,20 +91,12 @@ class AdminController extends Controller
         $user = Auth::user();
 
         // Vérifier que l'utilisateur est administrateur
-        if ($user->role_id !== 3) { // 3 est l'ID du rôle administrateur
+        if ($user->role_id !== 3) {
             return response()->json(['error' => 'Action non autorisée.'], 403);
         }
 
-        // Récupérer l'utilisateur associé au développeur
-        $associatedUser = $developer->user;
-
         // Supprimer le développeur
         $developer->delete();
-
-        // Supprimer l'utilisateur associé, s'il existe
-        if ($associatedUser) {
-            $associatedUser->delete();
-        }
 
         return response()->json(['message' => 'Développeur supprimé avec succès.'], 200);
     }
