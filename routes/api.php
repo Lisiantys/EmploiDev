@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\JobOfferController;
 use App\Http\Controllers\Api\DeveloperController;
@@ -33,9 +33,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/applications/check', [ApplicationController::class, 'checkExistingApplication']);
 
         //Développeurs
-        Route::put('/developers/{developer}', [DeveloperController::class, 'update']); 
-        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']); 
-        
+        Route::put('/developers/{developer}', [DeveloperController::class, 'update']);
+        Route::delete('/developers/{developer}', [DeveloperController::class, 'destroy']);
+
         //Candidatures
         Route::apiResource('applications', ApplicationController::class)->except(['update']);
     });
@@ -43,10 +43,10 @@ Route::middleware('auth:sanctum')->group(function () {
     //Autorisation => Entreprises
     Route::middleware('isCompany')->group(function () {
         //Entreprises
-        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']); 
+        Route::apiResource('companies', CompanyController::class)->except(['index', 'show', 'store']);
         Route::post('/applications/{application}/accept', [ApplicationController::class, 'acceptApplication']);
         Route::post('/applications/{application}/refuse', [ApplicationController::class, 'refuseApplication']);
-   
+
         //Offres d'emplois
         Route::get('/job-offers/{jobOffer}/applications', [JobOfferController::class, 'jobOfferApplications']);
         Route::get('/company/job-offers', [JobOfferController::class, 'getCompanyJobOffers']);
@@ -61,7 +61,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Autorisation => Administrateurs uniquement
     Route::middleware('isAdmin')->group(function () {
-        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']); 
+        Route::get('/admin/pending-job-offers', [AdminController::class, 'pendingJobOffers']);
         Route::get('/admin/pending-developers', [AdminController::class, 'pendingDevelopers']);
 
         // Routes pour valider les offres d'emploi et les développeurs
@@ -72,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     //Etre authentifié pour télécharger les cv et lettres
-    Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']); 
+    Route::get('/developers/{developer}/cv', [DeveloperController::class, 'downloadCv']);
     Route::get('/developers/{developer}/cover-letter', [DeveloperController::class, 'downloadCoverLetter']);
 
 });
@@ -89,7 +89,7 @@ Route::middleware('web')->group(function () {
     Route::post('/companies', [CompanyController::class, 'store']);
 });
 
-// Routes publiques 
+// Routes publiques
 
 // Routes pour les ressources
 Route::get('/programming-languages', [ResourceController::class, 'getProgrammingLanguages']);
@@ -100,7 +100,7 @@ Route::get('/locations', [ResourceController::class, 'getLocations']);
 
 
 //Développeurs
-Route::get('/developers/filter', [DeveloperController::class, 'filterForm']); 
+Route::get('/developers/filter', [DeveloperController::class, 'filterForm']);
 Route::apiResource('developers', DeveloperController::class)->only(['index', 'show']);
 
 //Offres d'emplois

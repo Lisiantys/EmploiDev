@@ -1,0 +1,17 @@
+// vite.config.js
+import { defineConfig } from "file:///C:/Users/Utilisateur/Documents/GitHub/EmploiDev/node_modules/vite/dist/node/index.js";
+import laravel from "file:///C:/Users/Utilisateur/Documents/GitHub/EmploiDev/node_modules/laravel-vite-plugin/dist/index.js";
+import vue from "file:///C:/Users/Utilisateur/Documents/GitHub/EmploiDev/node_modules/@vitejs/plugin-vue/dist/index.mjs";
+var vite_config_default = defineConfig({
+  plugins: [
+    laravel({
+      input: ["resources/css/app.css", "resources/js/app.js"],
+      refresh: true
+    }),
+    vue()
+  ]
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCJDOlxcXFxVc2Vyc1xcXFxVdGlsaXNhdGV1clxcXFxEb2N1bWVudHNcXFxcR2l0SHViXFxcXEVtcGxvaURldlwiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9maWxlbmFtZSA9IFwiQzpcXFxcVXNlcnNcXFxcVXRpbGlzYXRldXJcXFxcRG9jdW1lbnRzXFxcXEdpdEh1YlxcXFxFbXBsb2lEZXZcXFxcdml0ZS5jb25maWcuanNcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfaW1wb3J0X21ldGFfdXJsID0gXCJmaWxlOi8vL0M6L1VzZXJzL1V0aWxpc2F0ZXVyL0RvY3VtZW50cy9HaXRIdWIvRW1wbG9pRGV2L3ZpdGUuY29uZmlnLmpzXCI7aW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSc7XG5pbXBvcnQgbGFyYXZlbCBmcm9tICdsYXJhdmVsLXZpdGUtcGx1Z2luJztcbmltcG9ydCB2dWUgZnJvbSAnQHZpdGVqcy9wbHVnaW4tdnVlJ1xuXG5leHBvcnQgZGVmYXVsdCBkZWZpbmVDb25maWcoe1xuICAgIHBsdWdpbnM6IFtcbiAgICAgICAgbGFyYXZlbCh7XG4gICAgICAgICAgICBpbnB1dDogWydyZXNvdXJjZXMvY3NzL2FwcC5jc3MnLCAncmVzb3VyY2VzL2pzL2FwcC5qcyddLFxuICAgICAgICAgICAgcmVmcmVzaDogdHJ1ZSxcbiAgICAgICAgfSksXG4gICAgICAgIHZ1ZSgpLFxuICAgIF0sXG59KTtcbiJdLAogICJtYXBwaW5ncyI6ICI7QUFBMlUsU0FBUyxvQkFBb0I7QUFDeFcsT0FBTyxhQUFhO0FBQ3BCLE9BQU8sU0FBUztBQUVoQixJQUFPLHNCQUFRLGFBQWE7QUFBQSxFQUN4QixTQUFTO0FBQUEsSUFDTCxRQUFRO0FBQUEsTUFDSixPQUFPLENBQUMseUJBQXlCLHFCQUFxQjtBQUFBLE1BQ3RELFNBQVM7QUFBQSxJQUNiLENBQUM7QUFBQSxJQUNELElBQUk7QUFBQSxFQUNSO0FBQ0osQ0FBQzsiLAogICJuYW1lcyI6IFtdCn0K
